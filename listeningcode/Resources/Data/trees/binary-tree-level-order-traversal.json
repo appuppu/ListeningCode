@@ -1,0 +1,232 @@
+{
+  "id": "binary-tree-level-order-traversal",
+  "title": "Traversing a Binary Tree Level by Level",
+  "difficulty": "medium",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "level by level",
+        "explanation": "Processing all nodes at the same depth before moving to the next depth"
+      },
+      {
+        "phrase": "from top to bottom",
+        "explanation": "Starting at the root and moving downward through each level"
+      },
+      {
+        "phrase": "let me walk through an example",
+        "explanation": "A common phrase meaning to trace through a specific case step by step"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or boundary input that might cause problems"
+      },
+      {
+        "phrase": "that makes sense",
+        "explanation": "A phrase to confirm understanding of an explanation"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Level Order Traversal",
+        "definition": "Visiting all nodes at depth d before visiting nodes at depth d plus one"
+      },
+      {
+        "term": "BFS",
+        "definition": "Breadth-First Search, an algorithm that explores neighbors before going deeper"
+      },
+      {
+        "term": "DFS",
+        "definition": "Depth-First Search, an algorithm that explores as deep as possible before backtracking"
+      },
+      {
+        "term": "Queue",
+        "definition": "A first-in first-out data structure used to process elements in order"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Queue<TreeNode> queue = new LinkedList<>()",
+        "description": "Creates a queue backed by a linked list for BFS traversal"
+      },
+      {
+        "signature": "queue.offer(node)",
+        "description": "Adds a node to the end of the queue"
+      },
+      {
+        "signature": "queue.poll()",
+        "description": "Removes and returns the node at the front of the queue"
+      },
+      {
+        "signature": "queue.size()",
+        "description": "Returns the current number of elements in the queue"
+      },
+      {
+        "signature": "list.add(element)",
+        "description": "Appends an element to the end of a list"
+      }
+    ]
+  },
+  "concept": "Given the root of a binary tree, return a list of lists where each inner list contains the node values at that level, ordered from top to bottom and left to right.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "DFS with Depth Tracking",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use recursive DFS, passing the current depth to place each node's value into the correct level list."
+    },
+    {
+      "level": 2,
+      "label": "BFS with Queue",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a queue to process nodes level by level, draining each level before moving to the next."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    A[\"3\"]:::red --> B[\"9\"]:::red\n    A --> C[\"20\"]:::red\n    C --> D[\"15\"]:::red\n    C --> E[\"7\"]:::red\n    classDef red fill:#f87171,stroke:#333,color:#fff\n    F[\"Level 0: [3]\"] -.-> G[\"Level 1: [9, 20]\"]\n    G -.-> H[\"Level 2: [15, 7]\"]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's today's problem. You're given a binary tree, and I'd like you to return all the node values grouped by their level, from top to bottom. Each level should be a separate list, and within each level, values go left to right.",
+            "audio_file": "binary-tree-level-order-traversal-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So for a tree with root three, left child nine, right child twenty, and twenty has children fifteen and seven, the output would be a list of three lists: first list is just three, second is nine and twenty, third is fifteen and seven. Is that correct?",
+            "audio_file": "binary-tree-level-order-traversal-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. That's the expected output. What about edge cases?",
+            "audio_file": "binary-tree-level-order-traversal-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If the tree is empty, meaning the root is null, I'd return an empty list. If the tree has only one node, I return a list containing one list with just that value. Can nodes have negative values?",
+            "audio_file": "binary-tree-level-order-traversal-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, node values can be any integer, including negatives. The tree can have up to a few thousand nodes.",
+            "audio_file": "binary-tree-level-order-traversal-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "That makes sense. So to summarize, I need to traverse the binary tree and collect values at each depth into separate lists, returning them ordered from the shallowest level to the deepest. Let me think about approaches.",
+            "audio_file": "binary-tree-level-order-traversal-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "dfs",
+        "level": 1,
+        "title": "DFS with Depth Tracking",
+        "diagram": "graph TD\n    A[\"3 depth=0\"]:::blue --> B[\"9 depth=1\"]:::blue\n    A --> C[\"20 depth=1\"]:::blue\n    C --> D[\"15 depth=2\"]:::blue\n    C --> E[\"7 depth=2\"]:::blue\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff\n    F[\"Call: dfs 3, 0\"] --> G[\"Call: dfs 9, 1\"]\n    F --> H[\"Call: dfs 20, 1\"]\n    H --> I[\"Call: dfs 15, 2\"]\n    H --> J[\"Call: dfs 7, 2\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is to use recursive DFS with depth tracking. I pass the current depth as a parameter. When I visit a node, if the result list doesn't have a list for that depth yet, I create one. Then I add the node's value to the list at the index matching its depth.",
+            "audio_file": "binary-tree-level-order-traversal-dfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through our example with this approach?",
+            "audio_file": "binary-tree-level-order-traversal-dfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. I start at node three with depth zero. I create a new list at index zero and add three. Then I recurse left to nine at depth one. I create a list at index one and add nine. Node nine has no children, so I backtrack. Then I recurse right to twenty at depth one and add twenty to the existing list at index one.",
+            "audio_file": "binary-tree-level-order-traversal-dfs-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Continuing from twenty, I go left to fifteen at depth two, create a list at index two, and add fifteen. Then I go right to seven at depth two and add seven. The final result is three at level zero, nine and twenty at level one, fifteen and seven at level two.",
+            "audio_file": "binary-tree-level-order-traversal-dfs-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity?",
+            "audio_file": "binary-tree-level-order-traversal-dfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n since I visit every node exactly once. Space is O of n for the result lists, plus O of h for the recursion stack where h is the tree height. In the worst case of a skewed tree, h equals n, so overall space is O of n.",
+            "audio_file": "binary-tree-level-order-traversal-dfs-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "bfs",
+        "level": 2,
+        "title": "BFS with Queue",
+        "diagram": "graph TD\n    subgraph Step1[\"Process Level 0\"]\n        Q1[\"Queue: [3]\"]:::purple --> R1[\"Output: [[3]]\"]:::purple\n    end\n    subgraph Step2[\"Process Level 1\"]\n        Q2[\"Queue: [9, 20]\"]:::purple --> R2[\"Output: [[3],[9,20]]\"]:::purple\n    end\n    subgraph Step3[\"Process Level 2\"]\n        Q3[\"Queue: [15, 7]\"]:::purple --> R3[\"Output: [[3],[9,20],[15,7]]\"]:::purple\n    end\n    Step1 --> Step2 --> Step3\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "A more natural approach for level order is BFS using a queue. I start by adding the root to the queue. Then I loop: for each iteration, I record the current queue size, which tells me how many nodes are at this level. I dequeue exactly that many nodes, adding their values to the current level list, and enqueue their children.",
+            "audio_file": "binary-tree-level-order-traversal-bfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example.",
+            "audio_file": "binary-tree-level-order-traversal-bfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I enqueue three. Queue size is one, so I process one node. I dequeue three, add it to level zero's list, and enqueue its children nine and twenty. Now queue size is two, so I process two nodes. I dequeue nine and twenty, add them to level one's list. Nine has no children. Twenty has fifteen and seven, so I enqueue both.",
+            "audio_file": "binary-tree-level-order-traversal-bfs-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Queue size is now two. I dequeue fifteen and seven, add them to level two's list. Neither has children, so the queue is empty and we're done. The result is three, then nine and twenty, then fifteen and seven.",
+            "audio_file": "binary-tree-level-order-traversal-bfs-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does this compare to the DFS approach in terms of complexity?",
+            "audio_file": "binary-tree-level-order-traversal-bfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is still O of n since we visit every node once. Space is O of n for the result, and the queue holds at most one level of nodes at a time. For a balanced tree that's up to n over two nodes, so O of n. But there's no recursion stack, which avoids potential stack overflow on very deep trees.",
+            "audio_file": "binary-tree-level-order-traversal-bfs-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n        A[\"DFS + Depth\\nO of n time\\nO of n space\\nRecursive\"]:::blue\n        B[\"BFS + Queue\\nO of n time\\nO of n space\\nIterative\"]:::purple\n    end\n    A -->|\"Both visit each node once\"| B\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Good work. Which approach would you recommend in an interview?",
+            "audio_file": "binary-tree-level-order-traversal-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Both have the same time and space complexity of O of n. The DFS approach is elegant and easy to write recursively, but BFS with a queue is more intuitive for level order problems since it naturally processes nodes level by level. I'd go with BFS as my primary answer because it directly matches the problem's structure, and mention DFS as an alternative.",
+            "audio_file": "binary-tree-level-order-traversal-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great summary. The key takeaway is that BFS is the classic tool for level-based tree problems, and knowing both approaches shows flexibility. Well done.",
+            "audio_file": "binary-tree-level-order-traversal-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

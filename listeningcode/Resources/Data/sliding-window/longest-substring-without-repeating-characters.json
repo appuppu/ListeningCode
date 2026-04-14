@@ -1,0 +1,247 @@
+{
+  "id": "longest-substring-without-repeating-characters",
+  "title": "Finding the Longest Substring Without Repeating Characters",
+  "difficulty": "medium",
+  "category": "sliding-window",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "sliding window",
+        "explanation": "A technique where you maintain a window of elements that slides across the data structure, expanding or shrinking as needed."
+      },
+      {
+        "phrase": "brute force",
+        "explanation": "A straightforward approach that checks all possibilities without any optimization."
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input scenario that might cause unexpected behavior if not handled properly."
+      },
+      {
+        "phrase": "time complexity",
+        "explanation": "A measure of how the running time of an algorithm grows relative to the input size."
+      },
+      {
+        "phrase": "keep track of",
+        "explanation": "To monitor or record information as you process data, often using a data structure like a set or map."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Substring",
+        "definition": "A contiguous sequence of characters within a string."
+      },
+      {
+        "term": "HashSet",
+        "definition": "A collection that stores unique elements and provides constant-time lookup for checking membership."
+      },
+      {
+        "term": "HashMap",
+        "definition": "A data structure that maps keys to values, allowing constant-time lookup, insertion, and deletion."
+      },
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two index variables to define a range or window within a data structure."
+      },
+      {
+        "term": "ASCII",
+        "definition": "A character encoding standard representing 128 characters, often used to define the character set of a string."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashSet.contains(Object o)",
+        "description": "Returns true if the set contains the specified element."
+      },
+      {
+        "signature": "HashSet.add(E e)",
+        "description": "Adds the specified element to the set if it is not already present."
+      },
+      {
+        "signature": "HashSet.remove(Object o)",
+        "description": "Removes the specified element from the set if present."
+      },
+      {
+        "signature": "HashMap.put(K key, V value)",
+        "description": "Associates the specified value with the specified key in the map."
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the greater of two integer values."
+      }
+    ]
+  },
+  "concept": "Given a string, find the length of the longest substring that contains no duplicate characters.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Nested Loops",
+      "time_complexity": "O(n^3)",
+      "space_complexity": "O(n)",
+      "summary": "Check every possible substring and verify each one has all unique characters."
+    },
+    {
+      "level": 2,
+      "label": "Sliding Window with HashSet",
+      "time_complexity": "O(2n) → O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use two pointers and a HashSet to expand and shrink a window of unique characters."
+    },
+    {
+      "level": 3,
+      "label": "Optimized Sliding Window with HashMap",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a HashMap to store character positions and jump the left pointer directly past duplicates."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: 'abcabcbb'\"] --> B[\"Substrings to consider\"]\n    B --> C[\"'abc' ✓ length 3\"]\n    B --> D[\"'bca' ✓ length 3\"]\n    B --> E[\"'abca' ✗ 'a' repeats\"]\n    C --> F[\"Answer: 3\"]\n    style A fill:#f87171,color:#fff\n    style F fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's your problem. You're given a string, and you need to find the length of the longest substring that contains no repeating characters. For example, given the string a-b-c-a-b-c-b-b, the answer would be three, because a-b-c is the longest substring without duplicates.",
+            "audio_file": "longest-substring-without-repeating-characters-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to find a contiguous part of the string where every character is unique, and return the maximum length. Can I ask a few clarifying questions? What characters can the string contain, and how long can it be?",
+            "audio_file": "longest-substring-without-repeating-characters-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The string consists of English letters, digits, and symbols. The length can be up to fifty thousand characters. It can also be empty.",
+            "audio_file": "longest-substring-without-repeating-characters-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What should I return for an empty string? And if every character is the same, like a-a-a-a, the answer would be one, correct?",
+            "audio_file": "longest-substring-without-repeating-characters-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, return zero for an empty string, and one if all characters are identical. You just return the length as an integer.",
+            "audio_file": "longest-substring-without-repeating-characters-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So to summarize: given a string, I find the longest contiguous substring with all unique characters and return its length. Let me start with a brute force approach.",
+            "audio_file": "longest-substring-without-repeating-characters-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Nested Loops",
+        "diagram": "graph TD\n    A[\"String: 'p w w k e w'\"] --> B[\"i=0: check 'p','pw','pww' ✗\"]\n    B --> C[\"i=1: check 'w','ww' ✗\"]\n    C --> D[\"i=2: check 'w','wk','wke','wkew' ✗\"]\n    D --> E[\"i=3: check 'k','ke','kew' ✓ len=3\"]\n    E --> F[\"Max length = 3\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style F fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to check every possible substring. I use two nested loops: the outer loop picks a starting index, and the inner loop extends the end index. For each substring, I use a set to check if all characters are unique.",
+            "audio_file": "longest-substring-without-repeating-characters-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Take the string p-w-w-k-e-w. Starting from index zero, p is unique, p-w is unique, but p-w-w has a duplicate w, so I stop. I repeat this from every starting position and track the maximum length found.",
+            "audio_file": "longest-substring-without-repeating-characters-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "longest-substring-without-repeating-characters-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The two loops give O of n-squared combinations, and checking each substring for uniqueness takes O of n in the worst case. So overall it's O of n-cubed, with O of n space for the set. That's quite slow for large inputs.",
+            "audio_file": "longest-substring-without-repeating-characters-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. Can you think of a way to avoid rechecking characters from scratch every time?",
+            "audio_file": "longest-substring-without-repeating-characters-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "sliding-window-hashset",
+        "level": 2,
+        "title": "Sliding Window with HashSet",
+        "diagram": "graph TD\n    A[\"String: 'p w w k e w'\"] --> B[\"left=0, right=0: add 'p' → set={p}\"]\n    B --> C[\"right=1: add 'w' → set={p,w}\"]\n    C --> D[\"right=2: 'w' duplicate! remove 'p', left=1\"]\n    D --> E[\"still duplicate, remove 'w', left=2\"]\n    E --> F[\"right=2: add 'w' → set={w}\"]\n    F --> G[\"right=3: add 'k' → set={w,k}\"]\n    G --> H[\"right=4: add 'e' → set={w,k,e} max=3\"]\n    H --> I[\"right=5: 'w' dup, remove until clear\"]\n    I --> J[\"Result: 3\"]\n    style A fill:#a78bfa,color:#fff\n    style H fill:#a78bfa,color:#fff\n    style J fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of checking every substring, I can use a sliding window. I maintain two pointers, left and right, and a HashSet. I move the right pointer forward, adding characters to the set. When I find a duplicate, I remove characters from the left until the duplicate is gone.",
+            "audio_file": "longest-substring-without-repeating-characters-sliding-window-hashset-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For p-w-w-k-e-w, I add p and w. At the second w, it's a duplicate, so I remove from the left: remove p, then remove the first w. Now I add the second w and continue. The window w-k-e gives length three.",
+            "audio_file": "longest-substring-without-repeating-characters-sliding-window-hashset-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. What about the complexity now?",
+            "audio_file": "longest-substring-without-repeating-characters-sliding-window-hashset-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each character is added and removed from the set at most once, so the total work is O of two-n, which simplifies to O of n. Space is O of n for the set. This is much better, but the left pointer sometimes moves multiple steps. Can we make it jump directly?",
+            "audio_file": "longest-substring-without-repeating-characters-sliding-window-hashset-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Optimized Sliding Window with HashMap",
+        "diagram": "graph TD\n    A[\"String: 'p w w k e w'\"] --> B[\"right=0: map={p:0}, left=0, max=1\"]\n    B --> C[\"right=1: map={p:0,w:1}, max=2\"]\n    C --> D[\"right=2: 'w' at 1 → left=2, map={p:0,w:2}\"]\n    D --> E[\"right=3: map={..,k:3}, max=2\"]\n    E --> F[\"right=4: map={..,e:4}, max=3\"]\n    F --> G[\"right=5: 'w' at 2 → left=3, map={..,w:5}\"]\n    G --> H[\"Result: 3 (window 'kew')\"]\n    style A fill:#fb923c,color:#fff\n    style D fill:#fb923c,color:#fff\n    style H fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "To avoid moving the left pointer one step at a time, I use a HashMap that stores each character's most recent index. When I encounter a duplicate, I jump the left pointer directly to one position after the previous occurrence of that character.",
+            "audio_file": "longest-substring-without-repeating-characters-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For p-w-w-k-e-w: at index two, w was last seen at index one. So left jumps to index two. At index five, w was last at index two, so left jumps to three. The window k-e-w has length three. At each step I update the max length.",
+            "audio_file": "longest-substring-without-repeating-characters-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "longest-substring-without-repeating-characters-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The right pointer visits each character exactly once, so it's O of n time. Space is O of n for the HashMap, or O of one if we consider a fixed character set like ASCII. The key improvement is that the left pointer never backtracks through characters one by one.",
+            "audio_file": "longest-substring-without-repeating-characters-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Brute Force\\nO(n³) time\"] -->|\"Use sliding window\"| B[\"HashSet Window\\nO(n) time\"]\n    B -->|\"Jump left pointer\"| C[\"HashMap Window\\nO(n) time\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. You moved from an O of n-cubed brute force to an O of n sliding window. The key insight was maintaining a window of unique characters and efficiently handling duplicates.",
+            "audio_file": "longest-substring-without-repeating-characters-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes. The brute force rechecks everything. The HashSet approach avoids that by sliding the window, and the HashMap goes further by jumping the left pointer directly. All three find the same answer, but the optimized version does the least redundant work.",
+            "audio_file": "longest-substring-without-repeating-characters-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

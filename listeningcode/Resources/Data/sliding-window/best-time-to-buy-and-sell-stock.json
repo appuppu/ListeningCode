@@ -1,0 +1,218 @@
+{
+  "id": "best-time-to-buy-and-sell-stock",
+  "title": "Finding the Best Time to Buy and Sell a Stock",
+  "difficulty": "easy",
+  "category": "sliding-window",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific test case to demonstrate how the solution works"
+      },
+      {
+        "phrase": "keep track of",
+        "explanation": "To monitor and remember a value as the algorithm progresses"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "A straightforward method that checks all possibilities without optimization"
+      },
+      {
+        "phrase": "in one pass",
+        "explanation": "Processing the entire input by going through it only once from start to end"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Sliding Window",
+        "definition": "A technique using two pointers that form a window which slides across data to track a range of elements"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows relative to the input size"
+      },
+      {
+        "term": "Greedy Algorithm",
+        "definition": "An approach that makes the locally optimal choice at each step hoping to find the global optimum"
+      },
+      {
+        "term": "Nested Loop",
+        "definition": "A loop inside another loop, often resulting in quadratic time complexity"
+      },
+      {
+        "term": "Running Minimum",
+        "definition": "The smallest value seen so far while iterating through a sequence"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the larger of two integer values"
+      },
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values"
+      },
+      {
+        "signature": "array.length",
+        "description": "Returns the number of elements in an array"
+      },
+      {
+        "signature": "Integer.MAX_VALUE",
+        "description": "A constant representing the maximum possible integer value"
+      }
+    ]
+  },
+  "concept": "Given an array of daily stock prices, find the maximum profit you can achieve by buying on one day and selling on a later day. If no profit is possible, return zero.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "summary": "Check every pair of buy and sell days using nested loops to find the maximum profit."
+    },
+    {
+      "level": 2,
+      "label": "One-Pass with Running Minimum",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Track the minimum price seen so far and compute the profit at each day in a single pass."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    subgraph Prices[\"Stock Prices Over 6 Days\"]\n        D1[\"Day 1: 7\"] --> D2[\"Day 2: 1\"]\n        D2 --> D3[\"Day 3: 5\"]\n        D3 --> D4[\"Day 4: 3\"]\n        D4 --> D5[\"Day 5: 6\"]\n        D5 --> D6[\"Day 6: 4\"]\n    end\n    D2 -. \"Buy at 1\" .-> B[\"💰\"]\n    D5 -. \"Sell at 6\" .-> B\n    B --> R[\"Profit = 5\"]\n    style D2 fill:#f87171,color:#fff\n    style D5 fill:#f87171,color:#fff\n    style R fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an array of integers where each element represents the stock price on that day. You need to find the maximum profit you can make by choosing one day to buy and a later day to sell. For example, given prices seven, one, five, three, six, four, the answer would be five because you buy at one and sell at six.",
+            "audio_file": "best-time-to-buy-and-sell-stock-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I must buy before I sell, meaning the buy day must come before the sell day. Can I ask about the input constraints? What's the size range of the array, and are prices always non-negative?",
+            "audio_file": "best-time-to-buy-and-sell-stock-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The array length can be from zero up to one hundred thousand. Prices are non-negative integers. You should return zero if no profit is possible.",
+            "audio_file": "best-time-to-buy-and-sell-stock-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? If the array is empty or has just one element, I can't make any transaction, so I'd return zero. And if prices only decrease, like seven, six, four, one, there's no profitable trade, so also zero. Is that correct?",
+            "audio_file": "best-time-to-buy-and-sell-stock-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly right. Those are important edge cases to handle.",
+            "audio_file": "best-time-to-buy-and-sell-stock-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me summarize. I receive an array of stock prices. I need to pick one buy day and one later sell day to maximize profit. If no profit exists, return zero. I'll start with a brute force solution and then optimize.",
+            "audio_file": "best-time-to-buy-and-sell-stock-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force",
+        "diagram": "graph TD\n    subgraph BF[\"Brute Force: Check All Pairs\"]\n        P[\"Prices: 7, 1, 5, 3, 6, 4\"]\n        P --> C1[\"i=0,j=1: 1-7 = -6\"]\n        C1 --> C2[\"i=0,j=2: 5-7 = -2\"]\n        C2 --> C3[\"...\"]\n        C3 --> C4[\"i=1,j=2: 5-1 = 4\"]\n        C4 --> C5[\"i=1,j=3: 3-1 = 2\"]\n        C5 --> C6[\"i=1,j=4: 6-1 = 5 ✓\"]\n        C6 --> C7[\"i=1,j=5: 4-1 = 3\"]\n        C7 --> C8[\"... remaining pairs\"]\n        C8 --> R[\"Max Profit = 5\"]\n    end\n    style C6 fill:#60a5fa,color:#fff\n    style R fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to check every possible pair of buy and sell days. I use two nested loops. The outer loop picks the buy day, and the inner loop picks each later sell day. I calculate the difference and keep track of the maximum profit.",
+            "audio_file": "best-time-to-buy-and-sell-stock-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through the example. With prices seven, one, five, three, six, four, when buy day is index one with price one and sell day is index four with price six, the profit is five. No other pair gives a higher profit.",
+            "audio_file": "best-time-to-buy-and-sell-stock-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "best-time-to-buy-and-sell-stock-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Since we compare every pair, the time complexity is O of n-squared, and space is O of one since we only store the maximum profit variable. This works but is slow for large inputs. Can I try to optimize?",
+            "audio_file": "best-time-to-buy-and-sell-stock-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, please go ahead and see if you can do better.",
+            "audio_file": "best-time-to-buy-and-sell-stock-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "One-Pass with Running Minimum",
+        "diagram": "graph TD\n    subgraph OP[\"One-Pass: Track Min Price\"]\n        S[\"Start: minPrice=7, maxProfit=0\"]\n        S --> A1[\"Day 1: price=7, profit=0, min=7\"]\n        A1 --> A2[\"Day 2: price=1, new min=1, profit=0\"]\n        A2 --> A3[\"Day 3: price=5, profit=5-1=4, max=4\"]\n        A3 --> A4[\"Day 4: price=3, profit=3-1=2, max=4\"]\n        A4 --> A5[\"Day 5: price=6, profit=6-1=5, max=5 ✓\"]\n        A5 --> A6[\"Day 6: price=4, profit=4-1=3, max=5\"]\n        A6 --> R[\"Return 5\"]\n    end\n    style A2 fill:#a78bfa,color:#fff\n    style A5 fill:#a78bfa,color:#fff\n    style R fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that for any sell day, the best buy day is simply the minimum price seen before it. So I can solve this in one pass. I keep a running minimum price and at each step, I check if selling at the current price gives a better profit.",
+            "audio_file": "best-time-to-buy-and-sell-stock-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Walking through our example. I start with min price as seven and max profit as zero. At day two, price one becomes the new minimum. At day three, five minus one gives profit four. Day four gives two. Day five, six minus one gives five, which is our new max profit. Day six gives three. Final answer is five.",
+            "audio_file": "best-time-to-buy-and-sell-stock-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice. What are the time and space complexity now?",
+            "audio_file": "best-time-to-buy-and-sell-stock-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n because we iterate through the array once. Space complexity is O of one since we only use two variables: the running minimum price and the maximum profit. This is optimal because we must look at every price at least once.",
+            "audio_file": "best-time-to-buy-and-sell-stock-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you explain why this is sometimes called a sliding window approach?",
+            "audio_file": "best-time-to-buy-and-sell-stock-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The minimum price acts as our left pointer and the current day is our right pointer. We're essentially sliding a window from left to right. When we find a new minimum, we move the left boundary. At each step, the window represents the best buy and current sell opportunity.",
+            "audio_file": "best-time-to-buy-and-sell-stock-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Brute Force\\nTime: O of n-squared\\nSpace: O of 1\"]\n        OP[\"One-Pass\\nTime: O of n\\nSpace: O of 1\"]\n    end\n    BF -- \"Optimize\" --> OP\n    style BF fill:#60a5fa,color:#fff\n    style OP fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. Let's recap the two approaches.",
+            "audio_file": "best-time-to-buy-and-sell-stock-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The brute force checks all pairs in O of n-squared time. The optimized one-pass solution tracks the running minimum and computes profit at each step in O of n time with O of one space. The key takeaway is recognizing that we only need the minimum price before each sell day, which lets us solve it greedily in a single pass.",
+            "audio_file": "best-time-to-buy-and-sell-stock-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

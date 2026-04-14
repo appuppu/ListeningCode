@@ -1,0 +1,223 @@
+{
+  "id": "valid-palindrome",
+  "title": "Checking if a String is a Palindrome",
+  "difficulty": "easy",
+  "category": "two-pointers",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "considering only alphanumeric characters",
+        "explanation": "We should ignore any character that is not a letter or digit when processing the string."
+      },
+      {
+        "phrase": "ignoring case",
+        "explanation": "Uppercase and lowercase letters should be treated as the same character."
+      },
+      {
+        "phrase": "reads the same forwards and backwards",
+        "explanation": "A palindrome property where reversing the string produces the identical sequence."
+      },
+      {
+        "phrase": "let me walk through an example",
+        "explanation": "A common phrase candidates use to demonstrate their understanding with a concrete case."
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or boundary input that might cause incorrect behavior if not handled."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Palindrome",
+        "definition": "A sequence that reads the same forwards and backwards, such as 'racecar'."
+      },
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two indices that move toward each other to compare elements from both ends."
+      },
+      {
+        "term": "Alphanumeric",
+        "definition": "Characters that are either letters from a to z or digits from 0 to 9."
+      },
+      {
+        "term": "In-place",
+        "definition": "An algorithm that uses only a constant amount of extra memory beyond the input."
+      },
+      {
+        "term": "ASCII",
+        "definition": "A character encoding standard where each letter and digit maps to a numeric value."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Character.isLetterOrDigit(char ch)",
+        "description": "Returns true if the character is a letter or digit, false otherwise."
+      },
+      {
+        "signature": "Character.toLowerCase(char ch)",
+        "description": "Converts a character to its lowercase form."
+      },
+      {
+        "signature": "String.charAt(int index)",
+        "description": "Returns the character at the specified index in the string."
+      },
+      {
+        "signature": "String.length()",
+        "description": "Returns the number of characters in the string."
+      }
+    ]
+  },
+  "concept": "Given a string, determine whether it is a palindrome. Consider only alphanumeric characters and ignore letter casing. Return true if it is a palindrome, false otherwise.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Reverse and Compare",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Filter the string to keep only alphanumeric characters, convert to lowercase, reverse it, and compare with the original filtered string."
+    },
+    {
+      "level": 2,
+      "label": "Two Pointer In-Place",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use two pointers from both ends, skip non-alphanumeric characters, and compare characters moving inward."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    A[\"Input: 'A man, a plan, a canal: Panama'\"] --> B[\"Filter alphanumeric\"]\n    B --> C[\"'amanaplanacanalpanama'\"]\n    C --> D{\"Same forwards and backwards?\"}\n    D -->|Yes| E[\"Return true\"]\n    style A fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff\n    style E fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is today's problem. You are given a string that may contain letters, digits, spaces, and punctuation. Your task is to determine if it is a palindrome. However, you should only consider alphanumeric characters and ignore letter casing.",
+            "audio_file": "valid-palindrome-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So I need to check if the string reads the same forwards and backwards, but I should skip over spaces and punctuation and treat uppercase and lowercase as equal. Is that correct?",
+            "audio_file": "valid-palindrome-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. For example, the string 'A man, a plan, a canal: Panama' is a valid palindrome because after removing non-alphanumeric characters and lowering the case, it becomes 'amanaplanacanalpanama', which reads the same in both directions.",
+            "audio_file": "valid-palindrome-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? Should an empty string be considered a palindrome? And will the input always be a valid string?",
+            "audio_file": "valid-palindrome-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, an empty string counts as a palindrome. The input is always a valid string and can have a length up to two hundred thousand characters.",
+            "audio_file": "valid-palindrome-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So given a string, I filter it to alphanumeric characters only, convert to lowercase, and check if it is a palindrome. I should return true or false. Let me think about approaches.",
+            "audio_file": "valid-palindrome-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Reverse and Compare",
+        "diagram": "graph TD\n    A[\"Input: 'A man, a plan, a canal: Panama'\"] --> B[\"Filter and lowercase\"]\n    B --> C[\"filtered = 'amanaplanacanalpanama'\"]\n    C --> D[\"Reverse the filtered string\"]\n    D --> E[\"reversed = 'amanaplanacanalpanama'\"]\n    E --> F{\"filtered equals reversed?\"}\n    F -->|Yes| G[\"Return true\"]\n    style A fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff\n    style G fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first approach is straightforward. I will iterate through the string, keep only alphanumeric characters, and convert each to lowercase. This gives me a cleaned string. Then I reverse that cleaned string and compare it with the original cleaned version.",
+            "audio_file": "valid-palindrome-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through the example?",
+            "audio_file": "valid-palindrome-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. For 'A man, a plan, a canal: Panama', after filtering I get 'amanaplanacanalpanama'. Reversing it gives me the same string 'amanaplanacanalpanama'. Since they match, I return true.",
+            "audio_file": "valid-palindrome-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What is the time and space complexity?",
+            "audio_file": "valid-palindrome-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n because I scan the string once to filter and once to reverse. The space complexity is also O of n because I store the filtered string and its reversed copy.",
+            "audio_file": "valid-palindrome-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. Can you think of a way to avoid the extra space?",
+            "audio_file": "valid-palindrome-brute-force-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-pointer",
+        "level": 2,
+        "title": "Two Pointer In-Place",
+        "diagram": "graph TD\n    A[\"'A man, a plan, a canal: Panama'\"] --> B[\"left=0 points to 'A', right=29 points to 'a'\"]\n    B --> C[\"Compare 'a' vs 'a' → match, move inward\"]\n    C --> D[\"left skips space and comma, finds 'm'\"]\n    D --> E[\"right skips 'm', finds 'a'... continue\"]\n    E --> F[\"Pointers meet in the middle\"]\n    F --> G[\"All matched → Return true\"]\n    style A fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style F fill:#a78bfa,color:#fff\n    style G fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can use a two-pointer approach. I place one pointer at the start and one at the end. Each pointer skips non-alphanumeric characters. When both point to valid characters, I compare them in lowercase. If they match, I move both pointers inward. If they ever mismatch, I return false.",
+            "audio_file": "valid-palindrome-two-pointer-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example with this approach.",
+            "audio_file": "valid-palindrome-two-pointer-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For 'A man, a plan, a canal: Panama', my left pointer starts at 'A' and right pointer at 'a'. Both are alphanumeric. Lowercase 'a' equals 'a', so they match. I move left forward and right backward. Left skips the space and lands on 'm'. Right skips 'm' too. I keep comparing and skipping non-alphanumeric characters. The pointers eventually meet in the middle with all matches, so I return true.",
+            "audio_file": "valid-palindrome-two-pointer-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about the complexity?",
+            "audio_file": "valid-palindrome-two-pointer-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is still O of n because each character is visited at most once. But the space complexity is now O of one because I only use two pointer variables and no extra string storage. This is the optimal solution.",
+            "audio_file": "valid-palindrome-two-pointer-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n        A[\"Reverse and Compare<br/>Time: O of n<br/>Space: O of n\"] --- B[\"Two Pointer<br/>Time: O of n<br/>Space: O of 1\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Can you summarize both approaches?",
+            "audio_file": "valid-palindrome-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The first approach filters the string and reverses it for comparison. It runs in O of n time and O of n space. The two-pointer approach compares characters from both ends directly on the original string, skipping non-alphanumeric characters. It achieves O of n time and O of one space, making it the optimal solution for this problem.",
+            "audio_file": "valid-palindrome-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The key insight is that palindrome checking naturally fits the two-pointer pattern. By working from both ends inward and skipping irrelevant characters, we avoid building any extra data structure. Well done.",
+            "audio_file": "valid-palindrome-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

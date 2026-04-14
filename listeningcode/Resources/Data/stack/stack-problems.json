@@ -1,0 +1,50 @@
+[
+  {
+    "id": "valid-parentheses",
+    "title": "Checking if Parentheses Are Balanced",
+    "difficulty": "easy",
+    "sort_order": 0,
+    "content_file": "valid-parentheses.json",
+    "leetcode_url": "https://leetcode.com/problems/valid-parentheses/"
+  },
+  {
+    "id": "min-stack",
+    "title": "Designing a Stack That Tracks the Minimum",
+    "difficulty": "medium",
+    "sort_order": 1,
+    "content_file": "min-stack.json",
+    "leetcode_url": "https://leetcode.com/problems/min-stack/"
+  },
+  {
+    "id": "evaluate-reverse-polish-notation",
+    "title": "Evaluating an Expression in Reverse Polish Notation",
+    "difficulty": "medium",
+    "sort_order": 2,
+    "content_file": "evaluate-reverse-polish-notation.json",
+    "leetcode_url": "https://leetcode.com/problems/evaluate-reverse-polish-notation/"
+  },
+  {
+    "id": "daily-temperatures",
+    "title": "Finding How Many Days Until a Warmer Temperature",
+    "difficulty": "medium",
+    "sort_order": 3,
+    "content_file": "daily-temperatures.json",
+    "leetcode_url": "https://leetcode.com/problems/daily-temperatures/"
+  },
+  {
+    "id": "car-fleet",
+    "title": "Counting Car Fleets Arriving at a Destination",
+    "difficulty": "medium",
+    "sort_order": 4,
+    "content_file": "car-fleet.json",
+    "leetcode_url": "https://leetcode.com/problems/car-fleet/"
+  },
+  {
+    "id": "largest-rectangle-in-histogram",
+    "title": "Finding the Largest Rectangle in a Histogram",
+    "difficulty": "hard",
+    "sort_order": 5,
+    "content_file": "largest-rectangle-in-histogram.json",
+    "leetcode_url": "https://leetcode.com/problems/largest-rectangle-in-histogram/"
+  }
+]

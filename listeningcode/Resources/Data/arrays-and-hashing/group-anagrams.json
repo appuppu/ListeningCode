@@ -1,0 +1,331 @@
+{
+  "id": "group-anagrams",
+  "title": "Grouping Words by Anagram Patterns",
+  "difficulty": "medium",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "group together",
+        "explanation": "To collect items that share a common property into the same collection."
+      },
+      {
+        "phrase": "let me walk through",
+        "explanation": "A common phrase meaning to explain something step by step."
+      },
+      {
+        "phrase": "under the hood",
+        "explanation": "Refers to the internal workings or implementation details of something."
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input scenario that might cause unexpected behavior."
+      },
+      {
+        "phrase": "boils down to",
+        "explanation": "Means 'can be simplified to' or 'essentially means'."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Anagram",
+        "definition": "A word formed by rearranging the letters of another word. For example, 'eat' and 'tea' are anagrams."
+      },
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs and provides average O of 1 lookup time."
+      },
+      {
+        "term": "Character Frequency",
+        "definition": "A count of how many times each character appears in a string."
+      },
+      {
+        "term": "Sorting",
+        "definition": "Arranging elements in a specific order, often alphabetical or numerical."
+      },
+      {
+        "term": "Bucket",
+        "definition": "A grouping container used in hashing to collect items that share the same key."
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows relative to the input size."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Arrays.sort(char[])",
+        "description": "Sorts a character array in ascending alphabetical order in place."
+      },
+      {
+        "signature": "String.toCharArray()",
+        "description": "Converts a string into an array of characters."
+      },
+      {
+        "signature": "HashMap.getOrDefault(key, defaultValue)",
+        "description": "Returns the value for the given key, or the default value if the key is not present."
+      },
+      {
+        "signature": "HashMap.computeIfAbsent(key, mappingFunction)",
+        "description": "If the key is not already associated with a value, computes its value using the given function and inserts it."
+      },
+      {
+        "signature": "String.valueOf(char[])",
+        "description": "Creates a new String from a character array."
+      }
+    ]
+  },
+  "concept": "Given an array of strings, group together all strings that are anagrams of each other. Two strings are anagrams if they contain the exact same characters with the same frequencies, just in a different order. Return a list of groups where each group contains all mutual anagrams.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force Pairwise Comparison",
+      "time_complexity": "O(n-squared times k)",
+      "space_complexity": "O(n times k)",
+      "summary": "Compare every pair of strings by checking if they have identical character frequencies. Group matching pairs together."
+    },
+    {
+      "level": 2,
+      "label": "Sorted String as Hash Key",
+      "time_complexity": "O(n times k log k)",
+      "space_complexity": "O(n times k)",
+      "summary": "Sort each string alphabetically and use the sorted version as a hash map key. All anagrams produce the same sorted string."
+    },
+    {
+      "level": 3,
+      "label": "Character Frequency Count as Key",
+      "time_complexity": "O(n times k)",
+      "space_complexity": "O(n times k)",
+      "summary": "Count the frequency of each character in a string and use that frequency signature as the hash map key, avoiding the cost of sorting."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: array of strings\"] --> B{\"Are they anagrams?\"}\n    B -->|Yes| C[\"Group Together\"]\n    B -->|No| D[\"Separate Groups\"]\n    C --> E[\"Output: list of groups\"]\n    D --> E\n    style A fill:#f87171,color:#000\n    style B fill:#f87171,color:#000\n    style E fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's work on a string grouping problem today. You're given an array of strings, and your task is to group together all the strings that are anagrams of each other. For example, if the input is eat, tea, tan, ate, nat, and bat, you'd want to group eat, tea, and ate together since they all use the same letters. Similarly, tan and nat form another group, and bat stands alone.",
+            "audio_file": "group-anagrams-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Okay, so I need to identify which strings share the exact same set of characters with the same frequencies, and then collect them into groups. Before I start, I have a few clarifying questions. First, can the input array be empty, or can it contain empty strings?",
+            "audio_file": "group-anagrams-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good questions. Yes, the input array can be empty, in which case you'd return an empty list. And yes, individual strings can be empty too. Two empty strings would be anagrams of each other and should be grouped together.",
+            "audio_file": "group-anagrams-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. Are the strings always lowercase English letters, or do I need to handle uppercase, digits, or special characters?",
+            "audio_file": "group-anagrams-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "For this problem, you can assume all strings consist only of lowercase English letters from a to z.",
+            "audio_file": "group-anagrams-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. And what about the return format? Does the order of the groups matter, or does the order of strings within each group matter?",
+            "audio_file": "group-anagrams-intro-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The order does not matter at all. You can return the groups in any order, and the strings within each group can be in any order as well.",
+            "audio_file": "group-anagrams-intro-i4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Perfect. And roughly how large can the input be? How many strings and how long can each string be?",
+            "audio_file": "group-anagrams-intro-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The number of strings can be up to ten thousand, and each string can be up to one hundred characters long. So efficiency matters here.",
+            "audio_file": "group-anagrams-intro-i5.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright, let me summarize. I'm given an array of up to ten thousand lowercase strings, each up to one hundred characters. I need to group all anagrams together and return a list of those groups. The order doesn't matter. Two strings are anagrams if they have the same characters at the same frequencies. Let me think about different approaches.",
+            "audio_file": "group-anagrams-intro-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force: Pairwise Comparison",
+        "diagram": "graph TD\n    A[\"Pick string i\"] --> B[\"Compare with every string j\"] \n    B --> C{\"Same character frequencies?\"}\n    C -->|Yes| D[\"Add j to i's group\"]\n    C -->|No| E[\"Skip\"]\n    D --> F[\"Mark j as visited\"]\n    F --> B\n    E --> B\n    B --> G[\"Move to next unvisited i\"]\n    style A fill:#60a5fa,color:#000\n    style B fill:#60a5fa,color:#000\n    style C fill:#60a5fa,color:#000\n    style D fill:#60a5fa,color:#000\n    style G fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The most straightforward approach would be a brute force pairwise comparison. For each string that hasn't been grouped yet, I compare it against every other ungrouped string. To check if two strings are anagrams, I count the character frequencies of both and see if they match.",
+            "audio_file": "group-anagrams-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Okay, walk me through how that comparison works for a specific pair.",
+            "audio_file": "group-anagrams-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Take eat and tea. I create a frequency array of size twenty-six for eat: e appears once, a appears once, t appears once. Then I do the same for tea. The two arrays are identical, so they're anagrams. I'd group them together and mark tea as visited so I don't process it again.",
+            "audio_file": "group-anagrams-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And what's the time complexity of this approach?",
+            "audio_file": "group-anagrams-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each string, I potentially compare it with every other string. That gives me O of n-squared pairs. For each pair, comparing character frequencies takes O of k time, where k is the maximum string length. So the total time complexity is O of n-squared times k. With n up to ten thousand and k up to one hundred, that could be around ten billion operations, which is way too slow.",
+            "audio_file": "group-anagrams-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right, that won't scale well. What about space complexity?",
+            "audio_file": "group-anagrams-brute-force-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The space complexity is O of n times k for storing the groups and the visited flags. The frequency arrays are reused, so they only take O of twenty-six constant space. Let me think of a better approach that avoids the pairwise comparison altogether.",
+            "audio_file": "group-anagrams-brute-force-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "sorted-key",
+        "level": 2,
+        "title": "Better: Sorted String as Hash Key",
+        "diagram": "graph TD\n    A[\"For each string\"] --> B[\"Sort its characters\"]\n    B --> C[\"Use sorted string as key\"]\n    C --> D{\"Key exists in map?\"}\n    D -->|Yes| E[\"Add to existing group\"]\n    D -->|No| F[\"Create new group\"]\n    E --> G[\"Result: map values\"]\n    F --> G\n    style A fill:#a78bfa,color:#000\n    style B fill:#a78bfa,color:#000\n    style C fill:#a78bfa,color:#000\n    style D fill:#a78bfa,color:#000\n    style G fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Here's a key insight: if two strings are anagrams, then sorting their characters produces the exact same string. For example, sorting eat gives a-e-t, and sorting tea also gives a-e-t. So I can use the sorted version of each string as a hash map key.",
+            "audio_file": "group-anagrams-sorted-key-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's a nice observation. How would you implement this?",
+            "audio_file": "group-anagrams-sorted-key-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I create a hash map where the key is a sorted string and the value is a list of original strings that share that sorted form. I iterate through each string in the input, convert it to a character array, sort the array, and create a new string from it. Then I look up that sorted string in the map. If it exists, I add the original string to the list. If not, I create a new list.",
+            "audio_file": "group-anagrams-sorted-key-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Let me walk through an example. With the input eat, tea, tan, ate, nat, bat, what does the map look like?",
+            "audio_file": "group-anagrams-sorted-key-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let's see. Eat sorts to a-e-t, so the map gets key a-e-t mapped to a list containing eat. Tea also sorts to a-e-t, so we add tea to that same list. Tan sorts to a-n-t, creating a new key. Ate sorts to a-e-t again, joining eat and tea. Nat sorts to a-n-t, joining tan. And bat sorts to a-b-t, forming its own group. The final map has three keys with three groups.",
+            "audio_file": "group-anagrams-sorted-key-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great. What's the time and space complexity now?",
+            "audio_file": "group-anagrams-sorted-key-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each of the n strings, I sort it, which takes O of k log k where k is the string length. So the total time is O of n times k log k. The space is O of n times k for storing all the strings in the map. This is much better than the brute force approach, but we can actually eliminate the sorting cost entirely.",
+            "audio_file": "group-anagrams-sorted-key-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Optimal: Character Frequency Count as Key",
+        "diagram": "graph TD\n    A[\"For each string\"] --> B[\"Count character frequencies\"]\n    B --> C[\"Build frequency signature string\"]\n    C --> D[\"e.g. #1#0#0#0#1#...#1#0...\"]\n    D --> E{\"Key exists in map?\"}\n    E -->|Yes| F[\"Add to existing group\"]\n    E -->|No| G[\"Create new group\"]\n    F --> H[\"Result: map values\"]\n    G --> H\n    style A fill:#fb923c,color:#000\n    style B fill:#fb923c,color:#000\n    style C fill:#fb923c,color:#000\n    style D fill:#fb923c,color:#000\n    style H fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of sorting each string, I can count the frequency of each character and use that frequency count as the hash key. Since we only have twenty-six lowercase letters, I create an array of size twenty-six, count each character's occurrences, and then convert that array into a string representation to use as the key.",
+            "audio_file": "group-anagrams-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How exactly would you represent the frequency array as a string key?",
+            "audio_file": "group-anagrams-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I use a delimiter like the hash symbol between each count. For example, for the string eat, the frequency array has one for a, one for e, and one for t, with zeros for all other letters. The key string would look like one-hash-zero-hash-zero-hash-zero-hash-one, and so on up to twenty-six values. The delimiter is essential to avoid collisions. Without it, a count of one-twelve could be confused with eleven-two.",
+            "audio_file": "group-anagrams-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good point about the delimiter. Can you trace through the same example?",
+            "audio_file": "group-anagrams-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. For eat, I scan each character: e increments index four, a increments index zero, t increments index nineteen. That gives me my frequency array which I convert to a key string. For tea, I get the exact same frequency counts, so the exact same key. They land in the same bucket. The process is the same for all strings — anagrams always produce identical frequency signatures.",
+            "audio_file": "group-anagrams-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity improvement?",
+            "audio_file": "group-anagrams-optimal-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each string, counting frequencies takes O of k time, and building the key string takes O of twenty-six which is constant. So the total time complexity is O of n times k, where n is the number of strings and k is the maximum string length. We've eliminated the k log k sorting factor. The space complexity remains O of n times k for the hash map storage. This is optimal because we must read every character of every string at least once.",
+            "audio_file": "group-anagrams-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why is this truly optimal? Could we do better?",
+            "audio_file": "group-anagrams-optimal-i4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "No, we can't do better than O of n times k because just reading the input requires that much time. Every character in every string must be examined at least once to determine anagram groupings. So this approach achieves the theoretical lower bound for this problem.",
+            "audio_file": "group-anagrams-optimal-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Comparison and Key Takeaways",
+        "diagram": "graph TD\n    subgraph Comparison\n        A[\"Level 1: Brute Force\\nO of n-squared times k\\nPairwise comparison\"] \n        B[\"Level 2: Sorted Key\\nO of n times k log k\\nSorted string as hash key\"]\n        C[\"Level 3: Frequency Key\\nO of n times k\\nCharacter count as hash key\"]\n    end\n    A -->|\"Eliminate pairwise checks\"| B\n    B -->|\"Eliminate sorting\"| C\n    style A fill:#60a5fa,color:#000\n    style B fill:#a78bfa,color:#000\n    style C fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Let me summarize the three approaches. The brute force method compares every pair of strings, which gives O of n-squared times k time complexity. It's simple to understand but far too slow for large inputs.",
+            "audio_file": "group-anagrams-summary-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The second approach uses sorting as a normalizing trick. By sorting each string and using the sorted version as a hash map key, we avoid pairwise comparisons entirely. This brings us down to O of n times k log k.",
+            "audio_file": "group-anagrams-summary-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach replaces sorting with character frequency counting. Since we only have twenty-six possible characters, counting frequencies is linear in the string length. This gives us O of n times k, which matches the lower bound since we must read all input.",
+            "audio_file": "group-anagrams-summary-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great analysis. The key pattern here is the idea of finding a canonical representation for each group. Sorting gives one canonical form, and frequency counting gives another. This pattern of transforming data into a canonical key for grouping comes up frequently in interviews. Well done.",
+            "audio_file": "group-anagrams-summary-i1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

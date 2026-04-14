@@ -1,0 +1,213 @@
+{
+  "id": "valid-sudoku",
+  "title": "Validating a Sudoku Board",
+  "difficulty": "medium",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "partially filled",
+        "explanation": "Some cells have values while others are empty, not every position is occupied."
+      },
+      {
+        "phrase": "walk through",
+        "explanation": "To explain step by step how something works, often used when describing an algorithm."
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The most straightforward method that checks all possibilities without clever optimization."
+      },
+      {
+        "phrase": "trade off",
+        "explanation": "A situation where gaining one benefit requires giving up another, such as using more memory to gain speed."
+      },
+      {
+        "phrase": "under the hood",
+        "explanation": "Describes what happens internally in a system or algorithm, beyond what is immediately visible."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Hash Set",
+        "definition": "A data structure that stores unique elements and supports O of one average lookup, insertion, and deletion."
+      },
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that maps keys to values, allowing efficient retrieval by key in O of one average time."
+      },
+      {
+        "term": "Sub-grid",
+        "definition": "A smaller three-by-three block within the nine-by-nine Sudoku board. There are nine such sub-grids total."
+      },
+      {
+        "term": "Constraint validation",
+        "definition": "The process of checking whether a given state satisfies all required rules or conditions."
+      },
+      {
+        "term": "Two-dimensional array",
+        "definition": "An array of arrays, used to represent grid or matrix structures like a Sudoku board."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashSet.add(element)",
+        "description": "Adds an element to the set. Returns true if the element was not already present, false otherwise."
+      },
+      {
+        "signature": "HashSet.contains(element)",
+        "description": "Returns true if the set contains the specified element."
+      },
+      {
+        "signature": "HashMap.getOrDefault(key, defaultValue)",
+        "description": "Returns the value mapped to the key, or the default value if the key is not present."
+      },
+      {
+        "signature": "Character.isDigit(char)",
+        "description": "Returns true if the given character is a digit from zero to nine."
+      }
+    ]
+  },
+  "concept": "Given a nine-by-nine Sudoku board represented as a two-dimensional character array, determine whether the board is valid. A valid board means that each row, each column, and each of the nine three-by-three sub-grids contains no duplicate digits. Empty cells are represented by a dot character.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Separate Passes",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n)",
+      "summary": "Check each row, each column, and each sub-grid in three separate passes using a hash set to detect duplicates."
+    },
+    {
+      "level": 3,
+      "label": "Single Pass with Hash Sets",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n^2)",
+      "summary": "Iterate through the board once, tracking seen digits for every row, column, and sub-grid simultaneously using hash sets."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"9x9 Board\"]:::red --> B[\"Check Rows\"]:::red\n    A --> C[\"Check Columns\"]:::red\n    A --> D[\"Check 3x3 Boxes\"]:::red\n    B --> E{\"All Valid?\"}:::red\n    C --> E\n    D --> E\n    E -->|Yes| F[\"Return true\"]\n    E -->|No| G[\"Return false\"]\n    classDef red fill:#f87171,stroke:#333,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's work on a board validation problem. You're given a nine-by-nine Sudoku board as a two-dimensional character array. Some cells contain digits one through nine, and empty cells are marked with a dot. Your task is to determine whether the current state of the board is valid.",
+            "audio_file": "valid-sudoku-intro-i1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "A valid board means no duplicate digits in any row, any column, or any of the nine three-by-three sub-grids. You only need to validate the filled cells. You don't need to check if the puzzle is solvable.",
+            "audio_file": "valid-sudoku-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So the input is always exactly nine-by-nine, and each cell is either a digit character from one to nine or a dot. I should return true if no rules are violated and false otherwise. Is that correct?",
+            "audio_file": "valid-sudoku-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The board is always nine-by-nine. You can assume the input only contains valid characters. Focus on detecting duplicate digits within rows, columns, and sub-grids.",
+            "audio_file": "valid-sudoku-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So to summarize, I iterate over the board, and for each filled cell, I check whether that digit has already appeared in the same row, same column, or same three-by-three box. If any duplicate is found, I return false. Otherwise I return true.",
+            "audio_file": "valid-sudoku-intro-c2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Separate Passes",
+        "diagram": "graph TD\n    A[\"Pass 1: Check Rows\"]:::blue --> B[\"Pass 2: Check Columns\"]:::blue\n    B --> C[\"Pass 3: Check Sub-grids\"]:::blue\n    C --> D{\"Any duplicates?\"}\n    D -->|No| E[\"Return true\"]:::blue\n    D -->|Yes| F[\"Return false\"]\n    classDef blue fill:#60a5fa,stroke:#333,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a brute force approach with three separate passes. In the first pass, I check each of the nine rows. For each row, I create a hash set and add every digit. If an add operation returns false, it means a duplicate exists, so I return false.",
+            "audio_file": "valid-sudoku-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In the second pass, I do the same for each column. I iterate down each of the nine columns and use a fresh set to detect duplicates. The third pass handles the nine three-by-three sub-grids. I calculate the starting row and column of each box and scan its nine cells.",
+            "audio_file": "valid-sudoku-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That makes sense. What about the time and space complexity?",
+            "audio_file": "valid-sudoku-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Since the board is always nine-by-nine, the time complexity is O of n-squared where n is nine, so eighty-one cells visited three times. Space is O of n because each set holds at most nine elements. It works, but the three separate passes feel redundant.",
+            "audio_file": "valid-sudoku-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good observation. Can you think of a way to combine those checks into a single pass?",
+            "audio_file": "valid-sudoku-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Single Pass with Hash Sets",
+        "diagram": "graph TD\n    A[\"Iterate each cell\"]:::orange --> B{\"Is digit?\"}:::orange\n    B -->|No| A\n    B -->|Yes| C[\"Check row set\"]:::orange\n    C --> D[\"Check column set\"]:::orange\n    D --> E[\"Check box set\"]:::orange\n    E --> F{\"Duplicate found?\"}:::orange\n    F -->|Yes| G[\"Return false\"]\n    F -->|No| H[\"Add to all three sets\"]:::orange\n    H --> A\n    classDef orange fill:#fb923c,stroke:#333,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can validate everything in a single pass. I'll prepare three arrays of hash sets: one array of nine sets for rows, one for columns, and one for the nine sub-grids. Then I scan each cell exactly once.",
+            "audio_file": "valid-sudoku-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each filled cell at position row, col, I compute the box index as row divided by three times three plus col divided by three. This maps every cell to its correct sub-grid index from zero to eight. Then I check all three corresponding sets.",
+            "audio_file": "valid-sudoku-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If the digit already exists in the row set, column set, or box set, I return false immediately. Otherwise, I add the digit to all three sets and continue. If I finish scanning all eighty-one cells with no conflicts, I return true.",
+            "audio_file": "valid-sudoku-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice. What are the complexity trade offs compared to the brute force?",
+            "audio_file": "valid-sudoku-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is still O of n-squared, but we only pass through the board once instead of three times. Space is O of n-squared because we maintain twenty-seven sets, each holding up to nine elements. We trade a bit more memory for cleaner and faster execution.",
+            "audio_file": "valid-sudoku-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's a solid optimization. The single-pass approach is exactly what interviewers look for.",
+            "audio_file": "valid-sudoku-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Brute Force\"]:::blue -->|\"3 passes, O of n space\"| C[\"Valid Sudoku\"]\n    B[\"Single Pass\"]:::orange -->|\"1 pass, O of n-squared space\"| C\n    classDef blue fill:#60a5fa,stroke:#333,color:#000\n    classDef orange fill:#fb923c,stroke:#333,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. We covered two approaches. The brute force validates rows, columns, and boxes in three separate passes. The optimal solution uses three arrays of hash sets to check everything in one pass, which is both cleaner and more efficient in practice.",
+            "audio_file": "valid-sudoku-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is the box index formula: row divided by three times three plus col divided by three. That mapping lets us handle all constraints simultaneously without extra loops.",
+            "audio_file": "valid-sudoku-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

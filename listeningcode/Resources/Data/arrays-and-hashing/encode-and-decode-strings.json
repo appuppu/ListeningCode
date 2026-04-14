@@ -1,0 +1,227 @@
+{
+  "id": "encode-and-decode-strings",
+  "title": "Encoding and Decoding a List of Strings",
+  "difficulty": "medium",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "encode and decode",
+        "explanation": "To convert data into a specific format (encode) and then convert it back to the original format (decode)"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      },
+      {
+        "phrase": "delimiter",
+        "explanation": "A special character or sequence used to separate pieces of data"
+      },
+      {
+        "phrase": "stateless function",
+        "explanation": "A function that does not rely on any stored information between calls"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To go step by step through a specific input to show how the algorithm works"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Serialization",
+        "definition": "The process of converting a data structure into a format that can be stored or transmitted as a single value"
+      },
+      {
+        "term": "Deserialization",
+        "definition": "The process of reconstructing the original data structure from the serialized format"
+      },
+      {
+        "term": "Length-prefixed encoding",
+        "definition": "A technique where each piece of data is preceded by its length, allowing unambiguous parsing"
+      },
+      {
+        "term": "Escape character",
+        "definition": "A special character used to indicate that the following character should be treated differently"
+      },
+      {
+        "term": "StringBuilder",
+        "definition": "A mutable sequence of characters in Java used for efficient string concatenation"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "StringBuilder.append(String s)",
+        "description": "Appends the given string to the internal buffer of the StringBuilder"
+      },
+      {
+        "signature": "String.substring(int begin, int end)",
+        "description": "Returns a new string that is a portion of the original from begin index up to but not including end index"
+      },
+      {
+        "signature": "String.indexOf(String str, int fromIndex)",
+        "description": "Returns the index of the first occurrence of the specified string starting from the given index"
+      },
+      {
+        "signature": "Integer.parseInt(String s)",
+        "description": "Parses the string argument as a signed decimal integer"
+      },
+      {
+        "signature": "String.charAt(int index)",
+        "description": "Returns the character at the specified index in the string"
+      }
+    ]
+  },
+  "concept": "Design an algorithm to encode a list of strings into a single string and decode it back to the original list. The encode and decode methods must be stateless and handle any valid string content including special characters, empty strings, and delimiters.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Escape Character Delimiter",
+      "time_complexity": "O(n * k)",
+      "space_complexity": "O(n * k)",
+      "summary": "Use a delimiter to separate strings, and an escape character to handle cases where the delimiter appears within the strings themselves."
+    },
+    {
+      "level": 3,
+      "label": "Length-Prefixed Encoding",
+      "time_complexity": "O(n * k)",
+      "space_complexity": "O(n * k)",
+      "summary": "Prefix each string with its length followed by a fixed separator character, allowing unambiguous decoding without escaping."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"List of Strings\"]:::red --> B[\"encode()\"]:::red\n    B --> C[\"Single String\"]:::red\n    C --> D[\"decode()\"]:::red\n    D --> E[\"Original List of Strings\"]:::red\n    classDef red fill:#f87171,stroke:#dc2626,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. I'd like you to design two functions: encode and decode. The encode function takes a list of strings and converts it into a single string. The decode function takes that single string and converts it back into the original list. The key constraint is that these functions must be stateless.",
+            "audio_file": "encode-and-decode-strings-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Interesting. So I need to make sure the round trip is lossless. Can the input strings contain any characters, including special characters, numbers, or even empty strings?",
+            "audio_file": "encode-and-decode-strings-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the strings can contain any valid character, including symbols, spaces, and empty strings. The list itself can also be empty.",
+            "audio_file": "encode-and-decode-strings-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So the tricky part is choosing a way to separate strings that won't conflict with the string content. If I just use a comma, a string containing a comma would break the decoding. Let me think about approaches that handle this cleanly.",
+            "audio_file": "encode-and-decode-strings-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. That's the core challenge. How do you guarantee that your separator or encoding scheme is unambiguous regardless of the input content?",
+            "audio_file": "encode-and-decode-strings-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. Let me summarize: I need encode and decode functions that handle any string content, including empty strings, special characters, and delimiters. The functions must be stateless. I'll start with a simpler approach and then optimize.",
+            "audio_file": "encode-and-decode-strings-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Escape Character Delimiter",
+        "diagram": "graph TD\n    A[\"Input: ['ab','a#b']\"]:::blue --> B[\"Choose '#' as delimiter\"]:::blue\n    B --> C[\"Escape existing '#' in strings\"]:::blue\n    C --> D[\"'ab' stays 'ab'\"]:::blue\n    C --> E[\"'a#b' becomes 'a##b'\"]:::blue\n    D --> F[\"Join with '/#'\"]:::blue\n    E --> F\n    F --> G[\"Encoded: 'ab/#a##b'\"]:::blue\n    G --> H[\"Decode: split on '/# ' and unescape '##'\"]:::blue\n    classDef blue fill:#60a5fa,stroke:#2563eb,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is to use a delimiter approach with escape characters. I'll pick a delimiter, say the hash symbol, and an escape character, say the slash. Before joining, I escape any existing hash or slash characters within each string. Then I join strings with a unique delimiter like slash-hash.",
+            "audio_file": "encode-and-decode-strings-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That could work. Can you walk through how decoding handles the escaped characters?",
+            "audio_file": "encode-and-decode-strings-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "During decoding, I scan the encoded string. When I see slash-hash, I know it's a real delimiter between strings. When I see double-hash or double-slash, I know those are escaped characters within a string. I convert them back to single characters.",
+            "audio_file": "encode-and-decode-strings-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about the time and space complexity?",
+            "audio_file": "encode-and-decode-strings-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Both are O of n times k, where n is the number of strings and k is the average length. We scan every character during both encoding and decoding. The downside is the implementation is tricky. We need careful character-by-character parsing during decode, and bugs can easily creep in with nested escaping.",
+            "audio_file": "encode-and-decode-strings-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Length-Prefixed Encoding",
+        "diagram": "graph TD\n    A[\"Input: ['hello','world','']\"]:::orange --> B[\"Encode each string\"]:::orange\n    B --> C[\"'5#hello'\"]:::orange\n    B --> D[\"'5#world'\"]:::orange\n    B --> E[\"'0#'\"]:::orange\n    C --> F[\"Combined: '5#hello5#world0#'\"]:::orange\n    D --> F\n    E --> F\n    F --> G[\"Decode: read length, skip '#', extract substring\"]:::orange\n    G --> H[\"Output: ['hello','world','']\"]:::orange\n    classDef orange fill:#fb923c,stroke:#ea580c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "A much cleaner approach is length-prefixed encoding. For each string, I prepend its length followed by a hash symbol. For example, hello becomes five-hash-hello. The hash is just a fixed separator between the length and the content.",
+            "audio_file": "encode-and-decode-strings-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why is this better than the escape character approach?",
+            "audio_file": "encode-and-decode-strings-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that we never need to escape anything. Since we know the exact length of each string, we simply read that many characters after the separator. Even if the string content contains digits or hash symbols, it doesn't matter because we already know where the string ends.",
+            "audio_file": "encode-and-decode-strings-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does decoding work step by step?",
+            "audio_file": "encode-and-decode-strings-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "During decoding, I maintain a pointer. I find the next hash symbol, parse everything before it as the length, then extract that many characters after the hash as the string. I advance the pointer past those characters and repeat. For empty strings, the length is zero, so I just read zero characters and get an empty string back.",
+            "audio_file": "encode-and-decode-strings-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "encode-and-decode-strings-optimal-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n times k, same as before. Space complexity is also O of n times k for the encoded string. But this approach is far simpler to implement, less error-prone, and handles all edge cases naturally without special escaping logic.",
+            "audio_file": "encode-and-decode-strings-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n        A[\"Escape Delimiter\"]:::blue\n        B[\"Length-Prefixed\"]:::orange\n    end\n    A -- \"O of n k / complex parsing\" --> C[\"Works but error-prone\"]\n    B -- \"O of n k / simple parsing\" --> D[\"Clean and robust\"]\n    classDef blue fill:#60a5fa,stroke:#2563eb,color:#000\n    classDef orange fill:#fb923c,stroke:#ea580c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Both approaches have the same time complexity, but the length-prefixed encoding is clearly the better design. What's the main takeaway from this problem?",
+            "audio_file": "encode-and-decode-strings-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key lesson is that when designing serialization formats, including metadata like the length of each element makes parsing unambiguous. Instead of fighting with escape characters and edge cases, we let the length tell us exactly where each string starts and ends. It's a pattern used in real protocols like HTTP and binary formats.",
+            "audio_file": "encode-and-decode-strings-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

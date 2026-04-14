@@ -1,0 +1,204 @@
+{
+  "id": "searching-for-a-target-in-a-sorted-array",
+  "title": "Searching for a Target in a Sorted Array",
+  "difficulty": "easy",
+  "category": "binary-search",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "sorted in ascending order",
+        "explanation": "Arranged from smallest to largest value"
+      },
+      {
+        "phrase": "narrow down the search space",
+        "explanation": "Reduce the range of elements we need to check"
+      },
+      {
+        "phrase": "return negative one if not found",
+        "explanation": "Give back -1 as a signal that the target does not exist in the array"
+      },
+      {
+        "phrase": "cut the problem in half",
+        "explanation": "Eliminate half of the remaining elements in each step"
+      },
+      {
+        "phrase": "worst-case scenario",
+        "explanation": "The situation that requires the most operations to complete"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Search",
+        "definition": "An efficient algorithm that finds a target value in a sorted array by repeatedly dividing the search interval in half"
+      },
+      {
+        "term": "Linear Search",
+        "definition": "A simple search that checks every element one by one from start to end"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows as the input size increases"
+      },
+      {
+        "term": "Midpoint",
+        "definition": "The middle index between two boundary pointers, calculated to split the search range"
+      },
+      {
+        "term": "Sorted Array",
+        "definition": "An array whose elements are arranged in non-decreasing order"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Arrays.binarySearch(int[] a, int key)",
+        "description": "Searches a sorted array for a key using binary search and returns its index or a negative value if not found"
+      },
+      {
+        "signature": "array.length",
+        "description": "Returns the number of elements in the array"
+      },
+      {
+        "signature": "Math.floor(double a)",
+        "description": "Returns the largest integer less than or equal to the given value, useful for computing midpoints"
+      }
+    ]
+  },
+  "concept": "Given a sorted array of integers and a target value, return the index of the target. If the target is not found, return -1.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Linear Search",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Scan every element from left to right until the target is found or the array ends."
+    },
+    {
+      "level": 2,
+      "label": "Binary Search",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "summary": "Use two pointers to repeatedly halve the search range by comparing the middle element with the target."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    A[\"Input: nums = [1, 3, 5, 7, 9, 11], target = 7\"] --> B{\"Find index of 7\"}\n    B --> C[\"Output: 3\"]\n    style A fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's work on a search problem. You're given an array of integers that is already sorted in ascending order, and a target value. Your task is to find the index of the target in the array. If it doesn't exist, return negative one.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. Just to confirm, the array is always sorted and contains integers. Can the array be empty, or have just one element?",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array can be empty, in which case you return negative one. It can also have a single element. All values are unique, and the array is sorted in non-decreasing order.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So for example, given the array one, three, five, seven, nine, eleven and a target of seven, I should return index three. And if the target were four, I'd return negative one. Let me think about approaches.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-intro-c2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Linear Search",
+        "diagram": "graph LR\n    A[\"i=0: 1\"] --> B[\"i=1: 3\"] --> C[\"i=2: 5\"] --> D[\"i=3: 7 ✓\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#22c55e,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is a linear search. I loop through the array from left to right and check each element. If it matches the target, I return the current index.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Using our example, I check index zero which is one, not seven. Index one is three, not seven. Index two is five, not seven. Index three is seven, that's a match, so I return three.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n in the worst case, because I might need to check every element. The space complexity is O of one since I only use a loop variable. This works, but it doesn't take advantage of the sorted order at all.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. The array is sorted, so can you do better?",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Binary Search",
+        "diagram": "graph TD\n    S[\"Array: [1, 3, 5, 7, 9, 11], target = 7\"]\n    S --> R1[\"Step 1: left=0, right=5, mid=2, value=5\"]\n    R1 --> D1{\"5 < 7?\"}\n    D1 -->|Yes| R2[\"Step 2: left=3, right=5, mid=4, value=9\"]\n    R2 --> D2{\"9 > 7?\"}\n    D2 -->|Yes| R3[\"Step 3: left=3, right=3, mid=3, value=7\"]\n    R3 --> D3{\"7 == 7?\"}\n    D3 -->|Found!| RES[\"Return index 3\"]\n    style R1 fill:#a78bfa,color:#fff\n    style R2 fill:#a78bfa,color:#fff\n    style R3 fill:#22c55e,color:#fff\n    style RES fill:#22c55e,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Since the array is sorted, I can use binary search. I maintain two pointers, left and right, starting at the beginning and end of the array. I calculate the midpoint and compare the middle element to the target.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If the middle value equals the target, I return mid. If the middle value is less than the target, the target must be in the right half, so I move left to mid plus one. If the middle value is greater, I move right to mid minus one.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through the example. The array is one, three, five, seven, nine, eleven and the target is seven. Left is zero, right is five, so mid is two. The value at index two is five, which is less than seven, so I set left to three.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-optimal-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Now left is three, right is five, mid is four. The value at index four is nine, which is greater than seven, so I set right to three. Now left equals right equals three, mid is three, and the value is seven. That's the target, so I return three.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great walkthrough. What about the complexity?",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each step cuts the search space in half, so the time complexity is O of log n. The space complexity is O of one because I only use a few variables. This is much better than linear search for large arrays.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-optimal-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n        A[\"Linear Search\\nO of n time\\nO of 1 space\"] ---|\"Optimize\"| B[\"Binary Search\\nO of log n time\\nO of 1 space\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. Let's summarize. The linear search checks every element in O of n time. Binary search takes advantage of the sorted order to cut the search space in half each step, achieving O of log n time.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key takeaway is that whenever an array is sorted, binary search should be the first technique to consider. It's a fundamental pattern that appears in many variations during interviews.",
+            "audio_file": "searching-for-a-target-in-a-sorted-array-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

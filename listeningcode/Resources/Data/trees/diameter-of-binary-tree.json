@@ -1,0 +1,213 @@
+{
+  "id": "diameter-of-binary-tree",
+  "title": "Finding the Diameter of a Binary Tree",
+  "difficulty": "easy",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through a specific test case step by step to verify understanding"
+      },
+      {
+        "phrase": "the longest path between any two nodes",
+        "explanation": "The maximum number of edges you must traverse to get from one node to another"
+      },
+      {
+        "phrase": "bottom-up approach",
+        "explanation": "A strategy that solves subproblems at the leaves first and builds answers upward to the root"
+      },
+      {
+        "phrase": "keep track of",
+        "explanation": "To maintain and update a value as you process data"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that may require special handling"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Diameter",
+        "definition": "The number of edges on the longest path between any two nodes in a tree"
+      },
+      {
+        "term": "Depth-First Search",
+        "definition": "A traversal that explores as far down a branch as possible before backtracking"
+      },
+      {
+        "term": "Height of a Node",
+        "definition": "The number of edges on the longest downward path from that node to a leaf"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.max(a, b)",
+        "description": "Returns the larger of two integer values"
+      },
+      {
+        "signature": "node.left",
+        "description": "Accesses the left child of a binary tree node"
+      },
+      {
+        "signature": "node.right",
+        "description": "Accesses the right child of a binary tree node"
+      },
+      {
+        "signature": "dfs(node)",
+        "description": "A recursive helper method that performs depth-first traversal from the given node"
+      }
+    ]
+  },
+  "concept": "Given the root of a binary tree, find the diameter, which is the length of the longest path between any two nodes. The path length is measured by the number of edges between them. The path does not need to pass through the root.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force — Compute Height at Every Node",
+      "time_complexity": "O(n squared)",
+      "space_complexity": "O(n)",
+      "summary": "For each node, compute the left and right subtree heights and sum them to find the diameter through that node. Take the maximum across all nodes."
+    },
+    {
+      "level": 2,
+      "label": "Optimal — Single DFS with Global Maximum",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a single depth-first traversal that returns the height of each subtree while simultaneously updating a global maximum diameter."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction — Understanding the Problem",
+        "diagram": "graph TD\n    A[\"1\"]:::red --> B[\"2\"]\n    A --> C[\"3\"]\n    B --> D[\"4\"]\n    B --> E[\"5\"]\n    style A fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff\n    style E fill:#f87171,color:#fff\n    classDef red fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is today's problem. You are given the root of a binary tree. I need you to find the diameter of the tree. The diameter is the length of the longest path between any two nodes, measured by the number of edges. Note that this path does not have to pass through the root.",
+            "audio_file": "diameter-of-binary-tree-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to find the longest path in terms of edges, not nodes. A few clarifying questions: can the tree be empty, meaning the root is null? And can it have just one node?",
+            "audio_file": "diameter-of-binary-tree-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good questions. Yes, the tree can be empty, in which case return zero. A single node also has a diameter of zero since there are no edges. The tree can have up to ten thousand nodes.",
+            "audio_file": "diameter-of-binary-tree-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. Let me walk through an example. If the root is one, with left child two and right child three, and node two has children four and five, the longest path goes from four to two to one to three, which is three edges. So the diameter is three.",
+            "audio_file": "diameter-of-binary-tree-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly right. The path from node four to node three passes through nodes two and one, giving three edges. Go ahead and think about how you would solve this.",
+            "audio_file": "diameter-of-binary-tree-intro-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force — Height at Every Node",
+        "diagram": "graph TD\n    A[\"1: left height=2, right height=1\"]:::blue --> B[\"2: left height=1, right height=1\"]\n    A --> C[\"3: left height=0, right height=0\"]\n    B --> D[\"4: leaf\"]\n    B --> E[\"5: leaf\"]\n    classDef blue fill:#60a5fa,color:#fff\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a brute force approach. For every node in the tree, I compute the height of its left subtree and the height of its right subtree. The diameter passing through that node is the sum of those two heights. I take the maximum across all nodes.",
+            "audio_file": "diameter-of-binary-tree-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That makes sense. Can you walk through the time complexity?",
+            "audio_file": "diameter-of-binary-tree-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. For each of the n nodes, computing the height takes O of n time in the worst case, like a skewed tree. So overall it is O of n-squared. Space is O of n for the recursion stack.",
+            "audio_file": "diameter-of-binary-tree-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. The repeated height calculations are redundant. Can you think of a way to avoid that duplicate work?",
+            "audio_file": "diameter-of-binary-tree-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Optimal — Single DFS with Global Maximum",
+        "diagram": "graph TD\n    A[\"1: returns height 2, updates diameter=3\"]:::purple --> B[\"2: returns height 1, updates diameter=2\"]\n    A --> C[\"3: returns height 0\"]\n    B --> D[\"4: returns height 0\"]\n    B --> E[\"5: returns height 0\"]\n    classDef purple fill:#a78bfa,color:#fff\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style D fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can solve this in a single depth-first traversal. I write a recursive function that returns the height of the current subtree. At each node, I get the left height and right height from the recursive calls. The diameter through this node is left height plus right height, and I update a global maximum with that value.",
+            "audio_file": "diameter-of-binary-tree-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. What does the function return to its parent?",
+            "audio_file": "diameter-of-binary-tree-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "It returns one plus the maximum of the left height and right height. That gives the height of the subtree rooted at this node. So the parent can use it. Let me trace through our example. Nodes four and five are leaves, so they return zero. Node two gets left height zero and right height zero, so the diameter here is zero plus zero, which is zero. It returns one plus max of zero, zero, which is one.",
+            "audio_file": "diameter-of-binary-tree-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then node three is a leaf, returning zero. At node one, left height is one from node two, right height is zero from node three. Wait, I need to reconsider. Node two returns height one, node three returns height zero. Diameter at node one is one plus zero, which is one. But actually, node two has two children each of height zero, so node two returns one. Hmm, let me recalculate.",
+            "audio_file": "diameter-of-binary-tree-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Take your time. Remember, node four and five each return zero. Node two gets left one from four which is zero and right from five which is zero. So node two's diameter is zero. But node two returns one plus max of zero, zero, so it returns one. Then at node one, left height is one and right height is zero from node three. Diameter at node one is one plus zero equals one. That gives diameter one, but the answer should be three. What are we missing?",
+            "audio_file": "diameter-of-binary-tree-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Ah, I see my mistake. When node two has children four and five, both return height zero. Node two returns one. But at node one, the left subtree rooted at two has height two because the path goes one to two to four. So the height returned by node two should be one, and node one gets left height one and right height zero. The diameter through node one is one plus zero, only one. But the actual longest path is four to two to one to three, which is three edges. Oh wait, the height of node two is one, and node three's height is zero. The diameter at node one is one plus zero which is one. That's wrong. Let me reconsider. Nodes four and five return zero. Node two gets left zero and right zero. Diameter at two is zero. Node two returns one. Node three returns zero. At node one, left is one, right is zero. Diameter is one. But the real diameter is three. I think the issue is that the path four to five through two has length two. So at node two, left height zero plus right height zero gives zero, but each child is at distance one from node two. The diameter through node two is actually zero plus zero equals zero edges? No, the path from four to five is two edges. Oh! The height returned by a leaf should account for the edge. If a null node returns negative one, then a leaf returns zero, and node two gets left zero and right zero, diameter is zero plus zero equals zero. That is still wrong for the path four to five which has two edges. Actually, if null returns negative one, leaf returns max of negative one, negative one plus one equals zero. At node two, left height is zero, right height is zero, diameter is zero plus zero equals zero. But path four to two to five is two edges. I think I need to return the height differently. If null returns zero and a leaf returns one, then node two gets left one and right one. Diameter is one plus one equals two. That accounts for the path four to five correctly. Node two returns one plus max of one, one equals two. At node one, left is two, right from node three which is one. Diameter is two plus one equals three. Yes! That is the correct answer. So the base case should be: if the node is null, return zero. The height of a node is one plus max of left, right. And the diameter at each node is left height plus right height.",
+            "audio_file": "diameter-of-binary-tree-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. With this approach, you visit each node once, so the time complexity is O of n, and the space is O of n for the recursion stack. Great job working through that.",
+            "audio_file": "diameter-of-binary-tree-optimal-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary — Comparing Approaches",
+        "diagram": "graph LR\n    BF[\"Brute Force: O of n-squared time\"]:::blue\n    OP[\"Optimal DFS: O of n time\"]:::purple\n    BF -->|\"Eliminate redundant height calls\"| OP\n    classDef blue fill:#60a5fa,color:#fff\n    classDef purple fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Let's recap. The brute force computes the height at every node separately, giving O of n-squared time. The optimal solution uses a single depth-first search, computing height and updating the diameter in one pass for O of n time. Both use O of n space.",
+            "audio_file": "diameter-of-binary-tree-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that while computing the height recursively, we can also calculate the diameter at each node as the sum of left and right subtree heights. By tracking the global maximum, we avoid redundant traversals. This bottom-up approach is a common pattern in tree problems.",
+            "audio_file": "diameter-of-binary-tree-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "id": "maximum-depth-of-binary-tree",
+  "title": "Finding the Maximum Depth of a Binary Tree",
+  "difficulty": "easy",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific test case to illustrate how the algorithm works"
+      },
+      {
+        "phrase": "base case",
+        "explanation": "The simplest scenario in a recursive function where no further recursion is needed"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that may cause unexpected behavior"
+      },
+      {
+        "phrase": "time and space complexity",
+        "explanation": "A measure of how an algorithm's runtime and memory usage grow with input size"
+      },
+      {
+        "phrase": "recursive call",
+        "explanation": "When a function calls itself to solve a smaller subproblem"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Depth",
+        "definition": "The number of edges or nodes on the path from the root to a given node"
+      },
+      {
+        "term": "Leaf Node",
+        "definition": "A node with no children in a tree"
+      },
+      {
+        "term": "BFS",
+        "definition": "Breadth-First Search, a traversal that visits all nodes at one level before moving to the next"
+      },
+      {
+        "term": "DFS",
+        "definition": "Depth-First Search, a traversal that explores as far as possible along each branch before backtracking"
+      },
+      {
+        "term": "Queue",
+        "definition": "A first-in-first-out data structure often used for level-order traversal"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.max(a, b)",
+        "description": "Returns the greater of two integer values"
+      },
+      {
+        "signature": "Queue<TreeNode> queue = new LinkedList<>()",
+        "description": "Creates a queue backed by a linked list, used for BFS traversal"
+      },
+      {
+        "signature": "queue.offer(node)",
+        "description": "Adds an element to the end of the queue"
+      },
+      {
+        "signature": "queue.poll()",
+        "description": "Removes and returns the head element of the queue"
+      },
+      {
+        "signature": "queue.size()",
+        "description": "Returns the number of elements currently in the queue"
+      }
+    ]
+  },
+  "concept": "Given the root of a binary tree, find its maximum depth. The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "BFS Level-Order Traversal",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a queue to traverse the tree level by level, incrementing a counter at each level."
+    },
+    {
+      "level": 2,
+      "label": "Recursive DFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "summary": "Recursively compute the depth of left and right subtrees, returning the maximum plus one."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    A[\"1\"]:::red --> B[\"2\"]\n    A --> C[\"3\"]\n    B --> D[\"4\"]\n    B --> E[\"5\"]\n    C --> F[\"null\"]:::null\n    C --> G[\"6\"]\n    D --> H[\"7\"]\n    D --> I[\"null\"]:::null\n    style A fill:#f87171,color:#fff\n    style H fill:#f87171,color:#fff\n    classDef null fill:#ccc,stroke:#ccc,color:#999",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's your problem. You're given the root of a binary tree. I'd like you to find the maximum depth of that tree. The depth is the number of nodes along the longest path from the root down to the farthest leaf.",
+            "audio_file": "maximum-depth-of-binary-tree-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So just to clarify, are we counting nodes or edges along the path? And what should I return if the tree is empty, meaning the root is null?",
+            "audio_file": "maximum-depth-of-binary-tree-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good questions. We count nodes, not edges. So a single root node has a depth of one. And yes, if the root is null, return zero.",
+            "audio_file": "maximum-depth-of-binary-tree-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. Is there any constraint on the tree size or the node values?",
+            "audio_file": "maximum-depth-of-binary-tree-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The tree can have up to ten thousand nodes. Node values are integers, but the values don't matter for this problem. Only the structure matters.",
+            "audio_file": "maximum-depth-of-binary-tree-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright, let me summarize. Given a binary tree's root, I need to return the count of nodes on the longest root-to-leaf path. An empty tree returns zero, and a single node returns one. Let me think about approaches.",
+            "audio_file": "maximum-depth-of-binary-tree-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "bfs",
+        "level": 1,
+        "title": "BFS Level-Order Traversal",
+        "diagram": "graph TD\n    subgraph \"Level 1\"\n    A[\"1\"]:::blue\n    end\n    subgraph \"Level 2\"\n    B[\"2\"]:::blue\n    C[\"3\"]:::blue\n    end\n    subgraph \"Level 3\"\n    D[\"4\"]:::blue\n    E[\"5\"]:::blue\n    G[\"6\"]:::blue\n    end\n    subgraph \"Level 4\"\n    H[\"7\"]:::blue\n    end\n    A --> B\n    A --> C\n    B --> D\n    B --> E\n    C --> G\n    D --> H\n    classDef blue fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a breadth-first search using a queue. I process the tree level by level and count how many levels there are. The total number of levels equals the maximum depth.",
+            "audio_file": "maximum-depth-of-binary-tree-bfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Sounds reasonable. Can you walk through the example tree? The root is one, with children two and three. Node two has children four and five. Node three has child six. Node four has child seven.",
+            "audio_file": "maximum-depth-of-binary-tree-bfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. I start with the queue containing node one. That's level one. I process it and add nodes two and three. Level two has two nodes. I process them and add four, five, and six. Level three. Then I process those and add seven. Level four. The queue is now empty, so the depth is four.",
+            "audio_file": "maximum-depth-of-binary-tree-bfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about the complexity?",
+            "audio_file": "maximum-depth-of-binary-tree-bfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n because I visit every node once. Space complexity is also O of n in the worst case, since the queue could hold an entire level, which for a complete tree is about n over two nodes.",
+            "audio_file": "maximum-depth-of-binary-tree-bfs-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "recursive-dfs",
+        "level": 2,
+        "title": "Recursive DFS",
+        "diagram": "graph TD\n    A[\"1 → max 3,2 +1 = 4\"]:::purple\n    B[\"2 → max 2,1 +1 = 3\"]:::purple\n    C[\"3 → max 0,1 +1 = 2\"]:::purple\n    D[\"4 → max 1,0 +1 = 2\"]:::purple\n    E[\"5 → 0,0 +1 = 1\"]:::purple\n    G[\"6 → 0,0 +1 = 1\"]:::purple\n    H[\"7 → 0,0 +1 = 1\"]:::purple\n    A --> B\n    A --> C\n    B --> D\n    B --> E\n    C --> G\n    D --> H\n    classDef purple fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "A cleaner approach is recursive DFS. The idea is simple: the depth of a tree is one plus the maximum of its left subtree depth and right subtree depth. The base case is when the node is null, which returns zero.",
+            "audio_file": "maximum-depth-of-binary-tree-recursive-dfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the same example recursively.",
+            "audio_file": "maximum-depth-of-binary-tree-recursive-dfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Starting at node one, I recurse left to node two, then to node four, then to node seven. Node seven's children are both null, returning zero. So seven returns one. Node four's right is null returning zero, left returns one, so four returns two. Node five is a leaf, returning one. Node two takes max of two and one, plus one, giving three.",
+            "audio_file": "maximum-depth-of-binary-tree-recursive-dfs-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "On the right side, node three has no left child and node six is a leaf. So node three returns two. Back at the root, max of three and two, plus one, equals four. That's our answer.",
+            "audio_file": "maximum-depth-of-binary-tree-recursive-dfs-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity of this recursive solution?",
+            "audio_file": "maximum-depth-of-binary-tree-recursive-dfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is still O of n since we visit each node once. But the space is O of h, where h is the height of the tree, due to the recursion stack. In the best case of a balanced tree, that's O of log n. In the worst case of a skewed tree, it's O of n.",
+            "audio_file": "maximum-depth-of-binary-tree-recursive-dfs-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n    BFS[\"BFS Level-Order\\nTime: O of n\\nSpace: O of n\"]:::blue\n    DFS[\"Recursive DFS\\nTime: O of n\\nSpace: O of h\"]:::purple\n    end\n    BFS -- \"simpler space\\nfor balanced trees\" --> DFS\n    classDef blue fill:#60a5fa,color:#fff\n    classDef purple fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Can you summarize the two approaches?",
+            "audio_file": "maximum-depth-of-binary-tree-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We discussed two approaches. BFS processes the tree level by level using a queue, counting levels directly. It runs in O of n time and O of n space. The recursive DFS approach is more elegant. It computes depth as one plus the max of left and right subtree depths. Time is also O of n, but space improves to O of h. For most interviews, the recursive DFS solution is preferred for its simplicity and clean code.",
+            "audio_file": "maximum-depth-of-binary-tree-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

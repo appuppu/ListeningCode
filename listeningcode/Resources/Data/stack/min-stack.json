@@ -1,0 +1,257 @@
+{
+  "id": "min-stack",
+  "title": "Designing a Stack That Tracks the Minimum",
+  "difficulty": "medium",
+  "category": "stack",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "in constant time",
+        "explanation": "Performing an operation in O(1), meaning it takes the same amount of time regardless of input size"
+      },
+      {
+        "phrase": "on top of",
+        "explanation": "Built above or in addition to something else, often referring to layering functionality"
+      },
+      {
+        "phrase": "keep track of",
+        "explanation": "To maintain or record information as it changes over time"
+      },
+      {
+        "phrase": "at any given point",
+        "explanation": "At any moment during the process or execution"
+      },
+      {
+        "phrase": "trade off",
+        "explanation": "A situation where you accept a cost in one area to gain a benefit in another"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Stack",
+        "definition": "A last-in, first-out data structure that supports push and pop operations"
+      },
+      {
+        "term": "Auxiliary data structure",
+        "definition": "An additional data structure used alongside the main one to store helper information"
+      },
+      {
+        "term": "Monotonic stack",
+        "definition": "A stack where elements are maintained in a sorted order, either increasing or decreasing"
+      },
+      {
+        "term": "Invariant",
+        "definition": "A condition that remains true throughout the execution of an algorithm"
+      },
+      {
+        "term": "Amortized time",
+        "definition": "The average time per operation over a sequence of operations, even if some individual operations are costly"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Stack<Integer> stack = new Stack<>()",
+        "description": "Creates a new empty stack of integers"
+      },
+      {
+        "signature": "stack.push(int val)",
+        "description": "Pushes an element onto the top of the stack"
+      },
+      {
+        "signature": "stack.pop()",
+        "description": "Removes and returns the element on top of the stack"
+      },
+      {
+        "signature": "stack.peek()",
+        "description": "Returns the top element without removing it"
+      },
+      {
+        "signature": "Math.min(a, b)",
+        "description": "Returns the smaller of two integer values"
+      }
+    ]
+  },
+  "concept": "Design a stack that supports push, pop, top, and retrieving the minimum element, all in constant time.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force Scan",
+      "time_complexity": "O(n) for getMin, O(1) for others",
+      "space_complexity": "O(n)",
+      "summary": "Use a regular stack and scan all elements each time getMin is called."
+    },
+    {
+      "level": 2,
+      "label": "Two-Stack Approach",
+      "time_complexity": "O(1) for all operations",
+      "space_complexity": "O(n)",
+      "summary": "Maintain a second stack that tracks the current minimum at each level of the main stack."
+    },
+    {
+      "level": 3,
+      "label": "Single Stack with Pairs",
+      "time_complexity": "O(1) for all operations",
+      "space_complexity": "O(n) but with reduced overhead",
+      "summary": "Store each element alongside its current minimum as a pair in one stack, eliminating the need for a separate structure."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    A[\"push 5\"] --> B[\"push 3\"]\n    B --> C[\"push 7\"]\n    C --> D[\"getMin → 3\"]\n    D --> E[\"pop → 7\"]\n    E --> F[\"getMin → 3\"]\n    F --> G[\"pop → 3\"]\n    G --> H[\"getMin → 5\"]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's today's problem. I'd like you to design a special stack. It should support the usual push, pop, and top operations, but also a getMin operation that returns the smallest element currently in the stack. The key constraint is that all four operations must run in constant time.",
+            "audio_file": "min-stack-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Interesting. So push, pop, and top behave like a normal stack, and getMin returns the minimum among all elements still in the stack. Can I assume all values are integers?",
+            "audio_file": "min-stack-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, all values are integers, and they can be negative. You can also assume pop, top, and getMin will never be called on an empty stack.",
+            "audio_file": "min-stack-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Good. What if we push duplicate values, like pushing three twice? And is there a limit on the number of operations?",
+            "audio_file": "min-stack-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Duplicates are allowed. The number of operations can be up to thirty thousand, so efficiency matters.",
+            "audio_file": "min-stack-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me confirm. If I push five, then three, then seven, getMin returns three. If I pop seven and call getMin again, it still returns three. Then if I pop three, getMin should return five. The minimum updates dynamically as elements are removed. Let me think about approaches.",
+            "audio_file": "min-stack-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Scan",
+        "diagram": "graph TD\n    style S1 fill:#60a5fa,color:#fff\n    style S2 fill:#60a5fa,color:#fff\n    style S3 fill:#60a5fa,color:#fff\n    style SCAN fill:#60a5fa,color:#fff\n    S1[\"Stack: 5, 3, 7\"] --> SCAN[\"getMin: scan all → 3\"]\n    S2[\"Pop 7 → Stack: 5, 3\"] --> SCAN2[\"getMin: scan all → 3\"]\n    S3[\"Pop 3 → Stack: 5\"] --> SCAN3[\"getMin: scan all → 5\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to use a regular stack for push, pop, and top, all in O of one. For getMin, I scan every element in the stack to find the smallest value. This takes O of n time where n is the number of elements.",
+            "audio_file": "min-stack-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through our example? Push five, push three, push seven, then call getMin.",
+            "audio_file": "min-stack-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "After pushing five, three, and seven, the stack holds those three values. When getMin is called, I iterate through all three and find that three is the smallest. If I pop seven and call getMin again, I scan five and three, still returning three.",
+            "audio_file": "min-stack-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "This works but getMin is O of n. The problem requires constant time for all operations. Can you do better?",
+            "audio_file": "min-stack-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. The bottleneck is recalculating the minimum from scratch each time. I need a way to keep track of the minimum as elements are pushed and popped, so I can retrieve it instantly.",
+            "audio_file": "min-stack-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-stack",
+        "level": 2,
+        "title": "Two-Stack Approach",
+        "diagram": "graph TD\n    style M1 fill:#a78bfa,color:#fff\n    style M2 fill:#a78bfa,color:#fff\n    style M3 fill:#a78bfa,color:#fff\n    style N1 fill:#a78bfa,color:#fff\n    style N2 fill:#a78bfa,color:#fff\n    style N3 fill:#a78bfa,color:#fff\n    subgraph Main Stack\n        M1[\"5\"] --> M2[\"3\"] --> M3[\"7\"]\n    end\n    subgraph Min Stack\n        N1[\"5\"] --> N2[\"3\"] --> N3[\"3\"]\n    end\n    M3 -.->|\"getMin = top of Min Stack\"| N3",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I'll use two stacks. The main stack stores all elements normally. The second stack, called the min stack, tracks the running minimum. When I push a value, I also push the smaller of that value and the current min stack top onto the min stack.",
+            "audio_file": "min-stack-two-stack-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me trace through the example. I push five. Main stack has five, min stack has five. I push three. Main stack has five, three. Since three is less than five, min stack gets three. I push seven. Main stack has five, three, seven. Seven is greater than three, so min stack gets three again.",
+            "audio_file": "min-stack-two-stack-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Now what happens when you pop?",
+            "audio_file": "min-stack-two-stack-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I pop from both stacks simultaneously. Popping removes seven from the main stack and three from the min stack. The min stack top is now three, so getMin still returns three. If I pop again, both stacks lose three, and the min stack top is five. Every operation is O of one.",
+            "audio_file": "min-stack-two-stack-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great. The time complexity is O of one for all operations, and space is O of n since the min stack mirrors the main stack in size. Can we reduce the space overhead at all?",
+            "audio_file": "min-stack-two-stack-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Single Stack with Pairs",
+        "diagram": "graph TD\n    style P1 fill:#fb923c,color:#fff\n    style P2 fill:#fb923c,color:#fff\n    style P3 fill:#fb923c,color:#fff\n    P1[\"(5, min=5)\"] --> P2[\"(3, min=3)\"] --> P3[\"(7, min=3)\"]\n    P3 -.->|\"getMin → read min from top pair → 3\"| R[\"Result: 3\"]\n    style R fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of two separate stacks, I can store pairs in a single stack. Each entry holds the value and the current minimum at that point. This eliminates the overhead of managing two structures.",
+            "audio_file": "min-stack-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Walking through the example again. Push five: I store the pair five, five since five is the only element. Push three: three is less than five, so I store three, three. Push seven: seven is greater than three, so I store seven, three.",
+            "audio_file": "min-stack-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And getMin just reads the second value from the top pair?",
+            "audio_file": "min-stack-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Exactly. The top pair is seven, three, so getMin returns three. When I pop, I remove the entire pair. The new top is three, three, and getMin returns three. Pop again, the top is five, five, and getMin returns five. All operations are O of one, and we use a single stack.",
+            "audio_file": "min-stack-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The space is still O of n since we store an extra value per element, but the implementation is cleaner. Well done.",
+            "audio_file": "min-stack-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff\n    A[\"Brute Force\\ngetMin: O of n\\nSpace: O of n\"] --> B[\"Two-Stack\\nAll ops: O of 1\\nSpace: O of n\"]\n    B --> C[\"Pairs in One Stack\\nAll ops: O of 1\\nSpace: O of n, simpler\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "To summarize, the brute force scans all elements for getMin at O of n cost. The two-stack approach achieves O of one for every operation by maintaining a parallel min stack. The single stack with pairs provides the same O of one performance with a simpler implementation.",
+            "audio_file": "min-stack-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The key insight is that the minimum only changes when we push or pop, so we can record it alongside each element. This pattern of caching derived state at each level of a stack is useful in many related problems.",
+            "audio_file": "min-stack-summary-i1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "id": "longest-consecutive-sequence",
+  "title": "Finding the Longest Consecutive Number Sequence",
+  "difficulty": "medium",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "consecutive sequence",
+        "explanation": "A series of numbers where each is exactly one more than the previous, like 1, 2, 3, 4"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "A straightforward method that checks all possibilities without clever optimization"
+      },
+      {
+        "phrase": "time complexity",
+        "explanation": "A measure of how the running time of an algorithm grows as the input size increases"
+      },
+      {
+        "phrase": "trade-off between time and space",
+        "explanation": "Using more memory to achieve faster execution, or vice versa"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "HashSet",
+        "definition": "A data structure that stores unique elements and supports O(1) average-time lookups"
+      },
+      {
+        "term": "Sorting",
+        "definition": "Arranging elements in a specific order, typically ascending or descending"
+      },
+      {
+        "term": "Sequence start",
+        "definition": "The first element of a consecutive sequence, identified by having no predecessor in the set"
+      },
+      {
+        "term": "Amortized analysis",
+        "definition": "A method of analyzing algorithm cost by averaging over a sequence of operations"
+      },
+      {
+        "term": "In-place algorithm",
+        "definition": "An algorithm that uses only a constant amount of extra memory beyond the input"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashSet.add(E e)",
+        "description": "Adds the specified element to the set if it is not already present"
+      },
+      {
+        "signature": "HashSet.contains(Object o)",
+        "description": "Returns true if the set contains the specified element"
+      },
+      {
+        "signature": "Arrays.sort(int[] a)",
+        "description": "Sorts the specified array of integers into ascending numerical order"
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the greater of two integer values"
+      }
+    ]
+  },
+  "concept": "Given an unsorted array of integers, find the length of the longest sequence of consecutive integers. For example, given [100, 4, 200, 1, 3, 2], the longest consecutive sequence is [1, 2, 3, 4], so the answer is 4.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force Search",
+      "time_complexity": "O(n³)",
+      "space_complexity": "O(1)",
+      "summary": "For each number, repeatedly search the array for the next consecutive number and track the longest chain found."
+    },
+    {
+      "level": 2,
+      "label": "Sorting Approach",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(1)",
+      "summary": "Sort the array first, then scan linearly to find the longest run of consecutive numbers, skipping duplicates."
+    },
+    {
+      "level": 3,
+      "label": "HashSet Optimization",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Store all numbers in a HashSet. For each sequence start (a number whose predecessor is absent), count forward to find the sequence length."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: 100, 4, 200, 1, 3, 2\"] --> B{\"Find longest consecutive sequence\"}\n    B --> C[\"1, 2, 3, 4\"]\n    C --> D[\"Answer: 4\"]\n    style A fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's today's problem. You're given an unsorted array of integers, and you need to find the length of the longest sequence of consecutive numbers. For example, if the input is 100, 4, 200, 1, 3, 2, the answer is 4, because 1, 2, 3, 4 form the longest consecutive chain.",
+            "audio_file": "longest-consecutive-sequence-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to find consecutive integers regardless of their position in the array. A few questions: can the array contain negative numbers or duplicates?",
+            "audio_file": "longest-consecutive-sequence-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array can contain negatives and duplicates. Duplicates should not count twice in a sequence. The array length can be up to one hundred thousand elements.",
+            "audio_file": "longest-consecutive-sequence-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What should I return if the array is empty?",
+            "audio_file": "longest-consecutive-sequence-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Return zero for an empty array. For a single element, return one.",
+            "audio_file": "longest-consecutive-sequence-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So given an unsorted integer array, I return an integer representing the length of the longest chain of consecutive numbers, ignoring duplicates. Let me think through some approaches.",
+            "audio_file": "longest-consecutive-sequence-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Search",
+        "diagram": "graph TD\n    A[\"Array: 100, 4, 200, 1, 3, 2\"] --> B[\"Pick 1: search for 2?\"]\n    B --> C[\"Found 2: search for 3?\"]\n    C --> D[\"Found 3: search for 4?\"]\n    D --> E[\"Found 4: search for 5?\"]\n    E --> F[\"Not found. Length = 4\"]\n    A --> G[\"Pick 100: search for 101?\"]\n    G --> H[\"Not found. Length = 1\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff\n    style F fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is brute force. For each number in the array, I try to build a consecutive sequence by searching the entire array for the next number each time. I track the maximum length found.",
+            "audio_file": "longest-consecutive-sequence-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For example, starting at 1, I scan the array for 2, then for 3, then for 4, then for 5 which is missing. That gives a length of 4. I repeat this for every starting number.",
+            "audio_file": "longest-consecutive-sequence-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "longest-consecutive-sequence-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each number could start a sequence of length n, and each lookup scans the full array. We do this for all n numbers, so worst case is O of n-cubed. Space is O of 1 since we only track the maximum length.",
+            "audio_file": "longest-consecutive-sequence-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's quite slow for large inputs. Can you do better?",
+            "audio_file": "longest-consecutive-sequence-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "sorting",
+        "level": 2,
+        "title": "Sorting Approach",
+        "diagram": "graph TD\n    A[\"Array: 100, 4, 200, 1, 3, 2\"] --> B[\"Sorted: 1, 2, 3, 4, 100, 200\"]\n    B --> C[\"1→2: consecutive, count=2\"]\n    C --> D[\"2→3: consecutive, count=3\"]\n    D --> E[\"3→4: consecutive, count=4\"]\n    E --> F[\"4→100: gap! reset count=1\"]\n    F --> G[\"100→200: gap! reset count=1\"]\n    G --> H[\"Max length = 4\"]\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff\n    style H fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "If I sort the array first, consecutive numbers will be adjacent. Then I just scan left to right, counting consecutive pairs. When I hit a gap, I reset the counter. I skip duplicates during the scan.",
+            "audio_file": "longest-consecutive-sequence-sorting-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Using our example, after sorting we get 1, 2, 3, 4, 100, 200. Scanning through, 1 to 4 gives a run of 4. Then 100 to 200 is a gap, so we reset. The answer is 4.",
+            "audio_file": "longest-consecutive-sequence-sorting-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. What about the complexity now?",
+            "audio_file": "longest-consecutive-sequence-sorting-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sorting takes O of n log n, and the scan is O of n. So overall it's O of n log n time with O of 1 extra space if we sort in place. That's a big improvement over the brute force.",
+            "audio_file": "longest-consecutive-sequence-sorting-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can we do even better, perhaps in linear time?",
+            "audio_file": "longest-consecutive-sequence-sorting-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "HashSet Optimization",
+        "diagram": "graph TD\n    A[\"Array: 100, 4, 200, 1, 3, 2\"] --> B[\"HashSet: 1,2,3,4,100,200\"]\n    B --> C{\"Is 0 in set? No\"}\n    C -->|\"1 is a start\"| D[\"1→2→3→4→stop. Length=4\"]\n    B --> E{\"Is 3 in set? Yes\"}\n    E -->|\"4 is not a start\"| F[\"Skip\"]\n    B --> G{\"Is 99 in set? No\"}\n    G -->|\"100 is a start\"| H[\"100→stop. Length=1\"]\n    style A fill:#fb923c,color:#fff\n    style B fill:#fb923c,color:#fff\n    style D fill:#fb923c,color:#fff\n    style H fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The key insight is using a HashSet. First, I add all numbers to the set. Then, for each number, I check if its predecessor exists in the set. If not, this number is the start of a new sequence, and I count forward.",
+            "audio_file": "longest-consecutive-sequence-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For example, I check if 0 is in the set. It's not, so 1 is a sequence start. I count 1, 2, 3, 4, then 5 is missing, giving length 4. For 4, I check if 3 is in the set. It is, so 4 is not a start and I skip it.",
+            "audio_file": "longest-consecutive-sequence-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why is this O of n if you're iterating through each sequence?",
+            "audio_file": "longest-consecutive-sequence-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each element is visited at most twice: once in the outer loop and once when counting a sequence. The contains check is O of 1 on average for a HashSet. So the total time is O of n. Space is also O of n for the set.",
+            "audio_file": "longest-consecutive-sequence-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. That's a classic trade-off between time and space. Let's summarize everything.",
+            "audio_file": "longest-consecutive-sequence-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Brute Force\\nO of n-cubed time\\nO of 1 space\"] --> B[\"Sorting\\nO of n log n time\\nO of 1 space\"]\n    B --> C[\"HashSet\\nO of n time\\nO of n space\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. We explored three approaches: brute force at O of n-cubed, sorting at O of n log n, and the HashSet approach at O of n with O of n space.",
+            "audio_file": "longest-consecutive-sequence-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The main takeaway is that a HashSet lets us identify sequence starts efficiently. By only counting forward from true starting points, we avoid redundant work and achieve linear time.",
+            "audio_file": "longest-consecutive-sequence-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The trick of checking whether the predecessor exists is a pattern worth remembering for similar problems involving consecutive or sequential relationships.",
+            "audio_file": "longest-consecutive-sequence-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

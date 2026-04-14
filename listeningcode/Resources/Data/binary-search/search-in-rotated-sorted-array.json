@@ -1,0 +1,234 @@
+{
+  "id": "search-in-rotated-sorted-array",
+  "title": "Searching for a Target in a Rotated Sorted Array",
+  "difficulty": "medium",
+  "category": "binary-search",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "rotated at some pivot",
+        "explanation": "The sorted array has been shifted so that elements wrap around from the end to the beginning"
+      },
+      {
+        "phrase": "narrow down the search space",
+        "explanation": "Reduce the range of elements we need to examine to find the answer"
+      },
+      {
+        "phrase": "which half is sorted",
+        "explanation": "Determining whether the left portion or right portion of the array maintains ascending order"
+      },
+      {
+        "phrase": "falls within the range",
+        "explanation": "The target value lies between the minimum and maximum of a sorted segment"
+      },
+      {
+        "phrase": "edge case to consider",
+        "explanation": "A special or unusual input scenario that might cause incorrect behavior"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Rotated Sorted Array",
+        "definition": "A sorted array that has been split at a pivot index and the two halves swapped in order"
+      },
+      {
+        "term": "Binary Search",
+        "definition": "An algorithm that repeatedly halves the search space by comparing the target to the middle element"
+      },
+      {
+        "term": "Pivot Point",
+        "definition": "The index where the rotation occurred, separating two sorted subsequences"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows relative to input size"
+      },
+      {
+        "term": "Search Space",
+        "definition": "The range of indices currently under consideration during a search"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Arrays.sort(int[] a)",
+        "description": "Sorts an integer array in ascending order, useful for understanding the original sorted state"
+      },
+      {
+        "signature": "Arrays.binarySearch(int[] a, int key)",
+        "description": "Searches a sorted array for a key using binary search and returns its index"
+      },
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values"
+      }
+    ]
+  },
+  "concept": "Given an integer array that was sorted in ascending order and then rotated at an unknown pivot, find the index of a given target value. Return negative one if the target is not present. All elements are unique.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Linear Scan",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Scan every element in the array and check if it matches the target."
+    },
+    {
+      "level": 2,
+      "label": "Find Pivot then Binary Search",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "summary": "First locate the pivot point using binary search, then run standard binary search on the correct half."
+    },
+    {
+      "level": 3,
+      "label": "Single-Pass Modified Binary Search",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "summary": "Use one binary search that determines which half is sorted at each step and decides which half to search next."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Original Sorted: 0, 1, 2, 4, 5, 6, 7\"] -->|\"Rotate at index 4\"| B[\"Rotated: 4, 5, 6, 7, 0, 1, 2\"]\n    B --> C{\"Find target = 0\"}\n    C -->|\"Found\"| D[\"Return index 4\"]\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Imagine you have a sorted array of unique integers, but it has been rotated at some unknown pivot. For example, the array one, two, four, five, six, seven, zero becomes four, five, six, seven, zero, one, two. Given such an array and a target value, return the index of the target, or negative one if it is not found.",
+            "audio_file": "search-in-rotated-sorted-array-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So all elements are unique, and the array was originally sorted in ascending order before being rotated. Can the array be empty, and what should I return in that case?",
+            "audio_file": "search-in-rotated-sorted-array-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array could be empty, and you should return negative one. The array contains only unique integers and can have up to ten thousand elements.",
+            "audio_file": "search-in-rotated-sorted-array-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What if the array was not rotated at all, meaning it is still fully sorted? Should my solution handle that too?",
+            "audio_file": "search-in-rotated-sorted-array-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, treat a non-rotated array as a valid input. It is essentially rotated by zero positions.",
+            "audio_file": "search-in-rotated-sorted-array-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to search for a target in a rotated sorted array of unique integers and return its index, or negative one if absent. Let me start with a straightforward approach.",
+            "audio_file": "search-in-rotated-sorted-array-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Linear Scan",
+        "diagram": "graph LR\n    A[\"4\"] --> B[\"5\"] --> C[\"6\"] --> D[\"7\"] --> E[\"0 ✓\"]\n    E --> F[\"1\"] --> G[\"2\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#60a5fa,color:#fff\n    style E fill:#22c55e,color:#fff\n    style F fill:#9ca3af,color:#fff\n    style G fill:#9ca3af,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is a linear scan. I iterate through every element and check if it equals the target. For the array four, five, six, seven, zero, one, two with target zero, I check each element until I find zero at index four.",
+            "audio_file": "search-in-rotated-sorted-array-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. What is the time complexity of this approach?",
+            "audio_file": "search-in-rotated-sorted-array-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n since we may need to visit every element. The space complexity is O of one because we only use a loop variable.",
+            "audio_file": "search-in-rotated-sorted-array-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "This ignores the fact that the array is mostly sorted. Can you do better?",
+            "audio_file": "search-in-rotated-sorted-array-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "find-pivot",
+        "level": 2,
+        "title": "Find Pivot then Binary Search",
+        "diagram": "graph TD\n    A[\"4, 5, 6, 7, 0, 1, 2\"] --> B{\"Find pivot with binary search\"}\n    B --> C[\"Pivot at index 4: value 0\"]\n    C --> D{\"Target 0 <= 2? Right half\"}\n    D --> E[\"Binary search indices 4 to 6\"]\n    E --> F[\"Found 0 at index 4\"]\n    style A fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff\n    style F fill:#22c55e,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Since the array has two sorted halves, I can first find the pivot point using binary search. The pivot is where the smallest element is. I compare the middle element to the rightmost element. If the middle is greater, the pivot is to the right. Otherwise it is to the left.",
+            "audio_file": "search-in-rotated-sorted-array-find-pivot-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For our example, four, five, six, seven, zero, one, two, I find the pivot at index four where the value is zero. Now I know the left sorted half is indices zero to three and the right sorted half is indices four to six.",
+            "audio_file": "search-in-rotated-sorted-array-find-pivot-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I check whether the target falls within the right half by comparing it to the last element. Since zero is less than or equal to two, I binary search the right half and find zero at index four.",
+            "audio_file": "search-in-rotated-sorted-array-find-pivot-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. This runs two binary searches, so the time complexity is O of log n. Can you do it in a single pass?",
+            "audio_file": "search-in-rotated-sorted-array-find-pivot-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Single-Pass Modified Binary Search",
+        "diagram": "graph TD\n    A[\"Array: 4, 5, 6, 7, 0, 1, 2 — target 0\"] --> B[\"left=0, right=6, mid=3, value=7\"]\n    B --> C{\"Left half 4..7 is sorted\"}\n    C -->|\"0 not in 4..7\"| D[\"Move left to mid+1=4\"]\n    D --> E[\"left=4, right=6, mid=5, value=1\"]\n    E --> F{\"Left half 0..1 is sorted\"}\n    F -->|\"0 in range 0..1\"| G[\"Move right to mid-1=4\"]\n    G --> H[\"left=4, right=4, mid=4, value=0 ✓\"]\n    style A fill:#fb923c,color:#fff\n    style B fill:#fb923c,color:#fff\n    style E fill:#fb923c,color:#fff\n    style H fill:#22c55e,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can solve this with a single modified binary search. At each step, I check which half of the array is sorted by comparing the left boundary to the middle. Then I check if the target falls within that sorted half.",
+            "audio_file": "search-in-rotated-sorted-array-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Using our array, four, five, six, seven, zero, one, two, with target zero. Left is zero, right is six, mid is three with value seven. The left half from four to seven is sorted. Zero is not between four and seven, so I move left to mid plus one.",
+            "audio_file": "search-in-rotated-sorted-array-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Now left is four, right is six, mid is five with value one. The left half from zero to one is sorted. Zero falls within zero to one, so I move right to mid minus one. Now left equals right equals four, and the value is zero. Found it!",
+            "audio_file": "search-in-rotated-sorted-array-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. This runs in O of log n time with O of one space, and you only need a single binary search loop. Very clean.",
+            "audio_file": "search-in-rotated-sorted-array-optimal-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Linear Scan\\nO of n time\\nO of 1 space\"] --> B[\"Find Pivot + Binary Search\\nO of log n time\\nO of 1 space\"]\n    B --> C[\"Single-Pass Binary Search\\nO of log n time\\nO of 1 space\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. You started with a linear scan at O of n, improved to a two-pass binary search at O of log n, and then combined everything into a single elegant binary search pass.",
+            "audio_file": "search-in-rotated-sorted-array-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that even in a rotated array, at least one half around the midpoint is always sorted. By identifying the sorted half, we can decide which direction to search, keeping the O of log n guarantee.",
+            "audio_file": "search-in-rotated-sorted-array-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

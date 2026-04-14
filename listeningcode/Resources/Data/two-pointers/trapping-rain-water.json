@@ -1,0 +1,248 @@
+{
+  "id": "trapping-rain-water",
+  "title": "Calculating Trapped Rainwater Between Bars",
+  "difficulty": "hard",
+  "category": "two-pointers",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "elevation map",
+        "explanation": "An array where each value represents the height of a bar at that position"
+      },
+      {
+        "phrase": "trapped water",
+        "explanation": "Water that stays between taller bars because it cannot flow out"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through the logic step by step using a concrete input"
+      },
+      {
+        "phrase": "bottleneck",
+        "explanation": "The part of an algorithm that limits overall performance"
+      },
+      {
+        "phrase": "shrink the window",
+        "explanation": "Move one pointer inward to reduce the range being considered"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two indices moving toward each other to process an array in a single pass"
+      },
+      {
+        "term": "Prefix Maximum",
+        "definition": "The largest value from the start of the array up to a given index"
+      },
+      {
+        "term": "Suffix Maximum",
+        "definition": "The largest value from a given index to the end of the array"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time grows relative to input size"
+      },
+      {
+        "term": "Auxiliary Space",
+        "definition": "Extra memory used by an algorithm beyond the input itself"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values"
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the larger of two integer values"
+      },
+      {
+        "signature": "new int[n]",
+        "description": "Creates an integer array of size n, initialized to zeros"
+      },
+      {
+        "signature": "array.length",
+        "description": "Returns the number of elements in the array"
+      }
+    ]
+  },
+  "concept": "Given an array of non-negative integers representing an elevation map where each bar has a width of one, compute how much water can be trapped between the bars after raining.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "summary": "For each bar, scan left and right to find the tallest bars on both sides, then compute water at that position."
+    },
+    {
+      "level": 2,
+      "label": "Precomputed Max Arrays",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Build prefix-max and suffix-max arrays first, then compute water at each position in one pass."
+    },
+    {
+      "level": 3,
+      "label": "Two Pointer Optimal",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use left and right pointers moving inward, tracking running maximums to compute water without extra arrays."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Input[\"Elevation Map: 0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1\"]\n        B0[\"0\"]:::bar\n        B1[\"1\"]:::bar\n        B2[\"0\"]:::bar\n        B3[\"2\"]:::bar\n        B4[\"1\"]:::bar\n        B5[\"0\"]:::bar\n        B6[\"1\"]:::bar\n        B7[\"3\"]:::bar\n        B8[\"2\"]:::bar\n        B9[\"1\"]:::bar\n        B10[\"2\"]:::bar\n        B11[\"1\"]:::bar\n    end\n    subgraph Water[\"Water trapped = 6 units\"]\n        W1[\"Water sits in gaps between tall bars\"]:::water\n    end\n    Input --> Water\n    style B0 fill:#f87171\n    style B3 fill:#f87171\n    style B7 fill:#f87171\n    style W1 fill:#93c5fd",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is your problem. Imagine you have a row of bars with different heights, like a bar chart. After it rains, water gets trapped in the gaps between taller bars. Given an array of non-negative integers representing the height of each bar, calculate the total amount of water that can be trapped.",
+            "audio_file": "trapping-rain-water-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Interesting. So each element in the array is the height of a bar, and water fills the spaces between them. Can I confirm: the width of each bar is always one unit?",
+            "audio_file": "trapping-rain-water-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, each bar is exactly one unit wide. The array contains non-negative integers and can be empty. If the array has fewer than three elements, no water can be trapped. You should return a single integer representing the total trapped water.",
+            "audio_file": "trapping-rain-water-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. What about edge cases? If all bars have the same height, or the array is sorted in ascending or descending order, the answer would be zero since water would just flow off the sides, correct?",
+            "audio_file": "trapping-rain-water-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly right. Water can only be trapped when there are taller bars on both sides of a shorter bar. A sorted array or equal heights means zero trapped water.",
+            "audio_file": "trapping-rain-water-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me summarize. I receive an array of bar heights. For each position, water is held by the minimum of the tallest bar to its left and the tallest bar to its right, minus the bar's own height. I need to sum this across all positions. Let me start with a brute force approach.",
+            "audio_file": "trapping-rain-water-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force — Scan Left and Right",
+        "diagram": "graph TD\n    subgraph BF[\"Brute Force: index 5, height 0\"]\n        SL[\"Scan left from index 5\"]:::blue --> ML[\"Max left = 2 at index 3\"]:::blue\n        SR[\"Scan right from index 5\"]:::blue --> MR[\"Max right = 3 at index 7\"]:::blue\n        ML --> CALC[\"min of 2, 3 minus 0 = 2 units water\"]:::blue\n        MR --> CALC\n    end\n    subgraph Result[\"Repeat for every index: O of n-squared\"]\n        R1[\"Total = 6\"]:::blue\n    end\n    BF --> Result\n    style SL fill:#60a5fa\n    style SR fill:#60a5fa\n    style ML fill:#60a5fa\n    style MR fill:#60a5fa\n    style CALC fill:#60a5fa\n    style R1 fill:#60a5fa",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest idea is: for each bar, I scan left to find the tallest bar, then scan right to find the tallest bar. The water at that position is the minimum of these two maximums minus the current bar height. If that value is negative, it means no water is trapped there.",
+            "audio_file": "trapping-rain-water-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you trace through an example? Use the array zero, one, zero, two, one, zero, one, three, two, one, two, one.",
+            "audio_file": "trapping-rain-water-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Take index five with height zero. Scanning left, the maximum is two at index three. Scanning right, the maximum is three at index seven. The minimum of two and three is two, minus the bar height zero, gives two units of water at that position.",
+            "audio_file": "trapping-rain-water-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I repeat this for every index and sum up. The total is six. But this is O of n-squared time because each position requires scanning the entire array. Space is O of one since I only store a few variables.",
+            "audio_file": "trapping-rain-water-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good analysis. The repeated scanning is the bottleneck. Can you eliminate that redundant work?",
+            "audio_file": "trapping-rain-water-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "precomputed-max",
+        "level": 2,
+        "title": "Precomputed Max Arrays",
+        "diagram": "graph TD\n    subgraph Arrays[\"Precompute for: 0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1\"]\n        PM[\"Prefix Max: 0,1,1,2,2,2,2,3,3,3,3,3\"]:::purple\n        SM[\"Suffix Max: 3,3,3,3,3,3,3,3,2,2,2,1\"]:::purple\n    end\n    subgraph Calc[\"For each index i\"]\n        F[\"water_i = min of prefix_i, suffix_i minus height_i\"]:::purple\n    end\n    subgraph Ex[\"Index 5: min of 2, 3 minus 0 = 2\"]\n        R[\"Total = 6, Time O of n, Space O of n\"]:::purple\n    end\n    Arrays --> Calc --> Ex\n    style PM fill:#a78bfa\n    style SM fill:#a78bfa\n    style F fill:#a78bfa\n    style R fill:#a78bfa",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of scanning each time, I can precompute two arrays. A prefix-max array stores the tallest bar from the left up to each index. A suffix-max array stores the tallest bar from the right. Both can be built in O of n time.",
+            "audio_file": "trapping-rain-water-precomputed-max-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Using the same example, the prefix-max array is zero, one, one, two, two, two, two, three, three, three, three, three. The suffix-max array is three, three, three, three, three, three, three, three, two, two, two, one.",
+            "audio_file": "trapping-rain-water-precomputed-max-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Now for index five, I look up prefix-max of two and suffix-max of three. The minimum is two, minus height zero, equals two. I do this for all indices in one pass. Total is still six. Time is O of n, but space is also O of n for the two extra arrays.",
+            "audio_file": "trapping-rain-water-precomputed-max-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great improvement. Can you reduce the space to O of one while keeping O of n time?",
+            "audio_file": "trapping-rain-water-precomputed-max-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-pointer",
+        "level": 3,
+        "title": "Two Pointer Optimal",
+        "diagram": "graph TD\n    subgraph TP[\"Two Pointers on: 0,1,0,2,1,0,1,3,2,1,2,1\"]\n        S[\"left=0, right=11, leftMax=0, rightMax=0\"]:::orange\n        S --> S1[\"left=0: height 0, leftMax=0, move left\"]:::orange\n        S1 --> S2[\"left=1: height 1, leftMax=1, move left\"]:::orange\n        S2 --> S3[\"right=11: height 1, rightMax=1, move right\"]:::orange\n        S3 --> S4[\"...process smaller side each step...\"]:::orange\n        S4 --> S5[\"Add water when max minus height is positive\"]:::orange\n    end\n    subgraph Res[\"Result: 6, O of n time, O of 1 space\"]\n        R1[\"No extra arrays needed\"]:::orange\n    end\n    TP --> Res\n    style S fill:#fb923c\n    style S1 fill:#fb923c\n    style S2 fill:#fb923c\n    style S3 fill:#fb923c\n    style S4 fill:#fb923c\n    style S5 fill:#fb923c\n    style R1 fill:#fb923c",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that water at any position depends on the minimum of the left max and right max. I can use two pointers, one at each end, and track running maximums. I always process the pointer with the smaller maximum because that side is the limiting factor.",
+            "audio_file": "trapping-rain-water-two-pointer-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I set left to zero, right to the last index, and both left-max and right-max to zero. If left-max is less than or equal to right-max, I process the left side. I update left-max, compute water as left-max minus the current height, and move left forward.",
+            "audio_file": "trapping-rain-water-two-pointer-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Otherwise I process the right side: update right-max, compute water as right-max minus the current height, and move right backward. I continue until the pointers meet. This gives O of n time and O of one space.",
+            "audio_file": "trapping-rain-water-two-pointer-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why is it safe to process the smaller side without knowing the full opposite maximum?",
+            "audio_file": "trapping-rain-water-two-pointer-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Because if left-max is smaller, we know the water at the left pointer is bounded by left-max regardless of what lies beyond the right pointer. The right side already has a bar at least as tall as right-max, so the minimum of the two sides is guaranteed to be left-max. The same logic applies in reverse for the right pointer.",
+            "audio_file": "trapping-rain-water-two-pointer-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Brute Force: O of n-squared time, O of 1 space\"]:::blue\n        PM[\"Precomputed Max: O of n time, O of n space\"]:::purple\n        TP[\"Two Pointer: O of n time, O of 1 space\"]:::orange\n    end\n    BF -->|\"Eliminate repeated scans\"| PM\n    PM -->|\"Remove extra arrays\"| TP\n    style BF fill:#60a5fa\n    style PM fill:#a78bfa\n    style TP fill:#fb923c",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. Let us recap. You started with a brute force at O of n-squared, improved to linear time with precomputed arrays, and then optimized space to O of one using two pointers.",
+            "audio_file": "trapping-rain-water-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes. The core idea is that trapped water at each position depends on the minimum of the tallest bars on both sides. The two-pointer technique works because we can determine the limiting side without scanning the entire array, giving us both optimal time and space.",
+            "audio_file": "trapping-rain-water-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "invert-binary-tree",
+  "title": "Inverting a Binary Tree",
+  "difficulty": "easy",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "swap the left and right children",
+        "explanation": "Exchange the left child node and the right child node of a given node"
+      },
+      {
+        "phrase": "traverse the tree",
+        "explanation": "Visit every node in the tree in a systematic order"
+      },
+      {
+        "phrase": "base case",
+        "explanation": "The simplest condition in a recursive function where no further recursion is needed"
+      },
+      {
+        "phrase": "mirror image",
+        "explanation": "A reflection of the original structure, flipped horizontally"
+      },
+      {
+        "phrase": "level by level",
+        "explanation": "Processing nodes one depth at a time, from top to bottom"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "BFS",
+        "definition": "Breadth-First Search, a traversal that visits all nodes at the current depth before moving deeper"
+      },
+      {
+        "term": "DFS",
+        "definition": "Depth-First Search, a traversal that explores as far as possible along each branch before backtracking"
+      },
+      {
+        "term": "Queue",
+        "definition": "A first-in, first-out data structure used to process elements in order"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Queue<TreeNode> queue = new LinkedList<>()",
+        "description": "Creates a new queue backed by a linked list, commonly used for BFS traversal"
+      },
+      {
+        "signature": "queue.offer(node)",
+        "description": "Adds a node to the end of the queue"
+      },
+      {
+        "signature": "queue.poll()",
+        "description": "Removes and returns the node at the front of the queue"
+      },
+      {
+        "signature": "queue.isEmpty()",
+        "description": "Returns true if the queue contains no elements"
+      }
+    ]
+  },
+  "concept": "Given the root of a binary tree, invert the tree by swapping the left and right children at every node, and return the root of the inverted tree.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Recursive DFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "summary": "Use recursion to visit every node depth-first and swap its left and right children."
+    },
+    {
+      "level": 2,
+      "label": "Iterative BFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a queue to traverse the tree level by level, swapping children at each node."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff\n    style E fill:#f87171,color:#fff\n    subgraph Original\n    A((4)) --> B((2))\n    A --> C((7))\n    B --> D((1))\n    B --> E((3))\n    end\n    subgraph Inverted\n    F((4)) --> G((7))\n    F --> H((2))\n    H --> I((3))\n    H --> J((1))\n    end\n    style F fill:#f87171,color:#fff\n    style G fill:#f87171,color:#fff\n    style H fill:#f87171,color:#fff\n    style I fill:#f87171,color:#fff\n    style J fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's your problem. You're given the root of a binary tree. I want you to invert the entire tree. By invert, I mean swap the left and right children of every single node, so the result is a mirror image of the original.",
+            "audio_file": "invert-binary-tree-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So just to clarify, each node can have at most two children, and I need to swap left and right at every node, not just the root. What should I return?",
+            "audio_file": "invert-binary-tree-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Return the root of the inverted tree. The tree nodes have an integer value, a left pointer, and a right pointer. The tree could be empty, meaning the root is null.",
+            "audio_file": "invert-binary-tree-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? If the tree is null, I return null. If there's only one node with no children, I just return that node as is, right?",
+            "audio_file": "invert-binary-tree-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. Both of those should be handled. Let's use this example: root is four, left child is two, right child is seven. Node two has children one and three. After inverting, seven moves to the left, two moves to the right, and two's children also swap.",
+            "audio_file": "invert-binary-tree-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So the output tree has four at the root, seven on the left, two on the right, and under two, three is on the left and one is on the right. Let me think about approaches.",
+            "audio_file": "invert-binary-tree-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "recursive-dfs",
+        "level": 1,
+        "title": "Recursive DFS Approach",
+        "diagram": "graph TD\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff\n    A((4)) -->|\"Step 1: recurse left\"| B((2))\n    A -->|\"Step 2: recurse right\"| C((7))\n    B -->|\"recurse\"| D((1))\n    B -->|\"recurse\"| E((3))\n    A -.-|\"Step 3: swap 2 and 7\"| F((4))\n    F --> G((7))\n    F --> H((2))\n    H --> I((3))\n    H --> J((1))\n    style F fill:#60a5fa,color:#fff\n    style G fill:#60a5fa,color:#fff\n    style H fill:#60a5fa,color:#fff\n    style I fill:#60a5fa,color:#fff\n    style J fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a recursive approach. For each node, I recursively invert the left subtree, then the right subtree, and then swap the two children. The base case is when the node is null, I just return null.",
+            "audio_file": "invert-binary-tree-recursive-dfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example with that approach.",
+            "audio_file": "invert-binary-tree-recursive-dfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Starting at node four, I go left to node two. At node two, I go left to one, which has no children, so I return it. Then I go right to three, also no children. Now I swap one and three under node two. Back at four, I visit seven, which is a leaf. Finally I swap two and seven under four. Done.",
+            "audio_file": "invert-binary-tree-recursive-dfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about time and space complexity?",
+            "audio_file": "invert-binary-tree-recursive-dfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n because we visit every node once. Space is O of h where h is the height of the tree, due to the recursion call stack. In the worst case of a skewed tree, that's O of n. For a balanced tree, it's O of log n.",
+            "audio_file": "invert-binary-tree-recursive-dfs-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "iterative-bfs",
+        "level": 2,
+        "title": "Iterative BFS Approach",
+        "diagram": "graph TD\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style D fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff\n    subgraph \"Queue Processing\"\n    Q1[\"Queue: [4]\"] --> Q2[\"Swap 4's children → Queue: [7, 2]\"]\n    Q2 --> Q3[\"Swap 7's children (none) → Queue: [2]\"]\n    Q3 --> Q4[\"Swap 2's children → Queue: [3, 1]\"]\n    Q4 --> Q5[\"Process leaves → Queue empty\"]\n    end\n    subgraph Result\n    A((4)) --> B((7))\n    A --> C((2))\n    C --> D((3))\n    C --> E((1))\n    end",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "An alternative is an iterative solution using BFS. I use a queue starting with the root. For each node I dequeue, I swap its left and right children, then add both children to the queue if they're not null.",
+            "audio_file": "invert-binary-tree-iterative-bfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you trace through the same example?",
+            "audio_file": "invert-binary-tree-iterative-bfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Queue starts with four. I dequeue four and swap its children, so now seven is left and two is right. I enqueue seven and two. Next I dequeue seven, it has no children to swap. Then I dequeue two, swap its children one and three. I enqueue three and one. Both are leaves, so nothing to swap. Queue is empty, we're done.",
+            "audio_file": "invert-binary-tree-iterative-bfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity for this approach?",
+            "audio_file": "invert-binary-tree-iterative-bfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is still O of n since we process every node. Space is O of n in the worst case because the queue could hold up to n over two nodes at the widest level of the tree. This avoids recursion, so there's no risk of stack overflow on deep trees.",
+            "audio_file": "invert-binary-tree-iterative-bfs-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n    A[\"Recursive DFS\\nTime: O of n\\nSpace: O of h\"] --- B[\"Iterative BFS\\nTime: O of n\\nSpace: O of n\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Good work. Can you summarize the two approaches?",
+            "audio_file": "invert-binary-tree-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Both run in O of n time. The recursive DFS is the cleanest solution, just three lines of logic, and uses O of h space on the call stack. The iterative BFS uses a queue and takes O of n space, but it avoids recursion which can be important for very deep trees. For an interview, I'd go with the recursive approach for its simplicity.",
+            "audio_file": "invert-binary-tree-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

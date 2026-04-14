@@ -1,0 +1,238 @@
+{
+  "id": "median-of-two-sorted-arrays",
+  "title": "Finding the Median of Two Sorted Arrays",
+  "difficulty": "hard",
+  "category": "binary-search",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "logarithmic time",
+        "explanation": "An algorithm whose running time grows proportionally to the logarithm of the input size, meaning it gets only slightly slower as the input doubles."
+      },
+      {
+        "phrase": "partition the array",
+        "explanation": "Dividing an array into two halves such that every element in the left half is less than or equal to every element in the right half."
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "A special or boundary scenario that might cause incorrect results if not handled, such as empty arrays or arrays of length one."
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The most straightforward solution that solves the problem without any clever optimization, often with higher time complexity."
+      },
+      {
+        "phrase": "narrow down the search space",
+        "explanation": "Reducing the range of possible answers by eliminating candidates that cannot be correct, typically by half each step."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Median",
+        "definition": "The middle value of a sorted dataset. For an even number of elements, it is the average of the two middle values."
+      },
+      {
+        "term": "Binary Search",
+        "definition": "A search algorithm that repeatedly divides a sorted search space in half, achieving O of log n time complexity."
+      },
+      {
+        "term": "Sorted Array",
+        "definition": "An array whose elements are arranged in non-decreasing order from left to right."
+      },
+      {
+        "term": "Partition",
+        "definition": "A division point in an array that separates it into a left portion and a right portion."
+      },
+      {
+        "term": "Invariant",
+        "definition": "A condition that remains true throughout the execution of an algorithm, used to guarantee correctness."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the larger of two integer values."
+      },
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values."
+      },
+      {
+        "signature": "Arrays.copyOf(int[] original, int newLength)",
+        "description": "Copies the specified array into a new array of the given length."
+      },
+      {
+        "signature": "System.arraycopy(Object src, int srcPos, Object dest, int destPos, int length)",
+        "description": "Copies elements from a source array into a destination array starting at the specified positions."
+      }
+    ]
+  },
+  "concept": "Given two sorted arrays of integers, find the median of the array that would result from merging them together. The solution must run in logarithmic time relative to the total number of elements.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Merge and Find Median",
+      "time_complexity": "O(m + n)",
+      "space_complexity": "O(m + n)",
+      "summary": "Merge both sorted arrays into one sorted array, then return the middle element or the average of the two middle elements."
+    },
+    {
+      "level": 2,
+      "label": "Merge Up to Midpoint",
+      "time_complexity": "O(m + n)",
+      "space_complexity": "O(1)",
+      "summary": "Use two pointers to walk through both arrays simultaneously, stopping once we reach the median position without creating a full merged array."
+    },
+    {
+      "level": 3,
+      "label": "Binary Search on Partition",
+      "time_complexity": "O(log(min(m, n)))",
+      "space_complexity": "O(1)",
+      "summary": "Binary search on the shorter array to find a partition point where the left halves of both arrays combined equal the right halves, giving us the median directly."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Array 1: [1, 3, 8]\"] --> C[\"Merged: [1, 2, 3, 5, 7, 8]\"]\n    B[\"Array 2: [2, 5, 7]\"] --> C\n    C --> D[\"Median = (3 + 5) / 2 = 4.0\"]\n    style A fill:#f87171,color:#000\n    style B fill:#f87171,color:#000\n    style D fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is today's problem. You are given two sorted arrays of integers. Your task is to find the median of the combined sorted array. The catch is that your solution must run in logarithmic time.",
+            "audio_file": "median-of-two-sorted-arrays-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So the two arrays are already sorted individually. Can the arrays be different lengths? And can either array be empty?",
+            "audio_file": "median-of-two-sorted-arrays-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the arrays can have different lengths. At least one array will be non-empty. The total number of elements across both arrays is at least one. The median should be returned as a double.",
+            "audio_file": "median-of-two-sorted-arrays-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So for example, if array one is one, three, eight and array two is two, five, seven, the merged array would be one, two, three, five, seven, eight. Since there are six elements, the median is the average of three and five, which is four point zero.",
+            "audio_file": "median-of-two-sorted-arrays-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly right. Now, let's start with whatever approach comes to mind first, and then we can optimize.",
+            "audio_file": "median-of-two-sorted-arrays-intro-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Merge and Find Median",
+        "diagram": "graph TD\n    A[\"Array 1: [1, 3, 8]\"] --> M[\"Merge both arrays\"]\n    B[\"Array 2: [2, 5, 7]\"] --> M\n    M --> C[\"[1, 2, 3, 5, 7, 8]\"]\n    C --> D[\"Length = 6, even count\"]\n    D --> E[\"Index 2 → 3, Index 3 → 5\"]\n    E --> F[\"Median = (3+5)/2 = 4.0\"]\n    style A fill:#60a5fa,color:#000\n    style B fill:#60a5fa,color:#000\n    style C fill:#60a5fa,color:#000\n    style F fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to merge both sorted arrays into a single sorted array. Since both inputs are already sorted, we can use a standard merge operation with two pointers, similar to merge sort.",
+            "audio_file": "median-of-two-sorted-arrays-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Once merged, if the total length is odd, we return the middle element. If even, we return the average of the two middle elements. Using our example, the merged array is one, two, three, five, seven, eight, and we get four point zero.",
+            "audio_file": "median-of-two-sorted-arrays-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What is the time and space complexity of this approach?",
+            "audio_file": "median-of-two-sorted-arrays-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Both are O of m plus n, where m and n are the lengths of the two arrays. We traverse every element once for the merge and store them all in a new array. This works, but it does not meet the logarithmic time requirement.",
+            "audio_file": "median-of-two-sorted-arrays-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-pointer",
+        "level": 2,
+        "title": "Merge Up to Midpoint",
+        "diagram": "graph TD\n    A[\"Array 1: [1, 3, 8]  ptr_a=0\"] --> S[\"Walk both pointers forward\"]\n    B[\"Array 2: [2, 5, 7]  ptr_b=0\"] --> S\n    S --> S1[\"Step 1: pick 1, advance ptr_a\"]\n    S1 --> S2[\"Step 2: pick 2, advance ptr_b\"]\n    S2 --> S3[\"Step 3: pick 3, advance ptr_a\"]\n    S3 --> S4[\"Step 4: pick 5, stop at midpoint\"]\n    S4 --> R[\"Median = (3+5)/2 = 4.0\"]\n    style S1 fill:#a78bfa,color:#000\n    style S2 fill:#a78bfa,color:#000\n    style S3 fill:#a78bfa,color:#000\n    style S4 fill:#a78bfa,color:#000\n    style R fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can improve space by not creating the merged array. We use two pointers and walk forward through both arrays, counting steps. We only need to reach the midpoint position, so we stop after half the total elements.",
+            "audio_file": "median-of-two-sorted-arrays-two-pointer-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In our example, the total length is six, so we need positions two and three. We walk through: pick one, pick two, pick three, pick five. At that point we have our two middle values and can compute four point zero.",
+            "audio_file": "median-of-two-sorted-arrays-two-pointer-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. How does this change the complexity?",
+            "audio_file": "median-of-two-sorted-arrays-two-pointer-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is still O of m plus n in the worst case since we may walk through half of all elements. But space is now O of one since we only track a few variables. Still not logarithmic though.",
+            "audio_file": "median-of-two-sorted-arrays-two-pointer-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Binary Search on Partition",
+        "diagram": "graph TD\n    A[\"Shorter array: [1, 3, 8]\"]\n    A --> BS[\"Binary search partition on shorter array\"]\n    BS --> P1[\"Try partition at index 1: left=[1], right=[3,8]\"]\n    P1 --> P2[\"Other array fills remaining: left=[2,5], right=[7]\"]\n    P2 --> CHK[\"Check: max_left=5 ≤ min_right=3? No → adjust\"]\n    CHK --> P3[\"Try partition at index 2: left=[1,3], right=[8]\"]\n    P3 --> P4[\"Other array: left=[2], right=[5,7]\"]\n    P4 --> CHK2[\"Check: max_left=3 ≤ 5 and max_left=2 ≤ 8? Yes!\"]\n    CHK2 --> R[\"Median = (max(3,2)+min(8,5))/2 = (3+5)/2 = 4.0\"]\n    style BS fill:#fb923c,color:#000\n    style CHK2 fill:#fb923c,color:#000\n    style R fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "For the optimal solution, we perform binary search on the shorter array to find the right partition point. The idea is to split both arrays so that the left halves combined have exactly half of all elements, and every left element is less than or equal to every right element.",
+            "audio_file": "median-of-two-sorted-arrays-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We pick a partition index on the shorter array and compute the corresponding partition on the longer array. Then we check whether the max of the left side is less than or equal to the min of the right side. If not, we adjust our binary search bounds.",
+            "audio_file": "median-of-two-sorted-arrays-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In our example, after trying a couple of partition points, we find that partitioning array one as one, three on the left and eight on the right, and array two as two on the left and five, seven on the right, satisfies our condition. The median is the average of max of three, two and min of eight, five, which gives us four point zero.",
+            "audio_file": "median-of-two-sorted-arrays-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. And the complexity?",
+            "audio_file": "median-of-two-sorted-arrays-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of log of the minimum of m and n, since we binary search on the shorter array. Space complexity is O of one. This meets the logarithmic time requirement.",
+            "audio_file": "median-of-two-sorted-arrays-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    L1[\"Level 1: Merge and Find\"]\n    L1T[\"Time: O of m+n | Space: O of m+n\"]\n    L2[\"Level 2: Merge Up to Midpoint\"]\n    L2T[\"Time: O of m+n | Space: O of 1\"]\n    L3[\"Level 3: Binary Search Partition\"]\n    L3T[\"Time: O of log min m,n | Space: O of 1\"]\n    L1 --> L1T\n    L2 --> L2T\n    L3 --> L3T\n    style L1 fill:#60a5fa,color:#000\n    style L2 fill:#a78bfa,color:#000\n    style L3 fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. You started with a merge approach, then eliminated extra space by walking to the midpoint, and finally applied binary search on the partition to achieve logarithmic time.",
+            "audio_file": "median-of-two-sorted-arrays-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight for the optimal solution is that finding the median is really a partitioning problem. By binary searching on the shorter array, we can find the correct split in O of log of the minimum of m and n time without ever merging.",
+            "audio_file": "median-of-two-sorted-arrays-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

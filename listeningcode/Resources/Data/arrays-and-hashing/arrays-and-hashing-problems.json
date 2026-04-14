@@ -1,0 +1,74 @@
+[
+  {
+    "id": "contains-duplicate",
+    "title": "Finding Duplicates in an Array",
+    "difficulty": "easy",
+    "sort_order": 0,
+    "content_file": "contains-duplicate.json",
+    "leetcode_url": "https://leetcode.com/problems/contains-duplicate/"
+  },
+  {
+    "id": "valid-anagram",
+    "title": "Checking if Two Strings Are Anagrams",
+    "difficulty": "easy",
+    "sort_order": 1,
+    "content_file": "valid-anagram.json",
+    "leetcode_url": "https://leetcode.com/problems/valid-anagram/"
+  },
+  {
+    "id": "two-sum",
+    "title": "Finding Two Numbers That Add Up to a Target",
+    "difficulty": "easy",
+    "sort_order": 2,
+    "content_file": "two-sum.json",
+    "leetcode_url": "https://leetcode.com/problems/two-sum/"
+  },
+  {
+    "id": "group-anagrams",
+    "title": "Grouping Words by Anagram Patterns",
+    "difficulty": "medium",
+    "sort_order": 3,
+    "content_file": "group-anagrams.json",
+    "leetcode_url": "https://leetcode.com/problems/group-anagrams/"
+  },
+  {
+    "id": "top-k-frequent-elements",
+    "title": "Finding the K Most Frequent Elements",
+    "difficulty": "medium",
+    "sort_order": 4,
+    "content_file": "top-k-frequent-elements.json",
+    "leetcode_url": "https://leetcode.com/problems/top-k-frequent-elements/"
+  },
+  {
+    "id": "encode-and-decode-strings",
+    "title": "Encoding and Decoding a List of Strings",
+    "difficulty": "medium",
+    "sort_order": 5,
+    "content_file": "encode-and-decode-strings.json",
+    "leetcode_url": "https://leetcode.com/problems/encode-and-decode-strings/"
+  },
+  {
+    "id": "product-of-array-except-self",
+    "title": "Computing Products Without Self Inclusion",
+    "difficulty": "medium",
+    "sort_order": 6,
+    "content_file": "product-of-array-except-self.json",
+    "leetcode_url": "https://leetcode.com/problems/product-of-array-except-self/"
+  },
+  {
+    "id": "valid-sudoku",
+    "title": "Validating a Sudoku Board",
+    "difficulty": "medium",
+    "sort_order": 7,
+    "content_file": "valid-sudoku.json",
+    "leetcode_url": "https://leetcode.com/problems/valid-sudoku/"
+  },
+  {
+    "id": "longest-consecutive-sequence",
+    "title": "Finding the Longest Consecutive Number Sequence",
+    "difficulty": "medium",
+    "sort_order": 8,
+    "content_file": "longest-consecutive-sequence.json",
+    "leetcode_url": "https://leetcode.com/problems/longest-consecutive-sequence/"
+  }
+]

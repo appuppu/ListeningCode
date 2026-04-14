@@ -1,0 +1,218 @@
+{
+  "id": "minimum-window-substring",
+  "title": "Finding the Smallest Window Containing All Characters",
+  "difficulty": "hard",
+  "category": "sliding-window",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "sliding window",
+        "explanation": "A technique where a window of elements moves across the data structure to find an optimal range"
+      },
+      {
+        "phrase": "shrink the window",
+        "explanation": "Move the left boundary forward to reduce the window size while maintaining validity"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "A straightforward method that checks all possibilities without optimization"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input scenario that needs special handling"
+      },
+      {
+        "phrase": "keep track of",
+        "explanation": "To monitor or record information as you process data"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Substring",
+        "definition": "A contiguous sequence of characters within a string"
+      },
+      {
+        "term": "HashMap",
+        "definition": "A data structure that stores key-value pairs for fast lookup by key"
+      },
+      {
+        "term": "Character frequency",
+        "definition": "The count of how many times each character appears in a string"
+      },
+      {
+        "term": "Two pointers",
+        "definition": "A technique using two indices to define a range or window within a data structure"
+      },
+      {
+        "term": "Window validity",
+        "definition": "The condition that the current window satisfies all required constraints"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashMap.getOrDefault(key, defaultValue)",
+        "description": "Returns the value for the key, or the default value if the key is not present"
+      },
+      {
+        "signature": "String.charAt(index)",
+        "description": "Returns the character at the specified index in the string"
+      },
+      {
+        "signature": "String.substring(beginIndex, endIndex)",
+        "description": "Returns a new string from beginIndex to endIndex exclusive"
+      },
+      {
+        "signature": "String.length()",
+        "description": "Returns the number of characters in the string"
+      }
+    ]
+  },
+  "concept": "Given two strings s and t, find the minimum-length substring of s that contains every character of t, including duplicates. If no such window exists, return an empty string.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force",
+      "time_complexity": "O(n^3)",
+      "space_complexity": "O(n)",
+      "summary": "Check every possible substring of s and verify if it contains all characters of t."
+    },
+    {
+      "level": 2,
+      "label": "Sliding Window with Frequency Map",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use two pointers with a frequency map to expand and shrink the window efficiently."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    S[\"s = A D O B E C O D E B A N C\"] --> Q{\"Find smallest window\\ncontaining all of t\"}\n    T[\"t = A B C\"] --> Q\n    Q --> R[\"Result: B A N C\\nfrom index 9 to 12\"]\n    style S fill:#f87171,color:#fff\n    style T fill:#f87171,color:#fff\n    style R fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given two strings, s and t. Your task is to find the smallest substring within s that contains every character of t, including duplicates. For example, if s is A D O B E C O D E B A N C and t is A B C, what would you return?",
+            "audio_file": "minimum-window-substring-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So I need to find the shortest contiguous window in s that has all characters from t. A few clarifying questions: can t have duplicate characters, and do I need to match those duplicates? Also, what should I return if no valid window exists?",
+            "audio_file": "minimum-window-substring-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great questions. Yes, t can have duplicates, and your window must contain at least that many of each character. If no valid window exists, return an empty string. Both strings contain only English letters, and t is never longer than s.",
+            "audio_file": "minimum-window-substring-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. Are the characters case-sensitive? And should I return the substring itself or its indices?",
+            "audio_file": "minimum-window-substring-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, case-sensitive. Return the actual substring. For the example I gave, the answer would be B A N C, which is the shortest window containing A, B, and C.",
+            "audio_file": "minimum-window-substring-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to scan through s, find all windows that contain every character from t with the correct frequency, and return the shortest one. Let me start with a brute force approach and then optimize.",
+            "audio_file": "minimum-window-substring-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force — Check All Substrings",
+        "diagram": "graph TD\n    A[\"s = A D O B E C O D E B A N C\"] --> B[\"Try every start index i\"]\n    B --> C[\"Try every end index j from i onward\"]\n    C --> D[\"Extract substring s from i to j\"]\n    D --> E{\"Does it contain\\nall of A B C?\"}\n    E -- Yes --> F[\"Update minimum\\nif shorter\"]\n    E -- No --> G[\"Continue to\\nnext j\"]\n    F --> H[\"Best: B A N C\\nlength 4\"]\n    style A fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff\n    style H fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to generate every possible substring of s. For each one, I check whether it contains all characters of t by comparing character frequencies. I keep track of the shortest valid substring found.",
+            "audio_file": "minimum-window-substring-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the complexity of that approach.",
+            "audio_file": "minimum-window-substring-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "There are O of n-squared possible substrings, and checking each one takes O of n time to verify the character counts. So the total time complexity is O of n-cubed. Space is O of n for storing frequency maps.",
+            "audio_file": "minimum-window-substring-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's correct but quite slow for large inputs. Can you think of a way to avoid rechecking from scratch for every substring?",
+            "audio_file": "minimum-window-substring-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes, instead of regenerating counts each time, I can use a sliding window that expands and contracts. That way I incrementally update the character counts rather than recomputing them.",
+            "audio_file": "minimum-window-substring-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Sliding Window with Two Pointers",
+        "diagram": "graph TD\n    A[\"s = A D O B E C O D E B A N C\\nt = A B C\"] --> B[\"Build frequency map for t:\\nA:1 B:1 C:1\"]\n    B --> C[\"Expand right pointer\\nuntil window has A B C\"]\n    C --> D[\"Window: A D O B E C\\npositions 0 to 5, length 6\"]\n    D --> E[\"Shrink left pointer\\nA is removed, window invalid\"]\n    E --> F[\"Expand right again\\nfind next valid window\"]\n    F --> G[\"Window: C O D E B A N C\\npositions 5 to 12, length 8\"]\n    G --> H[\"Shrink left: remove C O D E\\nWindow: B A N C, length 4\"]\n    H --> I[\"Result: B A N C\"]\n    style A fill:#a78bfa,color:#fff\n    style D fill:#a78bfa,color:#fff\n    style H fill:#a78bfa,color:#fff\n    style I fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I'll use two pointers, left and right, both starting at zero. First, I build a frequency map for t. Then I expand right, adding characters to a window map. I also track how many characters have met the required frequency using a counter called formed.",
+            "audio_file": "minimum-window-substring-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Once formed equals the number of unique characters in t, the window is valid. Then I try shrinking from the left to find the smallest valid window. Each time I shrink, I update the minimum length if the current window is shorter.",
+            "audio_file": "minimum-window-substring-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you trace through our example? s is A D O B E C O D E B A N C and t is A B C.",
+            "audio_file": "minimum-window-substring-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right expands until index five, where we have A D O B E C. That's the first valid window with length six. Then I shrink from left, removing A. The window becomes invalid, so I expand right again. Eventually I find B A N C at indices nine through twelve, with length four. That's the minimum.",
+            "audio_file": "minimum-window-substring-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity?",
+            "audio_file": "minimum-window-substring-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each character is visited at most twice, once by right and once by left. So time is O of n where n is the length of s. Space is O of n for the two frequency maps storing character counts.",
+            "audio_file": "minimum-window-substring-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    BF[\"Brute Force\\nO of n-cubed time\\nO of n space\"] --> SW[\"Sliding Window\\nO of n time\\nO of n space\"]\n    style BF fill:#60a5fa,color:#fff\n    style SW fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great walkthrough. The brute force at O of n-cubed is a fine starting point, but the sliding window approach at O of n is a massive improvement. The key insight is using two pointers to expand and shrink the window while maintaining character counts.",
+            "audio_file": "minimum-window-substring-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The formed counter was the crucial detail. It lets us know instantly whether the current window is valid without recounting all characters. This pattern of expand then shrink applies to many substring problems.",
+            "audio_file": "minimum-window-substring-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

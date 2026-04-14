@@ -1,0 +1,267 @@
+{
+  "id": "contains-duplicate",
+  "title": "Finding Duplicates in an Array",
+  "difficulty": "easy",
+  "category": "arrays-and-hashing",
+
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "time-space tradeoff",
+        "explanation": "Using more memory to reduce computation time, or vice versa. A fundamental concept in algorithm design."
+      },
+      {
+        "phrase": "nested for-loops",
+        "explanation": "A loop inside another loop. The inner loop runs completely for each iteration of the outer loop."
+      },
+      {
+        "phrase": "single pass",
+        "explanation": "Processing each element in the array exactly once from start to end, achieving O(n) time."
+      },
+      {
+        "phrase": "adjacent elements",
+        "explanation": "Elements that are next to each other in the array. After sorting, duplicates become adjacent."
+      },
+      {
+        "phrase": "constant time",
+        "explanation": "An operation that takes the same amount of time regardless of input size. Denoted as O(1)."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Hash Set",
+        "definition": "A collection that stores unique elements using a hash table. Lookup and insertion are O(1) on average."
+      },
+      {
+        "term": "Brute Force",
+        "definition": "Trying every possible combination. Often the simplest but least efficient approach."
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "How the running time grows relative to input size, expressed in Big-O notation."
+      },
+      {
+        "term": "Space Complexity",
+        "definition": "How much additional memory an algorithm uses relative to input size."
+      },
+      {
+        "term": "In-place",
+        "definition": "An algorithm that uses only a constant amount of extra memory, O(1) space."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashSet<Integer> set = new HashSet<>()",
+        "description": "Creates an empty hash set that stores unique integers."
+      },
+      {
+        "signature": "set.add(element)",
+        "description": "Adds element to the set. Returns true if the element was not already present."
+      },
+      {
+        "signature": "set.contains(element)",
+        "description": "Returns true if the set already contains the element. O(1) average time."
+      },
+      {
+        "signature": "Arrays.sort(nums)",
+        "description": "Sorts the array in-place in ascending order. O(n log n) time."
+      }
+    ]
+  },
+
+  "concept": "Given an integer array nums, return true if any value appears at least twice, and false if every element is distinct. The core question is: How can you efficiently detect if a duplicate exists?",
+
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "summary": "Compare every pair of elements using two nested loops."
+    },
+    {
+      "level": 2,
+      "label": "Sorting",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(1)",
+      "summary": "Sort the array first, then check adjacent elements for duplicates."
+    },
+    {
+      "level": 3,
+      "label": "Hash Set",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a hash set to track seen elements. If an element is already in the set, a duplicate exists."
+    }
+  ],
+
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    subgraph Array[\"nums = [1, 2, 3, 1]\"]\n        direction LR\n        A0[\"1\"] --- A1[\"2\"] --- A2[\"3\"] --- A3[\"1\"]\n    end\n    Array --> Q{\"Any duplicates?\"}\n    Q -->|\"1 appears twice\"| Yes[\"Return true\"]\n    style A0 fill:#f87171,stroke:#dc2626,color:#000\n    style A3 fill:#f87171,stroke:#dc2626,color:#000\n    style Yes fill:#4ade80,stroke:#16a34a,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem I'd like you to solve. You're given an integer array. Your task is to determine whether any value in the array appears more than once. If any duplicate exists, return true. Otherwise, return false.",
+            "audio_file": "contains-duplicate-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. Before I start, let me clarify a few things. What kind of integers are we dealing with? Can the array contain negative numbers?",
+            "audio_file": "contains-duplicate-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array can contain any integers, including negative numbers. The array length can range from one to one hundred thousand elements.",
+            "audio_file": "contains-duplicate-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. And what about edge cases? If the array has only one element, we should return false since there's nothing to compare against, right?",
+            "audio_file": "contains-duplicate-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. A single-element array always returns false. An empty array also returns false.",
+            "audio_file": "contains-duplicate-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Perfect. So to summarize, I need to check if any value repeats at least twice in the given integer array, handling arrays up to one hundred thousand elements efficiently. Let me walk through my thought process starting from the simplest approach.",
+            "audio_file": "contains-duplicate-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Level 1 — Brute Force",
+        "diagram": "graph TD\n    subgraph Input[\"nums = [3, 1, 3, 4]\"]\n        direction LR\n        A0[\"3\"] --- A1[\"1\"] --- A2[\"3\"] --- A3[\"4\"]\n    end\n    Input --> Loop[\"Nested Loop: compare all pairs\"]\n    Loop --> C1[\"i=0, j=1: 3 ≠ 1\"]\n    Loop --> C2[\"i=0, j=2: 3 = 3 ✓\"]\n    C2 --> Result[\"Return true\"]\n    style C2 fill:#4ade80,stroke:#16a34a,color:#000\n    style Result fill:#4ade80,stroke:#16a34a,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Sounds good. What would the most straightforward solution look like?",
+            "audio_file": "contains-duplicate-bf-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The brute force approach would be to compare every pair of elements. For each element in the array, I check it against every other element that comes after it. If I find two elements that are equal, I return true. If I finish all pairs without a match, I return false. In code, that means two nested for-loops. The outer loop picks an element, and the inner loop scans the rest.",
+            "audio_file": "contains-duplicate-bf-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity of that approach?",
+            "audio_file": "contains-duplicate-bf-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n-squared, because we're checking roughly n times n-minus-one over two pairs. The space complexity is O of one since we're not using any extra data structures. This works, but it becomes extremely slow for large inputs. For an array of ten thousand elements, we could be making up to fifty million comparisons. So I'd like to optimize.",
+            "audio_file": "contains-duplicate-bf-c2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "sorting",
+        "level": 2,
+        "title": "Level 2 — Sorting Approach",
+        "diagram": "graph TD\n    subgraph Before[\"Before Sort\"]\n        direction LR\n        B0[\"3\"] --- B1[\"1\"] --- B2[\"3\"] --- B3[\"4\"]\n    end\n    Before -->|\"Arrays.sort()\"| After\n    subgraph After[\"After Sort\"]\n        direction LR\n        S0[\"1\"] --- S1[\"3\"] --- S2[\"3\"] --- S3[\"4\"]\n    end\n    After --> Check[\"Compare adjacent pairs\"]\n    Check --> P1[\"1 ≠ 3\"]\n    Check --> P2[\"3 = 3 ✓\"]\n    P2 --> Result[\"Return true\"]\n    style S1 fill:#a78bfa,stroke:#7c3aed,color:#000\n    style S2 fill:#a78bfa,stroke:#7c3aed,color:#000\n    style P2 fill:#a78bfa,stroke:#7c3aed,color:#000\n    style Result fill:#a78bfa,stroke:#7c3aed,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Good analysis. Can you do better than O of n-squared?",
+            "audio_file": "contains-duplicate-sort-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes. The key insight is that if we sort the array first, any duplicate elements will end up right next to each other. For example, if the input is three, one, three, four, two, after sorting it becomes one, two, three, three, four. Now the duplicate threes are adjacent.",
+            "audio_file": "contains-duplicate-sort-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So the algorithm is: first, sort the array using a built-in sort like Arrays dot sort. Then iterate through the sorted array and compare each element with the next one. If any two adjacent elements are equal, return true. Otherwise, return false after the loop.",
+            "audio_file": "contains-duplicate-sort-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "contains-duplicate-sort-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n log n because the sorting step dominates. The space complexity is O of one additional space for most practical purposes. This is a big improvement. For ten thousand elements, instead of fifty million operations, we're doing roughly one hundred thirty thousand. But we can actually do even better.",
+            "audio_file": "contains-duplicate-sort-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Level 3 — Hash Set (Optimal)",
+        "diagram": "graph TD\n    subgraph Input[\"nums = [1, 2, 3, 1]\"]\n        direction LR\n        N0[\"1\"] --- N1[\"2\"] --- N2[\"3\"] --- N3[\"1\"]\n    end\n    Input --> Step1[\"Check 1 → not in set → add\"]\n    Step1 --> Set1[\"{1}\"]\n    Set1 --> Step2[\"Check 2 → not in set → add\"]\n    Step2 --> Set2[\"{1, 2}\"]\n    Set2 --> Step3[\"Check 3 → not in set → add\"]\n    Step3 --> Set3[\"{1, 2, 3}\"]\n    Set3 --> Step4[\"Check 1 → IN SET ✓\"]\n    Step4 --> Result[\"Return true\"]\n    style Step4 fill:#fb923c,stroke:#ea580c,color:#000\n    style Result fill:#fb923c,stroke:#ea580c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "What's the optimal approach?",
+            "audio_file": "contains-duplicate-opt-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We can use a HashSet. A hash set lets us check whether an element already exists in O of one constant time on average. So instead of sorting or comparing every pair, we make a single pass through the array. For each element, we ask: have I seen this before? If yes, return true. If no, add it to the set and continue.",
+            "audio_file": "contains-duplicate-opt-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk me through an example?",
+            "audio_file": "contains-duplicate-opt-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Take the array one, two, three, one. We start with an empty hash set. We look at one. It's not in the set, so we add it. Now the set contains one. We look at two. Not in the set, add it. The set is one, two. We look at three. Not in the set, add it. The set is one, two, three. We look at one again, and this time it IS in the set. We return true immediately without checking the rest.",
+            "audio_file": "contains-duplicate-opt-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the complexity of this solution?",
+            "audio_file": "contains-duplicate-opt-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n because we visit each element exactly once, and each hash set operation is O of one on average. The space complexity is O of n because in the worst case, when there are no duplicates, the set stores all n elements. This is the classic time-space tradeoff. We use more memory to gain faster execution.",
+            "audio_file": "contains-duplicate-opt-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How would you implement this in Java?",
+            "audio_file": "contains-duplicate-opt-i4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I'd create a new HashSet of Integer. Then loop through each number in the array. For each number, I call set dot contains to check if it's already there. If it returns true, I return true. Otherwise I call set dot add with that number. After the loop completes without finding a duplicate, I return false. Very clean and concise.",
+            "audio_file": "contains-duplicate-opt-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        direction TB\n        BF[\"Brute Force\\nO(n²) time / O(1) space\"] --> Sort[\"Sorting\\nO(n log n) time / O(1) space\"]\n        Sort --> HS[\"Hash Set ★\\nO(n) time / O(n) space\"]\n    end\n    style BF fill:#60a5fa,stroke:#2563eb,color:#000\n    style Sort fill:#a78bfa,stroke:#7c3aed,color:#000\n    style HS fill:#fb923c,stroke:#ea580c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great. Can you summarize all three approaches and their tradeoffs?",
+            "audio_file": "contains-duplicate-sum-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Of course. Level one, brute force: compare every pair using nested loops. O of n-squared time, O of one space. Level two, sorting: sort first then check adjacent elements. O of n log n time, O of one space. Level three, hash set: single pass with a set for O of one lookups. O of n time, O of n space. The hash set solution is optimal. We're trading O of n extra space for a huge improvement in time, from n-squared down to linear. This pattern of using a hash set for constant-time lookups shows up in many other problems, so it's a fundamental technique to master.",
+            "audio_file": "contains-duplicate-sum-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

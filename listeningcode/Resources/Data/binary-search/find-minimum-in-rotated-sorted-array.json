@@ -1,0 +1,218 @@
+{
+  "id": "find-minimum-in-rotated-sorted-array",
+  "title": "Finding the Minimum in a Rotated Sorted Array",
+  "difficulty": "medium",
+  "category": "binary-search",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "rotated at some pivot",
+        "explanation": "The array was shifted so that elements after a certain index moved to the front"
+      },
+      {
+        "phrase": "in sorted order",
+        "explanation": "Elements arranged from smallest to largest"
+      },
+      {
+        "phrase": "narrow down the search space",
+        "explanation": "Reduce the range of elements we need to examine"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "Trace through a specific input step by step to verify logic"
+      },
+      {
+        "phrase": "that gives us a baseline",
+        "explanation": "Establishes a starting approach we can improve upon"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Rotated Sorted Array",
+        "definition": "A sorted array where a portion from the end has been moved to the beginning"
+      },
+      {
+        "term": "Binary Search",
+        "definition": "An algorithm that halves the search space each step by comparing with a middle element"
+      },
+      {
+        "term": "Pivot Point",
+        "definition": "The index where the rotation occurred, causing the order to break"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the runtime grows relative to input size"
+      },
+      {
+        "term": "Search Space",
+        "definition": "The range of indices currently under consideration during a search"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values"
+      },
+      {
+        "signature": "array.length",
+        "description": "Returns the number of elements in the array"
+      },
+      {
+        "signature": "Arrays.sort(int[] a)",
+        "description": "Sorts an array in ascending order"
+      },
+      {
+        "signature": "System.arraycopy(src, srcPos, dest, destPos, length)",
+        "description": "Copies elements from one array to another"
+      }
+    ]
+  },
+  "concept": "Given a sorted array of unique integers that has been rotated between 1 and n times, find and return the minimum element. The original array was in ascending order before the rotation.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Linear Scan",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Scan every element and track the minimum value."
+    },
+    {
+      "level": 2,
+      "label": "Binary Search",
+      "time_complexity": "O(log n)",
+      "space_complexity": "O(1)",
+      "summary": "Use binary search to identify which half contains the pivot and narrow down to the minimum."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Original Sorted: 1, 2, 3, 4, 5, 6, 7\"] -->|\"Rotate by 3\"| B[\"Rotated: 4, 5, 6, 7, 1, 2, 3\"]\n    B --> C[\"Find Minimum\"]\n    C --> D[\"Answer: 1\"]\n    style A fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. Imagine you have a sorted array of unique integers in ascending order. Someone takes the last few elements and moves them to the front. This is called a rotation. Given such a rotated array, your task is to find the minimum element. For example, the sorted array one, two, three, four, five, six, seven might become four, five, six, seven, one, two, three after rotating by three positions.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So the array was originally sorted, then rotated some number of times. I want to confirm a few things. Are all elements unique? And can the array be empty?",
+            "audio_file": "find-minimum-in-rotated-sorted-array-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great questions. Yes, all elements are unique. The array will always have at least one element, so you don't need to handle the empty case. The array length can be up to five thousand. Also, the rotation count is between one and n, where n is the array length.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. And I should return the minimum value itself, not its index, correct?",
+            "audio_file": "find-minimum-in-rotated-sorted-array-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's correct. Just return the minimum value.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright. So to summarize, I have a rotated sorted array of unique integers with at least one element. I need to find and return the smallest value. Let me start with a straightforward approach.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Linear Scan",
+        "diagram": "graph LR\n    A[\"4\"] --> B[\"5\"]\n    B --> C[\"6\"]\n    C --> D[\"7\"]\n    D --> E[\"1 ✓ min\"]\n    E --> F[\"2\"]\n    F --> G[\"3\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#60a5fa,color:#fff\n    style E fill:#f87171,color:#fff\n    style F fill:#60a5fa,color:#fff\n    style G fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is a linear scan. I just iterate through the entire array and keep track of the smallest value I've seen. For the array four, five, six, seven, one, two, three, I'd compare each element and find that one is the minimum.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. What's the time complexity of this approach?",
+            "audio_file": "find-minimum-in-rotated-sorted-array-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "It's O of n time since we visit every element, and O of one space since we only use a single variable to track the minimum.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. That gives us a baseline, but we're not using the fact that the array was originally sorted. Can you think of a way to take advantage of that property?",
+            "audio_file": "find-minimum-in-rotated-sorted-array-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Definitely. Since the array has a sorted structure, binary search should help us narrow down the search space much faster.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Binary Search",
+        "diagram": "graph TD\n    S[\"Array: 4, 5, 6, 7, 1, 2, 3\"] --> Step1\n    Step1[\"left=0 right=6 mid=3 val=7\"] --> Check1{\"7 > 3 right element?\"}\n    Check1 -->|\"Yes: min is in right half\"| Step2[\"left=4 right=6 mid=5 val=2\"]\n    Step2 --> Check2{\"2 > 3 right element?\"}\n    Check2 -->|\"No: min is in left half\"| Step3[\"left=4 right=5 mid=4 val=1\"]\n    Step3 --> Check3{\"1 > 2 right element?\"}\n    Check3 -->|\"No: min is in left half\"| Step4[\"left=4 right=4\"]\n    Step4 --> Result[\"Minimum = 1\"]\n    style S fill:#a78bfa,color:#fff\n    style Result fill:#f87171,color:#fff\n    style Step1 fill:#a78bfa,color:#fff\n    style Step2 fill:#a78bfa,color:#fff\n    style Step3 fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "In a rotated sorted array, one half is always properly sorted and the other half contains the pivot. The key insight is: if the middle element is greater than the rightmost element, the minimum must be in the right half. Otherwise, it's in the left half including mid.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through our example: four, five, six, seven, one, two, three. Left is zero, right is six, mid is three with value seven. Seven is greater than three, the right element, so the minimum is in the right half. We set left to mid plus one, which is four.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Now left is four, right is six, mid is five with value two. Two is not greater than three, so the minimum is in the left half. We set right to mid, which is five. Next, left is four, right is five, mid is four with value one. One is not greater than two, so right becomes four. Now left equals right, both at index four, so we return one.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice. And the complexity?",
+            "audio_file": "find-minimum-in-rotated-sorted-array-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We halve the search space each iteration, so the time complexity is O of log n. Space is O of one since we only use a few pointer variables.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. That's the optimal solution for this problem.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Linear Scan\nO of n time\nO of 1 space\"] --> B[\"Binary Search\nO of log n time\nO of 1 space\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. We started with a linear scan at O of n time, then improved to O of log n using binary search by leveraging the sorted property of the array.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key takeaway is that whenever we see a sorted or partially sorted structure, binary search is worth considering. By comparing the middle element with the rightmost element, we can determine which half contains the minimum and eliminate the other half each step.",
+            "audio_file": "find-minimum-in-rotated-sorted-array-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

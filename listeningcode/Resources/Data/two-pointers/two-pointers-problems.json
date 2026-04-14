@@ -1,0 +1,42 @@
+[
+  {
+    "id": "valid-palindrome",
+    "title": "Checking if a String is a Palindrome",
+    "difficulty": "easy",
+    "sort_order": 0,
+    "content_file": "valid-palindrome.json",
+    "leetcode_url": "https://leetcode.com/problems/valid-palindrome/"
+  },
+  {
+    "id": "two-sum-ii",
+    "title": "Finding Two Numbers in a Sorted Array That Add Up to a Target",
+    "difficulty": "medium",
+    "sort_order": 1,
+    "content_file": "two-sum-ii.json",
+    "leetcode_url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/"
+  },
+  {
+    "id": "three-sum",
+    "title": "Finding Three Numbers That Sum to Zero",
+    "difficulty": "medium",
+    "sort_order": 2,
+    "content_file": "three-sum.json",
+    "leetcode_url": "https://leetcode.com/problems/3sum/"
+  },
+  {
+    "id": "container-with-most-water",
+    "title": "Maximizing Water Held Between Two Lines",
+    "difficulty": "medium",
+    "sort_order": 3,
+    "content_file": "container-with-most-water.json",
+    "leetcode_url": "https://leetcode.com/problems/container-with-most-water/"
+  },
+  {
+    "id": "trapping-rain-water",
+    "title": "Calculating Trapped Rainwater Between Bars",
+    "difficulty": "hard",
+    "sort_order": 4,
+    "content_file": "trapping-rain-water.json",
+    "leetcode_url": "https://leetcode.com/problems/trapping-rain-water/"
+  }
+]

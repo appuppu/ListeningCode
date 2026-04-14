@@ -1,0 +1,243 @@
+{
+  "id": "remove-nth-node-from-end-of-list",
+  "title": "Removing the Nth Node From the End of a List",
+  "difficulty": "medium",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "traverse the list",
+        "explanation": "To visit each node in the linked list one by one from head to tail"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "A special or extreme input scenario that may cause unexpected behavior"
+      },
+      {
+        "phrase": "one-pass solution",
+        "explanation": "An approach that solves the problem by going through the data only once"
+      },
+      {
+        "phrase": "maintain a gap",
+        "explanation": "To keep a fixed distance between two pointers as they move through a structure"
+      },
+      {
+        "phrase": "dummy node",
+        "explanation": "A placeholder node placed before the head to simplify edge case handling"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Singly Linked List",
+        "definition": "A linear data structure where each node points to the next node and the last node points to null"
+      },
+      {
+        "term": "Two-Pointer Technique",
+        "definition": "A strategy using two references that move through a data structure at different speeds or with a fixed gap"
+      },
+      {
+        "term": "Head Node",
+        "definition": "The first node in a linked list, used as the entry point for traversal"
+      },
+      {
+        "term": "Sentinel Node",
+        "definition": "A dummy node added before the head to handle boundary conditions more cleanly"
+      },
+      {
+        "term": "In-Place Removal",
+        "definition": "Deleting a node by updating pointers without allocating extra data structures"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "ListNode.next",
+        "description": "A field referencing the next node in the linked list"
+      },
+      {
+        "signature": "new ListNode(0)",
+        "description": "Creates a new list node with value zero, often used as a dummy node"
+      },
+      {
+        "signature": "ArrayList.add(E e)",
+        "description": "Appends an element to the end of an array list"
+      },
+      {
+        "signature": "ArrayList.get(int index)",
+        "description": "Returns the element at the specified index in the array list"
+      }
+    ]
+  },
+  "concept": "Given the head of a singly linked list and an integer n, remove the nth node from the end of the list and return the head of the modified list.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Two-Pass Count and Remove",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "First pass counts the total length. Second pass finds and removes the target node."
+    },
+    {
+      "level": 2,
+      "label": "Store Nodes in Array",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Store all nodes in an array list for direct index access, then remove the target node."
+    },
+    {
+      "level": 3,
+      "label": "Two-Pointer One Pass",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use two pointers separated by a gap of n. When the fast pointer reaches the end, the slow pointer is right before the target node."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph LR\n    style N1 fill:#f87171,color:#fff\n    style N2 fill:#f87171,color:#fff\n    style N3 fill:#f87171,color:#fff\n    style N4 fill:#f87171,color:#fff\n    style N5 fill:#f87171,color:#fff\n    N1[1] --> N2[2] --> N3[3] --> N4[4] --> N5[5] --> NULL\n    style N4 stroke:#fff,stroke-width:3px\n    linkStyle 2 stroke:#f87171,stroke-width:2px\n    linkStyle 3 stroke:#f87171,stroke-width:2px",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given the head of a singly linked list and an integer n. You need to remove the nth node from the end of the list and return the head. For example, given the list one, two, three, four, five and n equals two, you should remove node four and return one, two, three, five.",
+            "audio_file": "remove-nth-node-from-end-of-list-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So we count from the end, not the beginning. A couple of questions: can n ever be larger than the length of the list? And what should I do if removing the node means removing the head itself?",
+            "audio_file": "remove-nth-node-from-end-of-list-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good questions. You can assume n is always valid, meaning it will be between one and the length of the list. And yes, the head itself might be the node to remove. In that case just return the next node.",
+            "audio_file": "remove-nth-node-from-end-of-list-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. Can the list be empty?",
+            "audio_file": "remove-nth-node-from-end-of-list-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The list will have at least one node.",
+            "audio_file": "remove-nth-node-from-end-of-list-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright. So to summarize: given a non-empty singly linked list and a valid n, I remove the nth node from the end and return the updated head. Let me start with a straightforward approach.",
+            "audio_file": "remove-nth-node-from-end-of-list-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Two-Pass Count and Remove",
+        "diagram": "graph TD\n    subgraph Pass1[\"First Pass: Count Length = 5\"]\n        direction LR\n        A1[1] --> A2[2] --> A3[3] --> A4[4] --> A5[5]\n    end\n    subgraph Pass2[\"Second Pass: Remove node at position 4\"]\n        direction LR\n        B1[1] --> B2[2] --> B3[3] --> B5[5]\n    end\n    Pass1 --> Pass2\n    style A1 fill:#60a5fa,color:#fff\n    style A2 fill:#60a5fa,color:#fff\n    style A3 fill:#60a5fa,color:#fff\n    style A4 fill:#60a5fa,color:#fff\n    style A5 fill:#60a5fa,color:#fff\n    style B1 fill:#60a5fa,color:#fff\n    style B2 fill:#60a5fa,color:#fff\n    style B3 fill:#60a5fa,color:#fff\n    style B5 fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a two-pass approach. In the first pass I traverse the entire list to count the total number of nodes. If the length is L and I want to remove the nth from the end, that's the node at position L minus n from the beginning.",
+            "audio_file": "remove-nth-node-from-end-of-list-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For our example, the list has five nodes and n is two. So the target is at position five minus two, which is three, meaning it's the fourth node. In the second pass I walk to the node just before it and update its next pointer to skip over the target.",
+            "audio_file": "remove-nth-node-from-end-of-list-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I'll use a dummy node before the head to handle the case where the head itself needs to be removed. The time complexity is O of n since we traverse twice, and space is O of one.",
+            "audio_file": "remove-nth-node-from-end-of-list-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. It's clean and correct. Can you think of a different approach, maybe one that trades space for a different style of access?",
+            "audio_file": "remove-nth-node-from-end-of-list-brute-force-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "array-store",
+        "level": 2,
+        "title": "Store Nodes in Array",
+        "diagram": "graph TD\n    subgraph Store[\"Store all nodes in array\"]\n        direction LR\n        S0[\"index 0: 1\"] --- S1[\"index 1: 2\"] --- S2[\"index 2: 3\"] --- S3[\"index 3: 4\"] --- S4[\"index 4: 5\"]\n    end\n    subgraph Remove[\"Access index 5 - 2 = 3 directly\"]\n        direction LR\n        R0[1] --> R1[2] --> R2[3] --> R4[5]\n    end\n    Store --> Remove\n    style S0 fill:#a78bfa,color:#fff\n    style S1 fill:#a78bfa,color:#fff\n    style S2 fill:#a78bfa,color:#fff\n    style S3 fill:#a78bfa,color:#fff\n    style S4 fill:#a78bfa,color:#fff\n    style R0 fill:#a78bfa,color:#fff\n    style R1 fill:#a78bfa,color:#fff\n    style R2 fill:#a78bfa,color:#fff\n    style R4 fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Another idea is to store each node reference in an array list as I traverse. Then I can directly access any node by index. To remove the nth from the end, I access the node at index length minus n minus one, which is the node right before the target, and update its next pointer.",
+            "audio_file": "remove-nth-node-from-end-of-list-array-store-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For our example, the array has five entries. I want the second from the end, so I look at index five minus two minus one, which is index two. That's node three. I set its next to node five, skipping node four.",
+            "audio_file": "remove-nth-node-from-end-of-list-array-store-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "This is still O of n time but uses O of n extra space for the array. It's a single pass through the list but not ideal on memory.",
+            "audio_file": "remove-nth-node-from-end-of-list-array-store-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. Can you combine the benefits of both? One pass and constant space?",
+            "audio_file": "remove-nth-node-from-end-of-list-array-store-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Two-Pointer One Pass",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Advance fast pointer n=2 steps\"]\n        direction LR\n        D0[dummy] --> E1[1] --> E2[2] --> E3[3] --> E4[4] --> E5[5]\n    end\n    subgraph Step2[\"Step 2: Move both until fast reaches end\"]\n        direction LR\n        F0[\"dummy/slow start\"] -.-> F3[\"3/slow end\"]\n        G2[\"2/fast start\"] -.-> G5[\"5/fast end\"]\n    end\n    subgraph Step3[\"Step 3: slow.next = slow.next.next\"]\n        direction LR\n        H1[1] --> H2[2] --> H3[3] --> H5[5] --> HNULL[null]\n    end\n    Step1 --> Step2 --> Step3\n    style E1 fill:#fb923c,color:#fff\n    style E2 fill:#fb923c,color:#fff\n    style E3 fill:#fb923c,color:#fff\n    style E4 fill:#fb923c,color:#fff\n    style E5 fill:#fb923c,color:#fff\n    style H1 fill:#fb923c,color:#fff\n    style H2 fill:#fb923c,color:#fff\n    style H3 fill:#fb923c,color:#fff\n    style H5 fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach uses two pointers with a gap of n between them. I create a dummy node pointing to the head. I place both fast and slow at the dummy, then advance fast by n plus one steps so the gap between them is exactly n plus one.",
+            "audio_file": "remove-nth-node-from-end-of-list-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then I move both pointers one step at a time until fast reaches null. At that point, slow is right before the target node. I simply set slow dot next to slow dot next dot next to remove it.",
+            "audio_file": "remove-nth-node-from-end-of-list-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Walking through our example: fast advances three steps to node two. Then both move together. When fast hits null, slow is at node three. We skip node four by linking three directly to five.",
+            "audio_file": "remove-nth-node-from-end-of-list-optimal-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "This gives us O of n time and O of one space with just a single pass. The dummy node cleanly handles the edge case of removing the head.",
+            "audio_file": "remove-nth-node-from-end-of-list-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. That's the most elegant solution. Let's wrap up with a summary.",
+            "audio_file": "remove-nth-node-from-end-of-list-optimal-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    subgraph Comparison[\"Approach Comparison\"]\n        direction TB\n        L1[\"Two-Pass: O of n time, O of 1 space, 2 passes\"]\n        L2[\"Array Store: O of n time, O of n space, 1 pass\"]\n        L3[\"Two-Pointer: O of n time, O of 1 space, 1 pass\"]\n    end\n    style L1 fill:#60a5fa,color:#fff\n    style L2 fill:#a78bfa,color:#fff\n    style L3 fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. We explored three approaches. The two-pass method is intuitive but requires traversing the list twice. Storing nodes in an array gives random access but costs extra memory. The two-pointer technique achieves the best of both worlds: one pass with constant space.",
+            "audio_file": "remove-nth-node-from-end-of-list-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that maintaining a fixed gap between two pointers lets us find the nth node from the end without knowing the total length. The dummy node is a useful trick for simplifying head removal. Thank you!",
+            "audio_file": "remove-nth-node-from-end-of-list-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "id": "reverse-nodes-in-k-group",
+  "title": "Reversing Nodes in Groups of K",
+  "difficulty": "hard",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "reverse in place",
+        "explanation": "To rearrange elements directly within the existing structure without using extra storage"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input scenario that may require special handling"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through the algorithm step by step using a concrete input"
+      },
+      {
+        "phrase": "pointer manipulation",
+        "explanation": "Changing the references or links between nodes in a data structure"
+      },
+      {
+        "phrase": "remaining nodes",
+        "explanation": "The leftover nodes that do not form a complete group"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Singly Linked List",
+        "definition": "A linear data structure where each node points to the next node and the last node points to null"
+      },
+      {
+        "term": "Dummy Node",
+        "definition": "A placeholder node placed before the head to simplify edge case handling"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "In-Place Reversal",
+        "definition": "Reversing elements by modifying pointers directly without allocating a new structure"
+      },
+      {
+        "term": "Group Reversal",
+        "definition": "Reversing a fixed number of consecutive elements as a unit"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "ListNode.next",
+        "description": "A reference to the next node in the linked list"
+      },
+      {
+        "signature": "ArrayList.add(E element)",
+        "description": "Appends the specified element to the end of the list"
+      },
+      {
+        "signature": "ArrayList.get(int index)",
+        "description": "Returns the element at the specified position in the list"
+      },
+      {
+        "signature": "Collections.reverse(List<?> list)",
+        "description": "Reverses the order of elements in the specified list"
+      }
+    ]
+  },
+  "concept": "Given the head of a singly linked list and an integer k, reverse every group of k consecutive nodes. If the number of remaining nodes is less than k, leave them in their original order. Return the modified list's head.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Extract to Array",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Copy all node values into an array, reverse each group of k in the array, then rebuild the linked list from the modified array."
+    },
+    {
+      "level": 2,
+      "label": "Recursive Group Reversal",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n/k)",
+      "summary": "Recursively reverse the first k nodes, then call the function on the remaining list and connect the results."
+    },
+    {
+      "level": 3,
+      "label": "Iterative In-Place Reversal",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use a dummy node and iteratively reverse each group of k nodes in place by manipulating pointers directly."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Input[\"Input: 1 → 2 → 3 → 4 → 5, k = 3\"]\n        A1[1] --> A2[2]\n        A2 --> A3[3]\n        A3 --> A4[4]\n        A4 --> A5[5]\n    end\n    subgraph Output[\"Output: 3 → 2 → 1 → 4 → 5\"]\n        B1[3] --> B2[2]\n        B2 --> B3[1]\n        B3 --> B4[4]\n        B4 --> B5[5]\n    end\n    Input --> Output\n    style A1 fill:#f87171,color:#000\n    style A2 fill:#f87171,color:#000\n    style A3 fill:#f87171,color:#000\n    style B1 fill:#f87171,color:#000\n    style B2 fill:#f87171,color:#000\n    style B3 fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "You are given the head of a singly linked list and a positive integer k. Your task is to reverse every group of k consecutive nodes. If the last group has fewer than k nodes, leave those nodes as they are.",
+            "audio_file": "reverse-nodes-in-k-group-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Just to confirm, for a list one, two, three, four, five with k equals three, I reverse the first three to get three, two, one, and then four and five stay unchanged since there are only two left. Is that correct?",
+            "audio_file": "reverse-nodes-in-k-group-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. And k is always a positive integer less than or equal to the length of the list. The list will have at least one node.",
+            "audio_file": "reverse-nodes-in-k-group-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What if k equals one? Then no reversal happens and we return the list as is, right?",
+            "audio_file": "reverse-nodes-in-k-group-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, that's a valid edge case. Also consider k equals the full length of the list, which means you reverse the entire list.",
+            "audio_file": "reverse-nodes-in-k-group-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to process the list in chunks of k, reverse each complete chunk, skip any incomplete remainder, and return the new head. Let me think about approaches.",
+            "audio_file": "reverse-nodes-in-k-group-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Extract to Array",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Copy to Array\"]\n        N1[1] --> N2[2] --> N3[3] --> N4[4] --> N5[5]\n        ARR1[\"Array: [1, 2, 3, 4, 5]\"]\n    end\n    subgraph Step2[\"Step 2: Reverse groups of 3\"]\n        ARR2[\"Array: [3, 2, 1, 4, 5]\"]\n    end\n    subgraph Step3[\"Step 3: Rebuild List\"]\n        R1[3] --> R2[2] --> R3[1] --> R4[4] --> R5[5]\n    end\n    Step1 --> Step2 --> Step3\n    style ARR1 fill:#60a5fa,color:#000\n    style ARR2 fill:#60a5fa,color:#000\n    style R1 fill:#60a5fa,color:#000\n    style R2 fill:#60a5fa,color:#000\n    style R3 fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to extract all values into an array list. Then I reverse every consecutive group of k elements in that array. Finally, I rebuild the linked list from the modified array.",
+            "audio_file": "reverse-nodes-in-k-group-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through the example? List one through five, k equals three.",
+            "audio_file": "reverse-nodes-in-k-group-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. I copy values into an array: one, two, three, four, five. I reverse the first three elements to get three, two, one. The remaining two elements stay. Then I build a new list: three, two, one, four, five.",
+            "audio_file": "reverse-nodes-in-k-group-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What are the time and space complexities?",
+            "audio_file": "reverse-nodes-in-k-group-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Both are O of n. We traverse the list once to fill the array, reverse in linear time, and rebuild in another pass. The array takes O of n extra space. It works but we lose the benefit of linked list structure.",
+            "audio_file": "reverse-nodes-in-k-group-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "recursive",
+        "level": 2,
+        "title": "Recursive Group Reversal",
+        "diagram": "graph TD\n    subgraph Call1[\"First Call: Reverse 1→2→3\"]\n        A1[1] --> A2[2] --> A3[3]\n        Rev1[\"Result: 3→2→1\"]\n    end\n    subgraph Call2[\"Recursive Call on 4→5\"]\n        A4[4] --> A5[5]\n        Rev2[\"Fewer than 3: keep 4→5\"]\n    end\n    subgraph Result[\"Connect: 3→2→1→4→5\"]\n        R1[3] --> R2[2] --> R3[1] --> R4[4] --> R5[5]\n    end\n    Call1 --> Call2 --> Result\n    style Rev1 fill:#a78bfa,color:#000\n    style Rev2 fill:#a78bfa,color:#000\n    style R1 fill:#a78bfa,color:#000\n    style R2 fill:#a78bfa,color:#000\n    style R3 fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "A better approach uses recursion. First, I check if there are at least k nodes. If so, I reverse the first k nodes, then recursively process the rest and attach the result to the tail of the reversed group.",
+            "audio_file": "reverse-nodes-in-k-group-recursive-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the recursion with our example.",
+            "audio_file": "reverse-nodes-in-k-group-recursive-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Starting with one, two, three, four, five and k equals three. I count three nodes, so I reverse one, two, three to get three, two, one. Node one is now the tail. I recurse on four, five. Since only two nodes remain, fewer than k, I return them unchanged. Then I connect one's next to four.",
+            "audio_file": "reverse-nodes-in-k-group-recursive-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about the complexity?",
+            "audio_file": "reverse-nodes-in-k-group-recursive-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n since each node is visited once. Space is O of n divided by k for the recursion stack, since we make one recursive call per group. This is better than the array approach in space when k is large.",
+            "audio_file": "reverse-nodes-in-k-group-recursive-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Iterative In-Place Reversal",
+        "diagram": "graph TD\n    subgraph Setup[\"Dummy → 1 → 2 → 3 → 4 → 5\"]\n        D[Dummy] --> O1[1] --> O2[2] --> O3[3] --> O4[4] --> O5[5]\n    end\n    subgraph Pass1[\"Reverse group 1: nodes 1,2,3\"]\n        D2[Dummy] --> P3[3] --> P2[2] --> P1[1] --> P4[4] --> P5[5]\n    end\n    subgraph Pass2[\"Group 2: only 2 nodes, skip\"]\n        D3[Dummy] --> Q3[3] --> Q2[2] --> Q1[1] --> Q4[4] --> Q5[5]\n    end\n    Setup --> Pass1 --> Pass2\n    style P3 fill:#fb923c,color:#000\n    style P2 fill:#fb923c,color:#000\n    style P1 fill:#fb923c,color:#000\n    style D fill:#fb923c,color:#000\n    style D2 fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach avoids both extra space and recursion. I create a dummy node pointing to the head. For each group, I first count k nodes ahead. If enough exist, I reverse them in place using pointer manipulation, then move to the next group.",
+            "audio_file": "reverse-nodes-in-k-group-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does the in-place reversal work for one group?",
+            "audio_file": "reverse-nodes-in-k-group-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I track the node before the group, called previous group end. For the first group, that is the dummy node. I repeatedly take the node after the current head and move it to the front of the group. After k minus one such moves, the group is reversed. Then previous group end advances to the old head, which is now the group's tail.",
+            "audio_file": "reverse-nodes-in-k-group-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "reverse-nodes-in-k-group-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n. We traverse each node at most twice, once for counting and once for reversing. Space is O of one since we only use a fixed number of pointers. This is the best we can achieve for this problem.",
+            "audio_file": "reverse-nodes-in-k-group-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    subgraph Compare[\"Approach Comparison\"]\n        B[\"Level 1: Extract to Array\\nTime: O of n | Space: O of n\"]\n        P[\"Level 2: Recursive\\nTime: O of n | Space: O of n/k\"]\n        O[\"Level 3: Iterative In-Place\\nTime: O of n | Space: O of 1\"]\n    end\n    B --> P --> O\n    style B fill:#60a5fa,color:#000\n    style P fill:#a78bfa,color:#000\n    style O fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. You showed three approaches: extracting to an array, recursive group reversal, and iterative in-place reversal. Each improved on space usage while keeping linear time.",
+            "audio_file": "reverse-nodes-in-k-group-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes. The key insight is that linked list problems reward careful pointer manipulation. The iterative approach with a dummy node handles all edge cases cleanly and achieves constant space, which is ideal for this problem.",
+            "audio_file": "reverse-nodes-in-k-group-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "id": "reverse-linked-list",
+  "title": "Reversing a Linked List",
+  "difficulty": "easy",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "in-place",
+        "explanation": "Modifying data directly without using extra storage"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "Step through a specific case to demonstrate how the algorithm works"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or boundary input that might cause problems"
+      },
+      {
+        "phrase": "time-space tradeoff",
+        "explanation": "Choosing between faster execution or lower memory usage"
+      },
+      {
+        "phrase": "base case",
+        "explanation": "The simplest scenario in recursion that stops further calls"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Singly Linked List",
+        "definition": "A data structure where each node holds a value and a reference to the next node"
+      },
+      {
+        "term": "Pointer",
+        "definition": "A variable that stores the memory address of another variable or node"
+      },
+      {
+        "term": "Head",
+        "definition": "The first node in a linked list"
+      },
+      {
+        "term": "Null",
+        "definition": "A special value meaning no object or no reference"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "Call Stack",
+        "definition": "The internal stack that tracks active function calls during recursion"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "ListNode.next",
+        "description": "Accesses the next node in the linked list"
+      },
+      {
+        "signature": "ListNode.val",
+        "description": "Accesses the value stored in the current node"
+      },
+      {
+        "signature": "ArrayList.add(E e)",
+        "description": "Appends an element to the end of the array list"
+      },
+      {
+        "signature": "Collections.reverse(List<?> list)",
+        "description": "Reverses the order of elements in a list"
+      }
+    ]
+  },
+  "concept": "Given the head of a singly linked list, reverse the list so that the last node becomes the new head, and return it.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Copy to Array and Rebuild",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Store all values in an array, then build a new reversed list from the array."
+    },
+    {
+      "level": 2,
+      "label": "Recursive Reversal",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Recursively reverse the rest of the list, then fix the pointers on the way back."
+    },
+    {
+      "level": 3,
+      "label": "Iterative In-Place Reversal",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use three pointers to reverse each link one node at a time in a single pass."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph LR\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff\n    A[1] --> B[2] --> C[3] --> D[4]\n    E[\"Reversed:\"] -.-> F[4] --> G[3] --> H[2] --> I[1]\n    style F fill:#f87171,color:#fff\n    style G fill:#f87171,color:#fff\n    style H fill:#f87171,color:#fff\n    style I fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given the head of a singly linked list. I'd like you to reverse the entire list and return the new head.",
+            "audio_file": "reverse-linked-list-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So if the list is one, two, three, four, the output should be four, three, two, one, correct?",
+            "audio_file": "reverse-linked-list-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The node that was last becomes the new head.",
+            "audio_file": "reverse-linked-list-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "A few clarifying questions. Can the list be empty or have just one node? And should I reverse it in place or can I create a new list?",
+            "audio_file": "reverse-linked-list-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the list can be empty or contain a single node. In those cases just return the head as is. You may use any approach you like.",
+            "audio_file": "reverse-linked-list-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to handle empty and single-node lists as edge cases, and for everything else, reverse the pointers so the last node becomes the head. Let me start with a straightforward approach.",
+            "audio_file": "reverse-linked-list-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Copy to Array and Rebuild",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Collect Values\"]\n        A1[1] --> A2[2] --> A3[3] --> A4[4]\n        ARR[\"Array: [1, 2, 3, 4]\"]\n    end\n    subgraph Step2[\"Step 2: Rebuild Reversed\"]\n        ARR2[\"Read array backwards\"]\n        B4[4] --> B3[3] --> B2[2] --> B1[1]\n    end\n    Step1 --> Step2\n    style A1 fill:#60a5fa,color:#fff\n    style A2 fill:#60a5fa,color:#fff\n    style A3 fill:#60a5fa,color:#fff\n    style A4 fill:#60a5fa,color:#fff\n    style B4 fill:#60a5fa,color:#fff\n    style B3 fill:#60a5fa,color:#fff\n    style B2 fill:#60a5fa,color:#fff\n    style B1 fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is simple. I'll traverse the list and copy every value into an array list. Then I'll build a new linked list by reading the array in reverse order.",
+            "audio_file": "reverse-linked-list-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. What's the complexity?",
+            "audio_file": "reverse-linked-list-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n because I visit each node twice, once to read and once to rebuild. Space is also O of n for the array and the new list.",
+            "audio_file": "reverse-linked-list-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good analysis. This creates extra nodes though. Can you think of a way that reuses the existing nodes?",
+            "audio_file": "reverse-linked-list-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "recursive",
+        "level": 2,
+        "title": "Recursive Reversal",
+        "diagram": "graph TD\n    subgraph Recurse[\"Recurse to end\"]\n        R1[\"reverse(1)\"] --> R2[\"reverse(2)\"] --> R3[\"reverse(3)\"] --> R4[\"reverse(4) base case\"]\n    end\n    subgraph Unwind[\"Unwind and fix pointers\"]\n        U4[4] -->|\"set 4.next = 3\"| U3[3] -->|\"set 3.next = 2\"| U2[2] -->|\"set 2.next = 1\"| U1[1] -->|\"set 1.next = null\"| N[null]\n    end\n    Recurse --> Unwind\n    style R1 fill:#a78bfa,color:#fff\n    style R2 fill:#a78bfa,color:#fff\n    style R3 fill:#a78bfa,color:#fff\n    style R4 fill:#a78bfa,color:#fff\n    style U4 fill:#a78bfa,color:#fff\n    style U3 fill:#a78bfa,color:#fff\n    style U2 fill:#a78bfa,color:#fff\n    style U1 fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can solve this recursively. The idea is to recurse all the way to the last node. That becomes the new head. Then as the recursion unwinds, I set each node's next pointer to point back to the current node.",
+            "audio_file": "reverse-linked-list-recursive-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For our example, I recurse through one, two, three, four. Node four is the base case and becomes the new head. Then as we return, I set four's next to three, three's next to two, two's next to one, and finally one's next to null.",
+            "audio_file": "reverse-linked-list-recursive-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice. What about complexity now?",
+            "audio_file": "reverse-linked-list-recursive-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n since we visit every node once. But space is still O of n because the recursion uses the call stack, which goes n levels deep.",
+            "audio_file": "reverse-linked-list-recursive-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. The call stack is a hidden cost. Can you eliminate that extra space?",
+            "audio_file": "reverse-linked-list-recursive-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Iterative In-Place Reversal",
+        "diagram": "graph TD\n    subgraph S0[\"Initial: prev=null, curr=1\"]\n        N0[null] --- X1[1] --> X2[2] --> X3[3] --> X4[4]\n    end\n    subgraph S1[\"After step 1: prev=1, curr=2\"]\n        Y1[1] --> N1[null]\n        Y2[2] --> Y3[3] --> Y4[4]\n    end\n    subgraph S2[\"After step 2: prev=2, curr=3\"]\n        Z2[2] --> Z1[1] --> N2[null]\n        Z3[3] --> Z4[4]\n    end\n    subgraph S3[\"Final: prev=4\"]\n        W4[4] --> W3[3] --> W2[2] --> W1[1] --> N3[null]\n    end\n    S0 --> S1 --> S2 --> S3\n    style X1 fill:#fb923c,color:#fff\n    style Y1 fill:#fb923c,color:#fff\n    style Y2 fill:#fb923c,color:#fff\n    style Z2 fill:#fb923c,color:#fff\n    style Z1 fill:#fb923c,color:#fff\n    style Z3 fill:#fb923c,color:#fff\n    style W4 fill:#fb923c,color:#fff\n    style W3 fill:#fb923c,color:#fff\n    style W2 fill:#fb923c,color:#fff\n    style W1 fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The optimal way is iterative with three pointers: previous, current, and next. I start with previous as null and current at the head.",
+            "audio_file": "reverse-linked-list-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At each step, I save current's next node, then point current's next to previous. Then I move previous to current, and current to the saved next node. I repeat until current is null.",
+            "audio_file": "reverse-linked-list-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Walking through our list: one, two, three, four. First, I redirect one's next from two to null. Then two's next from three to one. Then three's next from four to two. Then four's next from null to three. Now previous points to four, which is our new head.",
+            "audio_file": "reverse-linked-list-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "reverse-linked-list-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n for the single pass. Space is O of one because I only use three pointer variables regardless of list size.",
+            "audio_file": "reverse-linked-list-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Compare[\"Approach Comparison\"]\n        L1[\"Level 1: Array Copy\\nTime O of n | Space O of n\"]\n        L2[\"Level 2: Recursive\\nTime O of n | Space O of n\"]\n        L3[\"Level 3: Iterative\\nTime O of n | Space O of 1\"]\n    end\n    L1 --> L2 --> L3\n    style L1 fill:#60a5fa,color:#fff\n    style L2 fill:#a78bfa,color:#fff\n    style L3 fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. You showed three approaches. The array copy is simple but uses extra space. Recursion is elegant but costs stack space. The iterative three-pointer method is the best, running in O of n time with O of one space.",
+            "audio_file": "reverse-linked-list-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that we don't need to move data at all. We just redirect each pointer to the previous node. That pattern of previous, current, and next comes up in many linked list problems.",
+            "audio_file": "reverse-linked-list-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

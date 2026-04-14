@@ -1,0 +1,242 @@
+{
+  "id": "two-sum-ii",
+  "title": "Finding Two Numbers in a Sorted Array That Add Up to a Target",
+  "difficulty": "medium",
+  "category": "two-pointers",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "add up to",
+        "explanation": "When two or more numbers combine to equal a specific total"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To go step by step through a specific case to show how something works"
+      },
+      {
+        "phrase": "narrow down",
+        "explanation": "To reduce the range of possibilities by eliminating options"
+      },
+      {
+        "phrase": "off the top of my head",
+        "explanation": "Thinking of something immediately without careful analysis"
+      },
+      {
+        "phrase": "trade-off between",
+        "explanation": "A situation where improving one aspect means sacrificing another"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Sorted Array",
+        "definition": "An array whose elements are arranged in non-decreasing order from left to right"
+      },
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two index variables that move toward each other or in the same direction to solve problems efficiently"
+      },
+      {
+        "term": "1-indexed",
+        "definition": "A numbering system where the first element is at position 1, not 0"
+      },
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs and allows near-instant lookup by key"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the runtime of an algorithm grows relative to the input size"
+      },
+      {
+        "term": "Brute Force",
+        "definition": "An approach that tries all possible combinations to find the answer"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "new int[]{a, b}",
+        "description": "Creates a new integer array with the specified values, used to return a pair of indices"
+      },
+      {
+        "signature": "HashMap.put(key, value)",
+        "description": "Inserts a key-value pair into the hash map, or updates the value if the key already exists"
+      },
+      {
+        "signature": "HashMap.containsKey(key)",
+        "description": "Returns true if the hash map contains the specified key"
+      },
+      {
+        "signature": "HashMap.get(key)",
+        "description": "Returns the value associated with the given key in the hash map"
+      }
+    ]
+  },
+  "concept": "Given a sorted array of integers and a target value, find two numbers in the array that add up to the target. Return their 1-indexed positions. There is exactly one solution, and you may not use the same element twice.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Nested Loops",
+      "time_complexity": "O(n-squared)",
+      "space_complexity": "O(1)",
+      "summary": "Check every pair of elements using two nested loops to find the pair that adds up to the target."
+    },
+    {
+      "level": 2,
+      "label": "Hash Map Lookup",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a hash map to store each number's index, then for each element check if its complement exists in the map."
+    },
+    {
+      "level": 3,
+      "label": "Two Pointers from Both Ends",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Place one pointer at the start and one at the end. Move them inward based on whether the current sum is too small or too large."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Sorted Array: [2, 7, 11, 15]\"] --> B[\"Target: 9\"]\n    B --> C{\"Which two numbers add up to 9?\"}\n    C --> D[\"2 + 7 = 9\"]\n    D --> E[\"Return positions: [1, 2]\"]\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff\n    style E fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an array of integers that is already sorted in non-decreasing order. You also receive a target number. Your task is to find two distinct elements in the array that add up to the target, and return their positions using 1-based indexing.",
+            "audio_file": "two-sum-ii-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So the array is already sorted, and I need to return 1-indexed positions, not zero-indexed. A couple of questions: is there always exactly one valid pair, and can the array contain negative numbers or duplicates?",
+            "audio_file": "two-sum-ii-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, there is guaranteed to be exactly one solution. The array can contain negative numbers and duplicates, but you cannot use the same element at the same index twice. The array length is at least two.",
+            "audio_file": "two-sum-ii-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So for example, given the sorted array [2, 7, 11, 15] with a target of 9, the answer would be [1, 2] because 2 plus 7 equals 9, and those are at positions 1 and 2. Let me think about how to approach this.",
+            "audio_file": "two-sum-ii-intro-c2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Nested Loops",
+        "diagram": "graph TD\n    A[\"Array: [2, 7, 11, 15] Target: 9\"] --> B[\"i=0, j=1: 2+7=9 ✓\"]\n    A --> C[\"i=0, j=2: 2+11=13 ✗\"]\n    A --> D[\"i=0, j=3: 2+15=17 ✗\"]\n    A --> E[\"i=1, j=2: 7+11=18 ✗\"]\n    A --> F[\"...more pairs\"]\n    B --> G[\"Found! Return [1, 2]\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style G fill:#60a5fa,color:#fff\n    style C fill:#dbeafe\n    style D fill:#dbeafe\n    style E fill:#dbeafe",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Off the top of my head, the simplest approach is brute force. I use two nested loops. The outer loop picks each element, and the inner loop checks every element after it. If any pair adds up to the target, I return their 1-indexed positions.",
+            "audio_file": "two-sum-ii-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through our example with that approach?",
+            "audio_file": "two-sum-ii-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. With [2, 7, 11, 15] and target 9, I start with i at index 0 and j at index 1. I check 2 plus 7, which is 9. That matches the target right away, so I return [1, 2]. In the worst case, though, I'd check every pair.",
+            "audio_file": "two-sum-ii-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity?",
+            "audio_file": "two-sum-ii-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "It's O of n-squared because of the two nested loops, and O of 1 space since I only use a couple of index variables. This doesn't take advantage of the sorted order at all, so we can definitely do better.",
+            "audio_file": "two-sum-ii-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashmap",
+        "level": 2,
+        "title": "Hash Map Lookup",
+        "diagram": "graph TD\n    A[\"Array: [2, 7, 11, 15] Target: 9\"] --> B[\"Step 1: Visit 2\"]\n    B --> C[\"Need 9-2=7, not in map\"]\n    C --> D[\"Store 2 → index 1\"]\n    D --> E[\"Step 2: Visit 7\"]\n    E --> F[\"Need 9-7=2, found in map at index 1!\"]\n    F --> G[\"Return [1, 2]\"]\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff\n    style F fill:#a78bfa,color:#fff\n    style G fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "A better approach uses a hash map. For each element, I calculate the complement, which is the target minus the current number. If that complement is already in the map, I've found my pair. Otherwise, I store the current number and its index in the map.",
+            "audio_file": "two-sum-ii-hashmap-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Walking through our example: I visit 2 first, compute 9 minus 2 equals 7. The map is empty, so I store 2 with index 1. Next I visit 7, compute 9 minus 7 equals 2. The number 2 is already in the map at index 1, so I return [1, 2].",
+            "audio_file": "two-sum-ii-hashmap-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's much faster. What about the complexity?",
+            "audio_file": "two-sum-ii-hashmap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n since I traverse the array once. Space is O of n for the hash map. This is fast, but it uses extra memory and still doesn't leverage the fact that the array is sorted.",
+            "audio_file": "two-sum-ii-hashmap-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-pointer",
+        "level": 3,
+        "title": "Two Pointers from Both Ends",
+        "diagram": "graph TD\n    A[\"Array: [2, 7, 11, 15] Target: 9\"] --> B[\"left=0, right=3\"]\n    B --> C[\"2 + 15 = 17 > 9\"]\n    C --> D[\"Move right pointer left\"]\n    D --> E[\"left=0, right=2\"]\n    E --> F[\"2 + 11 = 13 > 9\"]\n    F --> G[\"Move right pointer left\"]\n    G --> H[\"left=0, right=1\"]\n    H --> I[\"2 + 7 = 9 = Target ✓\"]\n    I --> J[\"Return [1, 2]\"]\n    style A fill:#fb923c,color:#fff\n    style C fill:#fb923c,color:#fff\n    style F fill:#fb923c,color:#fff\n    style I fill:#fb923c,color:#fff\n    style J fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach uses two pointers. I place a left pointer at the beginning and a right pointer at the end of the sorted array. I compute their sum. If the sum equals the target, I return those positions. If the sum is too small, I move the left pointer right to increase it. If it's too large, I move the right pointer left to decrease it.",
+            "audio_file": "two-sum-ii-two-pointer-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example with this technique.",
+            "audio_file": "two-sum-ii-two-pointer-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "With [2, 7, 11, 15] and target 9: left is at index 0, right at index 3. The sum is 2 plus 15, which is 17. That's too large, so I move right to index 2. Now the sum is 2 plus 11, which is 13, still too large. I move right to index 1. The sum is 2 plus 7, which equals 9. I return [1, 2].",
+            "audio_file": "two-sum-ii-two-pointer-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why does this work correctly on a sorted array?",
+            "audio_file": "two-sum-ii-two-pointer-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Because the array is sorted, moving left increases the sum and moving right decreases it. Each step eliminates either the largest or smallest remaining candidate, so we never skip the answer. Time is O of n and space is O of 1. It's the best we can achieve for this problem.",
+            "audio_file": "two-sum-ii-two-pointer-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary and Comparison",
+        "diagram": "graph LR\n    subgraph Comparison\n        A[\"Brute Force\\nO of n-squared time\\nO of 1 space\"] --> B[\"Hash Map\\nO of n time\\nO of n space\"]\n        B --> C[\"Two Pointers\\nO of n time\\nO of 1 space\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. Can you summarize the trade-offs between the three approaches?",
+            "audio_file": "two-sum-ii-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Brute force is O of n-squared time with constant space. The hash map improves time to O of n but costs O of n space. The two-pointer approach is the best overall: O of n time and O of 1 space, and it directly exploits the sorted property of the input. In an interview, I'd go straight to two pointers for this problem.",
+            "audio_file": "two-sum-ii-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

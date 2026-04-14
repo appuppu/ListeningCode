@@ -1,0 +1,203 @@
+{
+  "id": "koko-eating-bananas",
+  "title": "Finding the Minimum Eating Speed to Finish Bananas",
+  "difficulty": "medium",
+  "category": "binary-search",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "within a given time frame",
+        "explanation": "Before a deadline or time limit expires"
+      },
+      {
+        "phrase": "at least as fast as",
+        "explanation": "Equal to or greater than a certain speed"
+      },
+      {
+        "phrase": "narrow down the search",
+        "explanation": "Reduce the range of possible answers step by step"
+      },
+      {
+        "phrase": "brute force through all possibilities",
+        "explanation": "Try every possible value one by one without optimization"
+      },
+      {
+        "phrase": "the key insight here is",
+        "explanation": "The most important observation that leads to a better solution"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Search",
+        "definition": "An algorithm that repeatedly halves a sorted search space to find a target value efficiently"
+      },
+      {
+        "term": "Search Space",
+        "definition": "The range of all possible candidate answers we need to examine"
+      },
+      {
+        "term": "Monotonic Function",
+        "definition": "A function that always increases or always decreases, never changing direction"
+      },
+      {
+        "term": "Ceiling Division",
+        "definition": "Division that rounds up to the nearest whole number instead of rounding down"
+      },
+      {
+        "term": "Feasibility Check",
+        "definition": "A test to determine whether a candidate answer satisfies all constraints"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.ceil(double a)",
+        "description": "Returns the smallest integer that is greater than or equal to the argument"
+      },
+      {
+        "signature": "Arrays.stream(int[] array).max().getAsInt()",
+        "description": "Returns the maximum value in an integer array using streams"
+      },
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values"
+      },
+      {
+        "signature": "(pile + speed - 1) / speed",
+        "description": "Integer ceiling division trick to compute how many hours a pile takes at a given speed"
+      }
+    ]
+  },
+  "concept": "Given an array of banana piles and a number h representing available hours, find the minimum integer eating speed k such that all bananas can be eaten within h hours. At speed k, each hour you eat k bananas from one pile. If a pile has fewer than k bananas, you finish that pile and wait for the next hour.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Linear Search",
+      "time_complexity": "O(max(piles) * n)",
+      "space_complexity": "O(1)",
+      "summary": "Try every speed from 1 up to the maximum pile size. For each speed, check if all piles can be finished within h hours."
+    },
+    {
+      "level": 2,
+      "label": "Binary Search on Speed",
+      "time_complexity": "O(n * log(max(piles)))",
+      "space_complexity": "O(1)",
+      "summary": "Use binary search over the range of possible speeds from 1 to max pile size. For each candidate speed, compute total hours needed and adjust the search range accordingly."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    A[\"Piles: [3, 6, 7, 11]\"]\n    B[\"Hours available: h = 8\"]\n    A --> C[\"Find minimum speed k\"]\n    B --> C\n    C --> D[\"k = 4: pile 3→1hr, pile 6→2hr, pile 7→2hr, pile 11→3hr\"]\n    D --> E[\"Total = 8 hours ✓\"]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the scenario. Imagine you have several piles of bananas, represented as an integer array. You also have h hours before a deadline. You need to find the minimum eating speed, let's call it k, so that you can finish all the bananas within h hours. Each hour, you pick one pile and eat up to k bananas from it. If a pile has fewer than k bananas left, you finish it and wait until the next hour.",
+            "audio_file": "koko-eating-bananas-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So each hour I can only eat from one pile, and even if I finish early, I can't start the next pile until the next hour. Can I confirm the constraints? The array will always have at least one pile, and h is always greater than or equal to the number of piles?",
+            "audio_file": "koko-eating-bananas-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. h is guaranteed to be at least the length of the piles array, so a valid answer always exists. Pile values are positive integers.",
+            "audio_file": "koko-eating-bananas-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me confirm with an example. If piles are three, six, seven, eleven and h is eight, at speed four: pile three takes one hour, pile six takes two hours, pile seven takes two hours, pile eleven takes three hours. That totals eight hours, which fits. And speed three would need more than eight hours, so the answer is four.",
+            "audio_file": "koko-eating-bananas-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's correct. The answer for that example is four. Go ahead and think about how you'd solve this.",
+            "audio_file": "koko-eating-bananas-intro-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Linear Search Through All Speeds",
+        "diagram": "graph LR\n    style S1 fill:#60a5fa,color:#fff\n    style S2 fill:#60a5fa,color:#fff\n    style S3 fill:#60a5fa,color:#fff\n    style S4 fill:#60a5fa,color:#fff\n    S1[\"k=1: 27hrs ✗\"] --> S2[\"k=2: 16hrs ✗\"]\n    S2 --> S3[\"k=3: 9hrs ✗\"]\n    S3 --> S4[\"k=4: 8hrs ✓ → answer!\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is a linear search. The minimum possible speed is one, and the maximum useful speed is the largest pile, which is eleven in our example. I try each speed starting from one and check if the total hours needed is within h.",
+            "audio_file": "koko-eating-bananas-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each speed k, I go through every pile and calculate the hours needed using ceiling division. That's pile plus k minus one, divided by k. I sum up all the hours. If the total is less than or equal to h, that k is my answer since I'm checking from the smallest value upward.",
+            "audio_file": "koko-eating-bananas-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "koko-eating-bananas-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "It's O of max piles times n, where n is the number of piles. For each candidate speed up to the max pile value, I iterate through all n piles. Space complexity is O of one since I only use a few variables. This works but is slow when pile values are very large.",
+            "audio_file": "koko-eating-bananas-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Binary Search on the Answer",
+        "diagram": "graph TD\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style D fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff\n    A[\"Search range: lo=1, hi=11\"] --> B[\"mid=6: hours=6 ≤ 8 → hi=6\"]\n    B --> C[\"lo=1, hi=6, mid=3: hours=9 > 8 → lo=4\"]\n    C --> D[\"lo=4, hi=6, mid=5: hours=7 ≤ 8 → hi=5\"]\n    D --> E[\"lo=4, hi=5, mid=4: hours=8 ≤ 8 → hi=4\"]\n    E --> F[\"lo=4, hi=4 → answer is 4\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The key insight here is that the relationship between speed and total hours is monotonic. As speed increases, total hours decreases. This means I can binary search on the answer instead of checking every value.",
+            "audio_file": "koko-eating-bananas-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I set lo to one and hi to the max pile value, eleven. I calculate mid as lo plus hi minus lo divided by two. For mid equals six, total hours is six, which is within eight, so I set hi to six. For mid equals three, total hours is nine, which exceeds eight, so I set lo to four.",
+            "audio_file": "koko-eating-bananas-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Continuing, mid equals five gives seven hours, so hi becomes five. Then mid equals four gives exactly eight hours, so hi becomes four. Now lo equals hi equals four, and that's our answer.",
+            "audio_file": "koko-eating-bananas-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. And the complexity?",
+            "audio_file": "koko-eating-bananas-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n times log of max piles. The binary search runs log of max piles iterations, and each feasibility check scans all n piles. Space is still O of one. This is a big improvement when pile values are large.",
+            "audio_file": "koko-eating-bananas-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": -1,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n    A[\"Linear Search\\nO of max piles times n\\nSimple but slow\"] --> B[\"Binary Search\\nO of n log max piles\\nOptimal solution\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. You identified that this is a binary search on the answer problem. The monotonic relationship between speed and hours is the crucial observation that lets us move from linear search to binary search.",
+            "audio_file": "koko-eating-bananas-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Exactly. The pattern of binary searching over possible answers applies whenever we have a yes-no feasibility check that flips at a single threshold. The ceiling division trick for computing hours per pile is also a useful technique to remember.",
+            "audio_file": "koko-eating-bananas-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

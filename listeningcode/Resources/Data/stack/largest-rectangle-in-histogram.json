@@ -1,0 +1,213 @@
+{
+  "id": "largest-rectangle-in-histogram",
+  "title": "Finding the Largest Rectangle in a Histogram",
+  "difficulty": "hard",
+  "category": "stack",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific case to illustrate how the algorithm works"
+      },
+      {
+        "phrase": "the key insight here",
+        "explanation": "The most important observation that leads to a better solution"
+      },
+      {
+        "phrase": "that gives us a time complexity of",
+        "explanation": "Used to state how fast the algorithm runs in Big O notation"
+      },
+      {
+        "phrase": "let me think about edge cases",
+        "explanation": "Considering unusual or boundary inputs that might break the solution"
+      },
+      {
+        "phrase": "we can do better than that",
+        "explanation": "Suggesting that a more efficient solution exists"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Histogram",
+        "definition": "A bar chart where each bar has a width of one and a given height, placed side by side"
+      },
+      {
+        "term": "Monotonic Stack",
+        "definition": "A stack that maintains elements in strictly increasing or decreasing order"
+      },
+      {
+        "term": "Stack",
+        "definition": "A last-in first-out data structure supporting push and pop operations"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows with input size"
+      },
+      {
+        "term": "Sentinel Value",
+        "definition": "A special value added to data to simplify boundary condition handling"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Stack.push(E item)",
+        "description": "Pushes an item onto the top of the stack"
+      },
+      {
+        "signature": "Stack.pop()",
+        "description": "Removes and returns the item at the top of the stack"
+      },
+      {
+        "signature": "Stack.peek()",
+        "description": "Returns the item at the top of the stack without removing it"
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the greater of two integer values"
+      }
+    ]
+  },
+  "concept": "Given an array of non-negative integers representing bar heights in a histogram where each bar has a width of one, find the area of the largest rectangle that can be formed within the histogram.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "summary": "For every pair of bars, find the minimum height between them and compute the area. Track the maximum area found."
+    },
+    {
+      "level": 2,
+      "label": "Monotonic Stack",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use an increasing monotonic stack to efficiently find, for each bar, how far left and right it can extend as the shortest bar in a rectangle."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Histogram[\"Histogram: heights = 2, 1, 5, 6, 2, 3\"]\n        B1[\"Bar 0\\nH=2\"]:::red\n        B2[\"Bar 1\\nH=1\"]:::red\n        B3[\"Bar 2\\nH=5\"]:::red\n        B4[\"Bar 3\\nH=6\"]:::red\n        B5[\"Bar 4\\nH=2\"]:::red\n        B6[\"Bar 5\\nH=3\"]:::red\n    end\n    Q[\"Question: What is the largest rectangle area?\"]:::red\n    Histogram --> Q\n    classDef red fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an array of integers representing bar heights in a histogram. Each bar has a width of one. Your task is to find the area of the largest rectangle that fits entirely within the histogram. For example, given heights two, one, five, six, two, three, what's the largest rectangle you can form?",
+            "audio_file": "largest-rectangle-in-histogram-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to find a contiguous group of bars and pick a height no taller than the shortest bar in that group, then maximize width times height. A few questions: Can heights be zero? And what should I return for an empty array?",
+            "audio_file": "largest-rectangle-in-histogram-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great questions. Yes, heights can be zero. All values are non-negative integers. If the array is empty, return zero. The array length can be up to one hundred thousand.",
+            "audio_file": "largest-rectangle-in-histogram-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So for the example two, one, five, six, two, three, I can see that bars at index two and three with heights five and six form a rectangle of area ten, using height five and width two. That's my target: find the maximum such area. I'll return a single integer. Let me start with a brute force approach.",
+            "audio_file": "largest-rectangle-in-histogram-intro-c2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Approach",
+        "diagram": "graph TD\n    subgraph BF[\"Brute Force: Check all pairs\"]\n        S1[\"i=0, j=0 to 5\\nTrack min height\"]:::blue\n        S2[\"i=1, j=1 to 5\\nTrack min height\"]:::blue\n        S3[\"...\"]:::blue\n        S4[\"i=2, j=2: area=5\\ni=2, j=3: min=5, w=2, area=10\"]:::blue\n        S5[\"Max area found = 10\"]:::blue\n    end\n    S1 --> S2 --> S3 --> S4 --> S5\n    classDef blue fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to try every possible pair of left and right boundaries. For each pair, I find the minimum height among those bars and compute the area as minimum height times the width. I track the maximum area across all pairs.",
+            "audio_file": "largest-rectangle-in-histogram-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through that with our example?",
+            "audio_file": "largest-rectangle-in-histogram-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Starting at index two with height five, I extend right to index three with height six. The minimum height is five, the width is two, so the area is ten. When I extend further to index four, the minimum drops to two and the area is two times three which is six. After checking all pairs, ten is the largest.",
+            "audio_file": "largest-rectangle-in-histogram-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity?",
+            "audio_file": "largest-rectangle-in-histogram-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We have two nested loops over n bars, so that gives us a time complexity of O of n-squared. Space is O of one since we only track the minimum and maximum. With up to one hundred thousand bars, this could be too slow. I think we can do better than that.",
+            "audio_file": "largest-rectangle-in-histogram-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Monotonic Stack Approach",
+        "diagram": "graph TD\n    subgraph MS[\"Monotonic Stack: heights = 2,1,5,6,2,3\"]\n        A[\"Push index 0, h=2\\nStack: 0\"]:::purple\n        B[\"h=1 < 2: Pop 0\\nArea = 2*1 = 2\\nPush 1\\nStack: 1\"]:::purple\n        C[\"Push 2, Push 3\\nStack: 1,2,3\"]:::purple\n        D[\"h=2 < 6: Pop 3\\nArea = 6*1 = 6\\nPop 2: Area = 5*2 = 10\\nPush 4\\nStack: 1,4\"]:::purple\n        E[\"Push 5\\nStack: 1,4,5\"]:::purple\n        F[\"End: Pop all remaining\\nMax area = 10\"]:::purple\n    end\n    A --> B --> C --> D --> E --> F\n    classDef purple fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The key insight here is that we can use a monotonic stack. We maintain a stack of bar indices in increasing order of height. When we encounter a bar shorter than the top of the stack, we pop and calculate the area that bar could form as the shortest bar in a rectangle.",
+            "audio_file": "largest-rectangle-in-histogram-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example using this stack approach.",
+            "audio_file": "largest-rectangle-in-histogram-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We push index zero with height two. At index one, height one is less than two, so we pop index zero. The area is two times one equals two. We push index one. Then we push indices two and three since heights five and six keep increasing. At index four, height two is less than six, so we pop index three. The width is one, area is six. We pop index two, height five. The width extends back to after index one, so width is two, area is ten. We push index four, then five. After the array ends, we pop remaining bars. The maximum area is ten.",
+            "audio_file": "largest-rectangle-in-histogram-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How do you determine the width when you pop a bar?",
+            "audio_file": "largest-rectangle-in-histogram-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "When we pop a bar, the width extends from the current index on the right to one past the new stack top on the left. If the stack is empty after popping, the bar was the shortest seen so far, so the width is the current index. This lets us find the full span where each bar is the minimum height.",
+            "audio_file": "largest-rectangle-in-histogram-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "largest-rectangle-in-histogram-optimal-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each bar is pushed and popped at most once, so that gives us a time complexity of O of n. The stack holds at most n elements, so space complexity is also O of n. This handles one hundred thousand bars efficiently.",
+            "audio_file": "largest-rectangle-in-histogram-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Brute Force\\nTime: O of n-squared\\nSpace: O of 1\"]:::blue\n        OPT[\"Monotonic Stack\\nTime: O of n\\nSpace: O of n\"]:::purple\n    end\n    BF -->|\"Optimize with stack\"| OPT\n    classDef blue fill:#60a5fa,color:#000\n    classDef purple fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. You went from an O of n-squared brute force to an elegant O of n solution using a monotonic stack. The stack approach is a classic pattern for problems where you need to find the nearest smaller element on both sides.",
+            "audio_file": "largest-rectangle-in-histogram-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Thank you. The main takeaway is that a monotonic stack lets us efficiently track how far each bar can extend as the shortest in a rectangle. It avoids redundant comparisons by processing each bar exactly twice: once on push and once on pop.",
+            "audio_file": "largest-rectangle-in-histogram-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

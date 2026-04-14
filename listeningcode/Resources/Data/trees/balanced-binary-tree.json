@@ -1,0 +1,213 @@
+{
+  "id": "balanced-binary-tree",
+  "title": "Checking if a Binary Tree is Height-Balanced",
+  "difficulty": "easy",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "height-balanced",
+        "explanation": "A tree where the left and right subtree heights of every node differ by at most one"
+      },
+      {
+        "phrase": "off the top of my head",
+        "explanation": "Without careful thought; the first idea that comes to mind"
+      },
+      {
+        "phrase": "bottom-up approach",
+        "explanation": "A strategy that starts solving from the smallest subproblems and builds up"
+      },
+      {
+        "phrase": "let me walk through",
+        "explanation": "Let me demonstrate step by step"
+      },
+      {
+        "phrase": "short-circuit",
+        "explanation": "To stop early once we already know the answer"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Height",
+        "definition": "The number of edges on the longest path from a node down to a leaf"
+      },
+      {
+        "term": "Subtree",
+        "definition": "A node and all of its descendants within a tree"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "Post-order Traversal",
+        "definition": "Visiting left subtree, then right subtree, then the current node"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.abs(int a)",
+        "description": "Returns the absolute value of an integer"
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the larger of two integer values"
+      },
+      {
+        "signature": "node.left",
+        "description": "Accesses the left child of a binary tree node"
+      },
+      {
+        "signature": "node.right",
+        "description": "Accesses the right child of a binary tree node"
+      }
+    ]
+  },
+  "concept": "Given the root of a binary tree, determine whether the tree is height-balanced. A binary tree is balanced if for every node, the heights of its left and right subtrees differ by no more than one.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Top-Down Recursion",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(n)",
+      "summary": "For each node, compute the height of its left and right subtrees separately using a helper function, then check the balance condition. This recalculates heights repeatedly."
+    },
+    {
+      "level": 2,
+      "label": "Bottom-Up Recursion with Early Termination",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Compute height and check balance in a single pass using post-order traversal. Return negative one immediately if any subtree is unbalanced."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A((3)) --> B((9))\n    A --> C((20))\n    C --> D((15))\n    C --> E((7))\n    style A fill:#f87171,color:#fff\n    style B fill:#fca5a5,color:#000\n    style C fill:#fca5a5,color:#000\n    style D fill:#fca5a5,color:#000\n    style E fill:#fca5a5,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's today's problem. You're given the root of a binary tree. I'd like you to determine whether the tree is height-balanced. A tree is balanced when the depth of the left and right subtrees of every single node never differs by more than one.",
+            "audio_file": "balanced-binary-tree-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to check every node, not just the root. A few questions: can the tree be empty, meaning the root is null? And what should I return in that case?",
+            "audio_file": "balanced-binary-tree-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the root can be null. An empty tree is considered balanced, so return true. The function signature takes a TreeNode root and returns a boolean.",
+            "audio_file": "balanced-binary-tree-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. And just to confirm, a single node with no children is also balanced, right? What about the size of the tree?",
+            "audio_file": "balanced-binary-tree-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Correct, a single node is balanced. The tree can have up to five thousand nodes, and node values range from negative ten thousand to ten thousand, but the values don't matter for this problem.",
+            "audio_file": "balanced-binary-tree-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright, so the task is: for every node in the tree, check that the height difference between its left and right subtrees is at most one. If all nodes satisfy this, return true; otherwise return false. Let me think about approaches.",
+            "audio_file": "balanced-binary-tree-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Top-Down Recursion",
+        "diagram": "graph TD\n    A((3)) -->|height 0| B((9))\n    A -->|height 2| C((20))\n    C --> D((15))\n    C --> E((7))\n    F[\"Check node 3: left height=0, right height=1, diff=1 ✓\"]\n    G[\"Check node 20: left height=0, right height=0, diff=0 ✓\"]\n    H[\"Result: Balanced ✓\"]\n    F --> G --> H\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#93c5fd,color:#000\n    style E fill:#93c5fd,color:#000\n    style H fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Off the top of my head, I can write a helper function that calculates the height of any node. Then for each node, I call this helper on its left child and right child, check if the difference is more than one, and recurse into both subtrees.",
+            "audio_file": "balanced-binary-tree-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That makes sense. Can you walk through the example tree? Root is three, left child is nine, right child is twenty, and twenty has children fifteen and seven.",
+            "audio_file": "balanced-binary-tree-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. At node three, left subtree height is zero since nine is a leaf, and right subtree height is one since twenty has children. The difference is one, so node three is fine. Then I check node twenty: both children are leaves, heights are zero, difference is zero. Nodes nine, fifteen, and seven are leaves, so they're trivially balanced. The tree is balanced.",
+            "audio_file": "balanced-binary-tree-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. What's the time complexity here?",
+            "audio_file": "balanced-binary-tree-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each of the n nodes, I compute height which takes O of n in the worst case. So the total time is O of n-squared. Space is O of n for the recursion stack in a skewed tree. This works but the repeated height calculations are wasteful.",
+            "audio_file": "balanced-binary-tree-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Bottom-Up Recursion with Early Termination",
+        "diagram": "graph BT\n    D((15)) -->|height 0| C((20))\n    E((7)) -->|height 0| C\n    B((9)) -->|height 0| A((3))\n    C -->|height 1| A\n    F[\"Post-order: visit 9→0, 15→0, 7→0, 20→1, 3→1\"]\n    G[\"All diffs ≤ 1 → Balanced ✓\"]\n    F --> G\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style D fill:#c4b5fd,color:#000\n    style E fill:#c4b5fd,color:#000\n    style G fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can do better with a bottom-up approach. Instead of computing height separately, I write one recursive function that returns the height of a subtree but also checks balance along the way. If a subtree is unbalanced, I return negative one to signal failure.",
+            "audio_file": "balanced-binary-tree-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Let me walk through this with the same tree. How does the post-order traversal work here?",
+            "audio_file": "balanced-binary-tree-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We visit leaves first. Node nine returns height zero. Fifteen and seven each return zero. Node twenty gets left height zero, right height zero, difference is zero, so it returns max of zero and zero plus one, which is one. Node three gets left zero, right one, difference one, returns max of zero and one plus one, which is two. No negative one was returned, so the tree is balanced.",
+            "audio_file": "balanced-binary-tree-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And if the tree were unbalanced?",
+            "audio_file": "balanced-binary-tree-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "As soon as any node finds a height difference greater than one, or receives negative one from a child, it immediately returns negative one. This short-circuits and bubbles up to the root. Time complexity is O of n since we visit each node exactly once. Space is O of n for the call stack.",
+            "audio_file": "balanced-binary-tree-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Top-Down Recursion\"] -->|\"O of n-squared\"| T1[\"Time\"]\n    A -->|\"O of n\"| S1[\"Space\"]\n    B[\"Bottom-Up Recursion\"] -->|\"O of n\"| T2[\"Time\"]\n    B -->|\"O of n\"| S2[\"Space\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style T1 fill:#e5e7eb,color:#000\n    style S1 fill:#e5e7eb,color:#000\n    style T2 fill:#e5e7eb,color:#000\n    style S2 fill:#e5e7eb,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. Can you summarize both approaches?",
+            "audio_file": "balanced-binary-tree-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The top-down approach checks each node by computing subtree heights separately, giving O of n-squared time. The bottom-up approach combines height calculation and balance checking into one traversal, achieving O of n time. Both use O of n space for recursion. The key insight is that by returning height and balance information together, we avoid redundant computation.",
+            "audio_file": "balanced-binary-tree-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

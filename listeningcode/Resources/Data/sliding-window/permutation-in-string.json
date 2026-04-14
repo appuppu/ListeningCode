@@ -1,0 +1,263 @@
+{
+  "id": "permutation-in-string",
+  "title": "Checking if a String Contains a Permutation of Another",
+  "difficulty": "medium",
+  "category": "sliding-window",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "permutation of a string",
+        "explanation": "Any rearrangement of the characters in a string, keeping all original characters"
+      },
+      {
+        "phrase": "sliding window",
+        "explanation": "A technique where a fixed-size or variable-size window moves across data to examine subsets"
+      },
+      {
+        "phrase": "character frequency",
+        "explanation": "How many times each character appears in a string"
+      },
+      {
+        "phrase": "contiguous substring",
+        "explanation": "A sequence of characters that appear next to each other within a larger string"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "A straightforward method that checks all possibilities without optimization"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Permutation",
+        "definition": "A rearrangement of all elements in a set; for strings, any reordering of the characters"
+      },
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs for constant-time lookup and insertion"
+      },
+      {
+        "term": "Sliding Window",
+        "definition": "An algorithmic pattern that maintains a window over a sequence and slides it to process subarrays or substrings efficiently"
+      },
+      {
+        "term": "Frequency Array",
+        "definition": "An array of size 26 used to count occurrences of each lowercase letter"
+      },
+      {
+        "term": "Anagram",
+        "definition": "A word formed by rearranging all letters of another word, which is essentially a permutation"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "String.charAt(int index)",
+        "description": "Returns the character at the specified index in a string"
+      },
+      {
+        "signature": "String.length()",
+        "description": "Returns the number of characters in a string"
+      },
+      {
+        "signature": "Arrays.equals(int[] a, int[] b)",
+        "description": "Compares two arrays element by element and returns true if they are identical"
+      },
+      {
+        "signature": "String.toCharArray()",
+        "description": "Converts a string into a character array"
+      }
+    ]
+  },
+  "concept": "Given two strings s1 and s2, return true if s2 contains any permutation of s1 as a contiguous substring. In other words, check whether any anagram of s1 exists within s2.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Sorting",
+      "time_complexity": "O(n * m log m)",
+      "space_complexity": "O(m)",
+      "summary": "Generate every substring of s2 with length equal to s1, sort each substring, and compare it to the sorted version of s1."
+    },
+    {
+      "level": 2,
+      "label": "Sliding Window with Frequency Comparison",
+      "time_complexity": "O(n * 26)",
+      "space_complexity": "O(1)",
+      "summary": "Maintain a frequency array for the current window and compare it against s1's frequency array at each step."
+    },
+    {
+      "level": 3,
+      "label": "Optimized Sliding Window with Match Counter",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Track how many of the 26 character frequencies match between the window and s1, updating incrementally as the window slides."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    S1[\"s1 = 'ab'\"] --> Q{\"Does s2 contain any permutation of s1?\"}\n    S2[\"s2 = 'eidbaooo'\"] --> Q\n    Q --> SUB1[\"'ei'\"]\n    Q --> SUB2[\"'id'\"]\n    Q --> SUB3[\"'db'\"]\n    Q --> SUB4[\"'ba' ✓\"]\n    Q --> SUB5[\"'ao'\"]\n    Q --> SUB6[\"'oo'\"]\n    Q --> SUB7[\"'oo'\"]\n    style SUB4 fill:#f87171,color:#fff\n    style S1 fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's your problem. You're given two strings, s1 and s2. You need to determine whether s2 contains any permutation of s1 as a contiguous substring. For example, if s1 is 'ab' and s2 is 'eidbaooo', you'd return true because 'ba' is a permutation of 'ab' and it appears in s2.",
+            "audio_file": "permutation-in-string-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So I need to check if any rearrangement of s1 appears somewhere inside s2. Can I confirm a few things? Are both strings lowercase English letters only? And what should I return if s1 is longer than s2?",
+            "audio_file": "permutation-in-string-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, both strings contain only lowercase English letters. If s1 is longer than s2, there's no way a permutation of s1 could fit inside s2, so you'd return false. Also, s1 will have at least one character.",
+            "audio_file": "permutation-in-string-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And if s1 is just one character, I simply check whether that character exists in s2. Let me also confirm: should I return a boolean, true or false?",
+            "audio_file": "permutation-in-string-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly, just return true or false. No need to return the index or the substring itself.",
+            "audio_file": "permutation-in-string-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright. So to summarize: given s1 and s2, I check every contiguous substring of s2 that has the same length as s1, and see if any of them is an anagram of s1. Let me start with a straightforward approach.",
+            "audio_file": "permutation-in-string-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Sorting",
+        "diagram": "graph TD\n    A[\"s1 = 'ab' → sorted: 'ab'\"] --> B[\"Window 'ei' → sorted: 'ei' ≠ 'ab'\"]\n    B --> C[\"Window 'id' → sorted: 'di' ≠ 'ab'\"]\n    C --> D[\"Window 'db' → sorted: 'bd' ≠ 'ab'\"]\n    D --> E[\"Window 'ba' → sorted: 'ab' = 'ab' ✓\"]\n    style A fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is brute force. I sort s1, then take every substring of s2 with length equal to s1, sort that substring, and check if the two sorted strings match. If any match, I return true.",
+            "audio_file": "permutation-in-string-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example. s1 is 'ab' and s2 is 'eidbaooo'.",
+            "audio_file": "permutation-in-string-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sorted s1 is 'ab'. I check substrings: 'ei' sorted is 'ei', no match. 'id' sorted is 'di', no. 'db' sorted is 'bd', no. Then 'ba' sorted is 'ab', which matches. Return true.",
+            "audio_file": "permutation-in-string-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity?",
+            "audio_file": "permutation-in-string-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let n be the length of s2 and m be the length of s1. I have about n minus m plus one substrings, and sorting each takes O of m log m. So the total is O of n times m log m. Space is O of m for the sorted copies.",
+            "audio_file": "permutation-in-string-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "sliding-window-freq",
+        "level": 2,
+        "title": "Sliding Window with Frequency Comparison",
+        "diagram": "graph TD\n    A[\"s1 freq: a=1, b=1\"] --> B[\"Window 'ei': e=1,i=1 → compare 26 slots → no match\"]\n    B --> C[\"Slide: remove 'e', add 'd' → 'id': i=1,d=1 → no match\"]\n    C --> D[\"Slide: remove 'i', add 'b' → 'db': d=1,b=1 → no match\"]\n    D --> E[\"Slide: remove 'd', add 'a' → 'ba': b=1,a=1 → match ✓\"]\n    style A fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of sorting, I can compare character frequencies. I build a frequency array of size twenty-six for s1. Then I maintain a sliding window of the same length over s2, also as a frequency array. At each step I compare the two arrays.",
+            "audio_file": "permutation-in-string-sliding-window-freq-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does the window slide?",
+            "audio_file": "permutation-in-string-sliding-window-freq-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "When I move the window one position right, I add the new character entering from the right and remove the character leaving from the left. Then I compare all twenty-six entries of both frequency arrays.",
+            "audio_file": "permutation-in-string-sliding-window-freq-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For our example, s1 'ab' has frequencies a equals one, b equals one. The window starts at 'ei'. After sliding to 'ba', the window frequency becomes b equals one, a equals one, which matches. We return true.",
+            "audio_file": "permutation-in-string-sliding-window-freq-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity now?",
+            "audio_file": "permutation-in-string-sliding-window-freq-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each slide is O of one for updating, but comparing twenty-six entries at each step makes it O of twenty-six times n, which simplifies to O of n. Space is O of one since the arrays are always size twenty-six.",
+            "audio_file": "permutation-in-string-sliding-window-freq-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Optimized Sliding Window with Match Counter",
+        "diagram": "graph TD\n    A[\"Init: s1 freq a=1,b=1 | window 'ei' freq e=1,i=1\"] --> B[\"Count matching slots: 24 of 26 match\"]\n    B --> C[\"Slide to 'id': remove e +1 match, add d -1 match → 24\"]\n    C --> D[\"Slide to 'db': remove i +1 match, add b +1 match → 25\"]\n    D --> E[\"Slide to 'ba': remove d +1 match, add a +1 match → 26 = match ✓\"]\n    style A fill:#fb923c,color:#fff\n    style E fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can avoid comparing all twenty-six entries every time. I keep a counter called matches that tracks how many of the twenty-six character frequencies are currently equal between the s1 array and the window array. When matches equals twenty-six, we have a permutation.",
+            "audio_file": "permutation-in-string-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How do you update this matches counter as the window slides?",
+            "audio_file": "permutation-in-string-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "When a character enters the window, I increment its count. If the count now equals the target, matches goes up by one. If it was equal before and now it's one more, matches goes down by one. Same logic in reverse for the character leaving the window.",
+            "audio_file": "permutation-in-string-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In our example, after initializing the window on 'ei', twenty-four of twenty-six slots match since only e and i have nonzero differences. As we slide right, matches adjusts. When we reach 'ba', all twenty-six match and we return true.",
+            "audio_file": "permutation-in-string-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the final complexity?",
+            "audio_file": "permutation-in-string-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n where n is the length of s2, since each slide does constant work. Space is O of one because we only use two fixed-size arrays of twenty-six. This is the optimal solution.",
+            "audio_file": "permutation-in-string-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    BF[\"Brute Force: Sort each substring\nO of n times m log m | O of m\"] --> SW[\"Frequency Comparison\nO of n times 26 | O of 1\"]\n    SW --> OPT[\"Match Counter\nO of n | O of 1\"]\n    style BF fill:#60a5fa,color:#fff\n    style SW fill:#a78bfa,color:#fff\n    style OPT fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. You started with sorting each substring, improved it by comparing frequency arrays directly, and then optimized further by tracking the match count incrementally.",
+            "audio_file": "permutation-in-string-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes. The key insight is that a permutation is really just an anagram, so we only care about character counts, not order. The sliding window lets us update counts in constant time, and the match counter removes the need to compare all twenty-six entries each time.",
+            "audio_file": "permutation-in-string-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

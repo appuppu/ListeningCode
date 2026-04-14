@@ -1,0 +1,74 @@
+[
+  {
+    "id": "invert-binary-tree",
+    "title": "Inverting a Binary Tree",
+    "difficulty": "easy",
+    "sort_order": 0,
+    "content_file": "invert-binary-tree.json",
+    "leetcode_url": "https://leetcode.com/problems/invert-binary-tree/"
+  },
+  {
+    "id": "maximum-depth-of-binary-tree",
+    "title": "Finding the Maximum Depth of a Binary Tree",
+    "difficulty": "easy",
+    "sort_order": 1,
+    "content_file": "maximum-depth-of-binary-tree.json",
+    "leetcode_url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/"
+  },
+  {
+    "id": "diameter-of-binary-tree",
+    "title": "Finding the Diameter of a Binary Tree",
+    "difficulty": "easy",
+    "sort_order": 2,
+    "content_file": "diameter-of-binary-tree.json",
+    "leetcode_url": "https://leetcode.com/problems/diameter-of-binary-tree/"
+  },
+  {
+    "id": "balanced-binary-tree",
+    "title": "Checking if a Binary Tree is Height-Balanced",
+    "difficulty": "easy",
+    "sort_order": 3,
+    "content_file": "balanced-binary-tree.json",
+    "leetcode_url": "https://leetcode.com/problems/balanced-binary-tree/"
+  },
+  {
+    "id": "same-tree",
+    "title": "Checking if Two Binary Trees Are Identical",
+    "difficulty": "easy",
+    "sort_order": 4,
+    "content_file": "same-tree.json",
+    "leetcode_url": "https://leetcode.com/problems/same-tree/"
+  },
+  {
+    "id": "subtree-of-another-tree",
+    "title": "Checking if a Tree is a Subtree of Another",
+    "difficulty": "easy",
+    "sort_order": 5,
+    "content_file": "subtree-of-another-tree.json",
+    "leetcode_url": "https://leetcode.com/problems/subtree-of-another-tree/"
+  },
+  {
+    "id": "lowest-common-ancestor-of-a-bst",
+    "title": "Finding the Lowest Common Ancestor in a BST",
+    "difficulty": "medium",
+    "sort_order": 6,
+    "content_file": "lowest-common-ancestor-of-a-bst.json",
+    "leetcode_url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/"
+  },
+  {
+    "id": "binary-tree-level-order-traversal",
+    "title": "Traversing a Binary Tree Level by Level",
+    "difficulty": "medium",
+    "sort_order": 7,
+    "content_file": "binary-tree-level-order-traversal.json",
+    "leetcode_url": "https://leetcode.com/problems/binary-tree-level-order-traversal/"
+  },
+  {
+    "id": "binary-tree-right-side-view",
+    "title": "Viewing a Binary Tree From the Right Side",
+    "difficulty": "medium",
+    "sort_order": 8,
+    "content_file": "binary-tree-right-side-view.json",
+    "leetcode_url": "https://leetcode.com/problems/binary-tree-right-side-view/"
+  }
+]

@@ -1,0 +1,253 @@
+{
+  "id": "search-a-2d-matrix",
+  "title": "Searching for a Value in a Sorted Matrix",
+  "difficulty": "medium",
+  "category": "binary-search",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific test case to demonstrate how the algorithm works"
+      },
+      {
+        "phrase": "narrow down the search space",
+        "explanation": "To reduce the range of elements being considered to find the answer faster"
+      },
+      {
+        "phrase": "treat it as",
+        "explanation": "To consider or handle something as if it were a different form"
+      },
+      {
+        "phrase": "that makes sense",
+        "explanation": "An expression showing you understand what was just explained"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "2D Matrix",
+        "definition": "A two-dimensional array organized in rows and columns, like a grid or table"
+      },
+      {
+        "term": "Binary Search",
+        "definition": "An efficient search algorithm that repeatedly halves the search space by comparing to the middle element"
+      },
+      {
+        "term": "Row-wise Sorted",
+        "definition": "Each row in the matrix is sorted in ascending order from left to right"
+      },
+      {
+        "term": "Flattened Index",
+        "definition": "A single index used to map a position in a 2D matrix to an equivalent position in a 1D array"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows relative to input size"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "matrix[row][col]",
+        "description": "Accesses the element at the given row and column in a 2D array"
+      },
+      {
+        "signature": "matrix.length",
+        "description": "Returns the number of rows in the 2D array"
+      },
+      {
+        "signature": "matrix[0].length",
+        "description": "Returns the number of columns in the first row of the 2D array"
+      },
+      {
+        "signature": "Math.min(a, b)",
+        "description": "Returns the smaller of two values"
+      }
+    ]
+  },
+  "concept": "Given an m-by-n matrix where each row is sorted in ascending order and the first element of each row is greater than the last element of the previous row, determine whether a given target value exists in the matrix.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force Linear Scan",
+      "time_complexity": "O(m * n)",
+      "space_complexity": "O(1)",
+      "summary": "Check every element in the matrix one by one until the target is found or all elements are exhausted."
+    },
+    {
+      "level": 2,
+      "label": "Row Binary Search",
+      "time_complexity": "O(m + log n)",
+      "space_complexity": "O(1)",
+      "summary": "First identify the correct row by checking boundaries, then perform binary search within that row."
+    },
+    {
+      "level": 3,
+      "label": "Full Binary Search on Virtual Array",
+      "time_complexity": "O(log(m * n))",
+      "space_complexity": "O(1)",
+      "summary": "Treat the entire matrix as a single sorted array and run one binary search using index mapping."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Matrix[\"Sorted Matrix Example\"]\n        R0[\"Row 0: 1, 3, 5, 7\"] --> R1[\"Row 1: 10, 11, 16, 20\"]\n        R1 --> R2[\"Row 2: 23, 30, 34, 60\"]\n    end\n    T[\"Target = 3\"] --> Q{\"Is 3 in the matrix?\"}\n    Q -->|Yes| ANS[\"Return true\"]\n    style T fill:#f87171,color:#fff\n    style Q fill:#f87171,color:#fff\n    style ANS fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given a two-dimensional matrix of integers. Each row is sorted in ascending order, and the first element of each row is strictly greater than the last element of the previous row. Given a target integer, return true if it exists in the matrix, or false otherwise.",
+            "audio_file": "search-a-2d-matrix-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Okay, so the entire matrix is essentially sorted if I read it row by row from left to right. Can I confirm the input format? I receive a 2D integer array and a single integer target?",
+            "audio_file": "search-a-2d-matrix-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's correct. The matrix will have m rows and n columns. Both m and n are at least one, so you won't get an empty matrix. The target is a plain integer.",
+            "audio_file": "search-a-2d-matrix-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. What if the matrix has only one row or one column? And can there be duplicate values?",
+            "audio_file": "search-a-2d-matrix-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "A single row or single column is valid. All values in the matrix are distinct since each row's first element is strictly greater than the previous row's last element, and each row is sorted.",
+            "audio_file": "search-a-2d-matrix-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "That makes sense. So to summarize, I have a fully sorted matrix read left to right, top to bottom, and I need to return a boolean indicating whether the target exists. Let me think about approaches.",
+            "audio_file": "search-a-2d-matrix-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Linear Scan",
+        "diagram": "graph LR\n    subgraph Scan[\"Linear Scan for Target = 3\"]\n        A1[\"1\"] -->|check| A2[\"3 ✓\"]\n        A2 -->|found| STOP[\"Return true\"]\n    end\n    subgraph Skipped[\"Remaining unchecked\"]\n        A3[\"5\"] --- A4[\"7\"] --- A5[\"10\"] --- A6[\"...\"]\n    end\n    style A2 fill:#60a5fa,color:#fff\n    style STOP fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is a brute force scan. I iterate through every row and every column, checking each element against the target. If I find it, I return true. Otherwise, I return false at the end.",
+            "audio_file": "search-a-2d-matrix-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through an example? Say the matrix is one, three, five, seven in row zero, ten, eleven, sixteen, twenty in row one, and twenty-three, thirty, thirty-four, sixty in row two. Target is three.",
+            "audio_file": "search-a-2d-matrix-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. I start at row zero, column zero. Value is one, not three. Move to column one, value is three, that matches! I return true immediately. In the worst case, I'd scan all m times n elements.",
+            "audio_file": "search-a-2d-matrix-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity?",
+            "audio_file": "search-a-2d-matrix-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of m times n since I might visit every cell. Space is O of one because I only use a loop variable. This works but doesn't take advantage of the sorted property at all.",
+            "audio_file": "search-a-2d-matrix-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "row-binary-search",
+        "level": 2,
+        "title": "Row Identification Plus Binary Search",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Find correct row for target 3\"]\n        R0C[\"Row 0: 1..7 → 3 is in range ✓\"]\n        R1C[\"Row 1: 10..20 → skip\"]\n        R2C[\"Row 2: 23..60 → skip\"]\n    end\n    subgraph Step2[\"Step 2: Binary search in Row 0\"]\n        L[\"lo=0\"] --- M[\"mid=1 → value 3 ✓\"] --- H[\"hi=3\"]\n    end\n    R0C --> Step2\n    style R0C fill:#a78bfa,color:#fff\n    style M fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Since each row's range doesn't overlap with other rows, I can first find which row the target could be in. I check if the target is between the first and last element of each row. Once I find the right row, I run binary search within it.",
+            "audio_file": "search-a-2d-matrix-row-binary-search-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the same example with target three.",
+            "audio_file": "search-a-2d-matrix-row-binary-search-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Row zero goes from one to seven. Three falls in that range, so I binary search row zero. Low is index zero, high is index three, mid is index one, value is three. Found it! If no row contains the range, I return false.",
+            "audio_file": "search-a-2d-matrix-row-binary-search-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about complexity?",
+            "audio_file": "search-a-2d-matrix-row-binary-search-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Finding the row takes O of m in the worst case by scanning rows. The binary search within a row is O of log n. So total time is O of m plus log n, and space is O of one. Much better than brute force, but we can still improve the row search.",
+            "audio_file": "search-a-2d-matrix-row-binary-search-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Full Binary Search on Virtual Array",
+        "diagram": "graph TD\n    subgraph Virtual[\"Virtual 1D Array (12 elements)\"]\n        V[\"Index: 0  1  2  3  4  5  6  7  8  9  10  11\"]\n        W[\"Value: 1  3  5  7  10 11 16 20 23 30 34 60\"]\n    end\n    subgraph Search[\"Binary search for target 3\"]\n        S1[\"lo=0, hi=11, mid=5 → value 11 > 3 → go left\"]\n        S2[\"lo=0, hi=4, mid=2 → value 5 > 3 → go left\"]\n        S3[\"lo=0, hi=1, mid=0 → value 1 < 3 → go right\"]\n        S4[\"lo=1, hi=1, mid=1 → value 3 ✓\"]\n    end\n    S1 --> S2 --> S3 --> S4\n    style S4 fill:#fb923c,color:#fff\n    style Virtual fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Here's the key insight. Since the matrix is fully sorted when read left to right and top to bottom, I can treat it as a single sorted array of m times n elements. I run one binary search on this virtual array. To convert a one-dimensional index to two-dimensional coordinates, the row is index divided by n, and the column is index modulo n.",
+            "audio_file": "search-a-2d-matrix-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Show me how that works with our example. Three rows, four columns, target is three.",
+            "audio_file": "search-a-2d-matrix-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Total elements are twelve. Low is zero, high is eleven. Mid is five, which maps to row one column one, value eleven. Eleven is greater than three, so high becomes four. Mid is two, row zero column two, value five. Still greater, high becomes one. Mid is zero, row zero column zero, value one. Less than three, so low becomes one. Now mid is one, row zero column one, value three. Found it!",
+            "audio_file": "search-a-2d-matrix-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "search-a-2d-matrix-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of log of m times n, which is the best we can achieve for searching a sorted collection. Space remains O of one. The index conversion is just simple division and modulo operations, both constant time.",
+            "audio_file": "search-a-2d-matrix-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Brute Force\\nO of m times n\"]\n        RB[\"Row + Binary Search\\nO of m plus log n\"]\n        OPT[\"Full Binary Search\\nO of log m times n\"]\n    end\n    BF -->|improve row search| RB -->|unify into one search| OPT\n    style BF fill:#60a5fa,color:#fff\n    style RB fill:#a78bfa,color:#fff\n    style OPT fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Can you summarize the three approaches?",
+            "audio_file": "search-a-2d-matrix-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Brute force scans every cell at O of m times n. The row-plus-binary-search approach narrows down the row first, giving O of m plus log n. The optimal solution treats the matrix as a flat sorted array and applies one binary search for O of log of m times n. The key takeaway is recognizing that this sorted matrix is really just a sorted list in disguise.",
+            "audio_file": "search-a-2d-matrix-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

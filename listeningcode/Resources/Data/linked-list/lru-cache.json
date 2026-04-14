@@ -1,0 +1,238 @@
+{
+  "id": "lru-cache",
+  "title": "Designing a Least Recently Used Cache",
+  "difficulty": "medium",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "eviction policy",
+        "explanation": "A rule that decides which item to remove when the cache is full"
+      },
+      {
+        "phrase": "constant time",
+        "explanation": "An operation that always takes the same amount of time regardless of data size"
+      },
+      {
+        "phrase": "under the hood",
+        "explanation": "Describing how something works internally"
+      },
+      {
+        "phrase": "trade-off",
+        "explanation": "A compromise where gaining one thing requires giving up another"
+      },
+      {
+        "phrase": "walk through",
+        "explanation": "To explain something step by step"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "LRU Cache",
+        "definition": "A cache that removes the least recently used item first when it reaches capacity"
+      },
+      {
+        "term": "Doubly Linked List",
+        "definition": "A linked list where each node has pointers to both the next and previous nodes"
+      },
+      {
+        "term": "HashMap",
+        "definition": "A data structure that maps keys to values with average O(1) lookup time"
+      },
+      {
+        "term": "LinkedHashMap",
+        "definition": "A Java map that maintains insertion or access order of entries"
+      },
+      {
+        "term": "Sentinel Node",
+        "definition": "A dummy node used at the boundary of a linked list to simplify edge case handling"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashMap.get(key)",
+        "description": "Returns the value mapped to the given key, or null if not present"
+      },
+      {
+        "signature": "HashMap.put(key, value)",
+        "description": "Inserts or updates a key-value pair in the map"
+      },
+      {
+        "signature": "HashMap.remove(key)",
+        "description": "Removes the mapping for the specified key"
+      },
+      {
+        "signature": "LinkedHashMap.removeEldestEntry(eldest)",
+        "description": "Override this method to define a policy for automatically removing the oldest entry"
+      }
+    ]
+  },
+  "concept": "Design a data structure that follows the Least Recently Used eviction policy. It should support get and put operations, both in O(1) time. When the cache exceeds its capacity, it should invalidate the least recently used item before inserting a new one.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Array and Linear Search",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Store entries in an array with timestamps. On each get or put, scan the entire array to find the key or the least recently used entry."
+    },
+    {
+      "level": 2,
+      "label": "HashMap plus Doubly Linked List",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(n)",
+      "summary": "Combine a HashMap for O(1) key lookup with a doubly linked list to track usage order. Move accessed nodes to the front and evict from the tail."
+    },
+    {
+      "level": 3,
+      "label": "Java LinkedHashMap",
+      "time_complexity": "O(1)",
+      "space_complexity": "O(n)",
+      "summary": "Use Java's built-in LinkedHashMap with access-order mode and override removeEldestEntry to automatically evict when capacity is exceeded."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style P fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    P[\"LRU Cache\\ncapacity = 2\"] --> OP1[\"put(1, 'A')\"]\n    OP1 --> OP2[\"put(2, 'B')\"]\n    OP2 --> OP3[\"get(1) → 'A'\"]\n    OP3 --> OP4[\"put(3, 'C')\"]\n    OP4 --> C[\"Key 2 evicted\\n(least recently used)\"]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's say you need to design a cache with a fixed capacity. It should support two operations: get and put. When the cache is full and you insert a new entry, it must remove the least recently used item. Both operations should run in constant time.",
+            "audio_file": "lru-cache-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I see. So just to confirm, the cache maps integer keys to integer values, and we're given the capacity at construction time. What should get return if the key doesn't exist?",
+            "audio_file": "lru-cache-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Return negative one if the key is not found. Also, calling get on an existing key counts as a use, so it updates that item's recency.",
+            "audio_file": "lru-cache-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And for put, if the key already exists, we update the value and mark it as recently used. If the key is new and the cache is at capacity, we evict the least recently used entry first. Let me walk through an example: with capacity two, we put key one then key two. Then we get key one, making it most recent. Now when we put key three, key two gets evicted since it's the least recently used.",
+            "audio_file": "lru-cache-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's exactly right. Go ahead and start with any approach that comes to mind.",
+            "audio_file": "lru-cache-intro-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Array and Linear Search",
+        "diagram": "graph TD\n    style S fill:#60a5fa,color:#fff\n    style SCAN fill:#60a5fa,color:#fff\n    S[\"Array of entries\\n(key, value, timestamp)\"] --> PUT1[\"put(1,'A') ts=1\\n[(1,'A',1)]\"]\n    PUT1 --> PUT2[\"put(2,'B') ts=2\\n[(1,'A',1),(2,'B',2)]\"]\n    PUT2 --> GET1[\"get(1) ts=3\\nScan array → found\\nUpdate ts to 3\"]\n    GET1 --> PUT3[\"put(3,'C') ts=4\\nCache full!\"]\n    PUT3 --> SCAN[\"Scan for min ts\\nKey 2 has ts=2 → evict\"]\n    SCAN --> RES[\"[(1,'A',3),(3,'C',4)]\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first thought is a simple approach. I'll store entries in an array where each entry holds a key, value, and a timestamp. Each time we access or insert, we increment the timestamp. For get, I scan the array to find the key, which takes O of n time.",
+            "audio_file": "lru-cache-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And what about eviction when the cache is full?",
+            "audio_file": "lru-cache-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "When the array is at capacity, I scan all entries to find the one with the smallest timestamp. That's the least recently used item, so I remove it and insert the new one. Both get and put require a linear scan, giving us O of n time per operation.",
+            "audio_file": "lru-cache-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. This works but doesn't meet the constant time requirement. Can you do better?",
+            "audio_file": "lru-cache-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashmap-dll",
+        "level": 2,
+        "title": "HashMap plus Doubly Linked List",
+        "diagram": "graph LR\n    style HM fill:#a78bfa,color:#fff\n    style HEAD fill:#a78bfa,color:#fff\n    style TAIL fill:#a78bfa,color:#fff\n    HM[\"HashMap\\n1→Node1\\n3→Node3\"] -.-> HEAD\n    HEAD[\"Head\\n(dummy)\"] <--> N1[\"Node1\\nkey=1, val='A'\"]\n    N1 <--> N3[\"Node3\\nkey=3, val='C'\"]\n    N3 <--> TAIL[\"Tail\\n(dummy)\"]\n    style N1 fill:#a78bfa,color:#fff\n    style N3 fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The bottleneck in the brute force is searching and finding the least recent item. I can solve both with a combination of a HashMap and a doubly linked list. The HashMap maps each key to its corresponding node in the linked list, giving us O of one lookup.",
+            "audio_file": "lru-cache-hashmap-dll-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The doubly linked list maintains the usage order. The most recently used node sits right after the head sentinel, and the least recently used node sits right before the tail sentinel. I'll use dummy head and tail nodes to avoid null checks at the boundaries.",
+            "audio_file": "lru-cache-hashmap-dll-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How do get and put work with this structure?",
+            "audio_file": "lru-cache-hashmap-dll-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For get, I look up the key in the HashMap. If found, I unlink the node from its current position and re-insert it right after the head. For put, if the key exists, I update the value and move the node to the front. If it's new and we're at capacity, I remove the node just before the tail, which is the least recently used, delete it from the HashMap, then add the new node at the front. Everything is O of one.",
+            "audio_file": "lru-cache-hashmap-dll-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. This is the classic approach interviewers expect. Is there a way to simplify the implementation in Java?",
+            "audio_file": "lru-cache-hashmap-dll-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Java LinkedHashMap",
+        "diagram": "graph TD\n    style LHM fill:#fb923c,color:#fff\n    style OV fill:#fb923c,color:#fff\n    LHM[\"LinkedHashMap\\naccess-order = true\\ncapacity = 2\"] --> PUT1[\"put(1,'A')\\nOrder: [1]\"]\n    PUT1 --> PUT2[\"put(2,'B')\\nOrder: [1, 2]\"]\n    PUT2 --> GET1[\"get(1)\\nOrder: [2, 1]\"]\n    GET1 --> PUT3[\"put(3,'C')\"]\n    PUT3 --> OV[\"removeEldestEntry\\nsize 3 > 2 → evict key 2\"]\n    OV --> RES[\"Order: [1, 3]\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Java actually has a built-in class called LinkedHashMap that combines a HashMap with a doubly linked list internally. If I set the access-order flag to true in the constructor, it automatically reorders entries on each get call.",
+            "audio_file": "lru-cache-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then I override the removeEldestEntry method to return true when the size exceeds the capacity. This makes the map automatically evict the eldest entry on each put. The entire LRU cache becomes just a few lines of code, with O of one for both operations.",
+            "audio_file": "lru-cache-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's clean and practical. In a real interview, knowing this approach shows familiarity with the standard library. But be prepared to explain the underlying mechanism if asked.",
+            "audio_file": "lru-cache-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Absolutely. Under the hood, LinkedHashMap does exactly what we built manually: a hash table for fast lookup and a doubly linked list for ordering. The key insight is that both data structures work together to achieve constant time for every operation.",
+            "audio_file": "lru-cache-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    subgraph Comparison\n    A[\"Level 1: Array + Timestamp\\nTime: O of n | Space: O of n\"] --> B[\"Level 2: HashMap + Doubly Linked List\\nTime: O of 1 | Space: O of n\"]\n    B --> C[\"Level 3: LinkedHashMap\\nTime: O of 1 | Space: O of n\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. We started with a brute force array scan at O of n time, then achieved O of one using a HashMap combined with a doubly linked list, and finally simplified the code using Java's LinkedHashMap.",
+            "audio_file": "lru-cache-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The core takeaway is that combining a hash map with a doubly linked list is the standard pattern for any problem requiring both fast lookup and ordering. It's a powerful trade-off of extra space for constant time operations.",
+            "audio_file": "lru-cache-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

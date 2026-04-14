@@ -1,0 +1,218 @@
+{
+  "id": "longest-repeating-character-replacement",
+  "title": "Longest Substring After Replacing K Characters",
+  "difficulty": "medium",
+  "category": "sliding-window",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "sliding window",
+        "explanation": "A technique where a window of elements moves across data to examine subsets efficiently"
+      },
+      {
+        "phrase": "let me walk through",
+        "explanation": "A common phrase meaning to explain something step by step"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The most straightforward but often least efficient way to solve a problem"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual input that tests the boundaries of your solution"
+      },
+      {
+        "phrase": "shrink the window",
+        "explanation": "Reduce the size of the current range being examined by advancing the left pointer"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Substring",
+        "definition": "A contiguous sequence of characters within a string"
+      },
+      {
+        "term": "Character frequency",
+        "definition": "The count of how many times a particular character appears in a string or window"
+      },
+      {
+        "term": "Sliding window",
+        "definition": "An algorithm pattern using two pointers to define a dynamic range over a sequence"
+      },
+      {
+        "term": "Window size",
+        "definition": "The number of elements between the left and right boundaries of the current range"
+      },
+      {
+        "term": "Dominant character",
+        "definition": "The character with the highest frequency in the current window"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "String.charAt(int index)",
+        "description": "Returns the character at the specified index in the string"
+      },
+      {
+        "signature": "String.length()",
+        "description": "Returns the number of characters in the string"
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the larger of two integer values"
+      },
+      {
+        "signature": "int[] new int[26]",
+        "description": "Creates an integer array of size 26 to count each uppercase letter frequency"
+      }
+    ]
+  },
+  "concept": "Given a string of uppercase English letters and an integer k, find the length of the longest substring you can obtain where every character is the same, after performing at most k character replacements.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "summary": "Check every possible substring. For each one, count the most frequent character and see if the remaining characters can be replaced within k operations."
+    },
+    {
+      "level": 2,
+      "label": "Optimized Sliding Window",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use a sliding window with a frequency array. Expand right, track the max frequency character, and shrink from the left when replacements needed exceed k."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: s = AABABBA, k = 1\"] --> B[\"Replace 1 character\"]\n    B --> C[\"AABABBA → possible windows\"]\n    C --> D[\"AAAB... length 4?\"]\n    C --> E[\"ABBB... length 4?\"]\n    D --> F[\"Output: 4\"]\n    style A fill:#f87171,color:#000\n    style F fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given a string of uppercase English letters and an integer k. You can pick at most k characters in the string and replace each with any uppercase letter you want. After doing that, find the length of the longest substring where all characters are the same.",
+            "audio_file": "longest-repeating-character-replacement-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So if I have the string A A B A B B A and k equals one, I could replace one character to try to make a long run of identical letters. Can I confirm, the string only has uppercase English letters?",
+            "audio_file": "longest-repeating-character-replacement-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's correct. Only uppercase A through Z. The string length can be up to ten thousand. And yes, k can be zero, meaning no replacements allowed.",
+            "audio_file": "longest-repeating-character-replacement-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? If the string is empty, should I return zero? And if k is greater than or equal to the string length, the answer would just be the entire string length, right?",
+            "audio_file": "longest-repeating-character-replacement-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. Empty string returns zero. And yes, if k is large enough, you can replace everything, so the full length is the answer. Return an integer for the maximum length.",
+            "audio_file": "longest-repeating-character-replacement-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Great. So the core question is: find the longest window in the string where the number of characters that are NOT the most frequent character is at most k. Let me think about approaches.",
+            "audio_file": "longest-repeating-character-replacement-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Approach",
+        "diagram": "graph TD\n    A[\"s = AABABBA, k = 1\"] --> B[\"Check all substrings\"]\n    B --> C[\"i=0: A, AA, AAB, AABA...\"]\n    B --> D[\"i=1: A, AB, ABA...\"]\n    C --> E[\"For each: count max freq char\"]\n    E --> F[\"Window len - max freq <= k?\"]\n    F --> G[\"Track max valid length = 4\"]\n    style A fill:#60a5fa,color:#000\n    style G fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is brute force. I check every possible substring. For each one, I count the frequency of each character, find the most frequent one, and check if the remaining characters are at most k. If so, it's a valid window.",
+            "audio_file": "longest-repeating-character-replacement-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through the example? String A A B A B B A with k equals one.",
+            "audio_file": "longest-repeating-character-replacement-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. Starting at index zero, I expand right. Substring A A B A has length four, max frequency is A with three, so I need one replacement which equals k. That's valid. I keep expanding but A A B A B needs two replacements, which exceeds k. I track four as the best so far.",
+            "audio_file": "longest-repeating-character-replacement-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this brute force?",
+            "audio_file": "longest-repeating-character-replacement-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each starting index, I expand to the end, so it's O of n-squared overall. Space is O of one since we only use a fixed-size frequency array of twenty-six letters. This works but is slow for large inputs.",
+            "audio_file": "longest-repeating-character-replacement-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Optimized Sliding Window",
+        "diagram": "graph TD\n    A[\"s = AABABBA, k = 1\"] --> B[\"left=0, right=0, maxFreq=0\"]\n    B --> C[\"Expand right: A → freq A=1, maxFreq=1\"]\n    C --> D[\"right=3: AABA, freq A=3, maxFreq=3\"]\n    D --> E[\"windowLen - maxFreq = 4-3 = 1 <= k ✓\"]\n    E --> F[\"right=4: AABAB, 5-3=2 > k ✗\"]\n    F --> G[\"Shrink left: left=1, windowLen=4\"]\n    G --> H[\"Continue... best answer = 4\"]\n    style A fill:#a78bfa,color:#000\n    style H fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can do much better with a sliding window. I use two pointers, left and right, and a frequency array. I also track the maximum frequency of any single character in the current window. The key insight is: if window length minus the max frequency exceeds k, we need to shrink.",
+            "audio_file": "longest-repeating-character-replacement-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Let me walk through the example with you. Start with A A B A B B A and k equals one.",
+            "audio_file": "longest-repeating-character-replacement-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right pointer expands. At index three, the window is A A B A. A appears three times, so max frequency is three. Window length four minus three equals one, which is at most k. Valid. At index four, window is A A B A B. Length five minus three equals two, exceeding k. So I move left forward, decrement the frequency of the character leaving the window.",
+            "audio_file": "longest-repeating-character-replacement-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Do you need to recalculate the max frequency when shrinking?",
+            "audio_file": "longest-repeating-character-replacement-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Great question. Actually, we don't need to decrease max frequency. It only matters when max frequency increases, because that's when we might find a longer valid window. If it doesn't increase, the window size won't grow. So we just keep the historical maximum, which keeps this at O of n time and O of one space.",
+            "audio_file": "longest-repeating-character-replacement-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's a clever optimization. The window either grows or slides but never truly shrinks, so we naturally track the best answer. Well done.",
+            "audio_file": "longest-repeating-character-replacement-optimal-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    A[\"Brute Force\"] --> B[\"O of n-squared time\"]\n    C[\"Sliding Window\"] --> D[\"O of n time\"]\n    B --> E[\"Both use O of 1 space\"]\n    D --> E\n    style A fill:#60a5fa,color:#000\n    style C fill:#a78bfa,color:#000\n    style E fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. The brute force checks all substrings in O of n-squared. The sliding window brings it down to O of n by expanding and shifting the window, using the max frequency insight to avoid unnecessary recalculation.",
+            "audio_file": "longest-repeating-character-replacement-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key takeaway is that the window condition, length minus max frequency is at most k, lets us efficiently determine validity. And by never decreasing max frequency, we guarantee the window only grows when a better answer is possible.",
+            "audio_file": "longest-repeating-character-replacement-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

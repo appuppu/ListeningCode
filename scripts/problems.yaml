@@ -1,0 +1,809 @@
+# ListeningCode — Problem List
+# Add problems here to generate content, audio, and diagrams.
+#
+# After adding problems, run: python3 scripts/generate_all.py
+# Or wait for the cron job to pick them up automatically (every 30 min).
+
+- category: arrays-and-hashing
+  problems:
+    - id: contains-duplicate
+      title: "Finding Duplicates in an Array"
+      description: "Given an integer array, determine if any value appears at least twice."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/contains-duplicate/"
+    - id: valid-anagram
+      title: "Checking if Two Strings Are Anagrams"
+      description: "Given two strings, determine if one is an anagram of the other by comparing character frequencies."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/valid-anagram/"
+    - id: two-sum
+      title: "Finding Two Numbers That Add Up to a Target"
+      description: "Given an array and a target sum, find the indices of two numbers that add up to the target."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/two-sum/"
+    - id: group-anagrams
+      title: "Grouping Words by Anagram Patterns"
+      description: "Given an array of strings, group the strings that are anagrams of each other."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/group-anagrams/"
+    - id: top-k-frequent-elements
+      title: "Finding the K Most Frequent Elements"
+      description: "Given an integer array and k, return the k most frequently occurring elements."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/top-k-frequent-elements/"
+    - id: encode-and-decode-strings
+      title: "Encoding and Decoding a List of Strings"
+      description: "Design an algorithm to encode a list of strings into a single string and decode it back."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/encode-and-decode-strings/"
+    - id: product-of-array-except-self
+      title: "Computing Products Without Self Inclusion"
+      description: "Given an array, return an array where each element is the product of all other elements except itself, without using division."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/product-of-array-except-self/"
+    - id: valid-sudoku
+      title: "Validating a Sudoku Board"
+      description: "Determine if a partially filled 9x9 Sudoku board is valid based on row, column, and box constraints."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/valid-sudoku/"
+    - id: longest-consecutive-sequence
+      title: "Finding the Longest Consecutive Number Sequence"
+      description: "Given an unsorted array, find the length of the longest sequence of consecutive integers."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/longest-consecutive-sequence/"
+
+- category: two-pointers
+  problems:
+    - id: valid-palindrome
+      title: "Checking if a String is a Palindrome"
+      description: "Determine if a string is a palindrome, considering only alphanumeric characters and ignoring case."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/valid-palindrome/"
+    - id: two-sum-ii
+      title: "Finding Two Numbers in a Sorted Array That Add Up to a Target"
+      description: "Given a sorted array and a target, find two numbers that add up to the target using their 1-indexed positions."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/"
+    - id: three-sum
+      title: "Finding Three Numbers That Sum to Zero"
+      description: "Given an array, find all unique triplets that sum to zero."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/3sum/"
+    - id: container-with-most-water
+      title: "Maximizing Water Held Between Two Lines"
+      description: "Given an array of heights, find two lines that together with the x-axis form a container holding the most water."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/container-with-most-water/"
+    - id: trapping-rain-water
+      title: "Calculating Trapped Rainwater Between Bars"
+      description: "Given an elevation map of bars, compute how much water can be trapped after raining."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/trapping-rain-water/"
+
+- category: sliding-window
+  problems:
+    - id: best-time-to-buy-and-sell-stock
+      title: "Finding the Best Time to Buy and Sell a Stock"
+      description: "Given daily stock prices, find the maximum profit from buying on one day and selling on a later day."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"
+    - id: longest-substring-without-repeating-characters
+      title: "Finding the Longest Substring Without Repeating Characters"
+      description: "Given a string, find the length of the longest substring that contains no duplicate characters."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+    - id: longest-repeating-character-replacement
+      title: "Longest Substring After Replacing K Characters"
+      description: "Given a string and k allowed replacements, find the length of the longest substring with all identical characters."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/longest-repeating-character-replacement/"
+    - id: permutation-in-string
+      title: "Checking if a String Contains a Permutation of Another"
+      description: "Given two strings, determine if one string contains any permutation of the other as a substring."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/permutation-in-string/"
+    - id: minimum-window-substring
+      title: "Finding the Smallest Window Containing All Characters"
+      description: "Given two strings, find the minimum window in the first string that contains all characters of the second string."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/minimum-window-substring/"
+    - id: sliding-window-maximum
+      title: "Finding the Maximum in Each Sliding Window"
+      description: "Given an array and a window size k, return the maximum value in each sliding window position."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/sliding-window-maximum/"
+
+- category: stack
+  problems:
+    - id: valid-parentheses
+      title: "Checking if Parentheses Are Balanced"
+      description: "Given a string of brackets, determine if every opening bracket has a matching closing bracket in the correct order."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/valid-parentheses/"
+    - id: min-stack
+      title: "Designing a Stack That Tracks the Minimum"
+      description: "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/min-stack/"
+    - id: evaluate-reverse-polish-notation
+      title: "Evaluating an Expression in Reverse Polish Notation"
+      description: "Evaluate an arithmetic expression given in Reverse Polish Notation (postfix) using a stack."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/evaluate-reverse-polish-notation/"
+    - id: daily-temperatures
+      title: "Finding How Many Days Until a Warmer Temperature"
+      description: "Given daily temperatures, find how many days you have to wait for a warmer temperature for each day."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/daily-temperatures/"
+    - id: car-fleet
+      title: "Counting Car Fleets Arriving at a Destination"
+      description: "Given positions and speeds of cars heading to a destination, determine how many car fleets arrive."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/car-fleet/"
+    - id: largest-rectangle-in-histogram
+      title: "Finding the Largest Rectangle in a Histogram"
+      description: "Given an array of bar heights, find the area of the largest rectangle that can be formed in the histogram."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/largest-rectangle-in-histogram/"
+
+- category: binary-search
+  problems:
+    - id: binary-search
+      title: "Searching for a Target in a Sorted Array"
+      description: "Given a sorted array and a target value, return the index of the target using binary search."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/binary-search/"
+    - id: search-a-2d-matrix
+      title: "Searching for a Value in a Sorted Matrix"
+      description: "Given a matrix where each row is sorted and the first element of each row is greater than the last of the previous, find a target value."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/search-a-2d-matrix/"
+    - id: koko-eating-bananas
+      title: "Finding the Minimum Eating Speed to Finish Bananas"
+      description: "Given piles of bananas and h hours, find the minimum eating speed to finish all bananas within h hours."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/koko-eating-bananas/"
+    - id: find-minimum-in-rotated-sorted-array
+      title: "Finding the Minimum in a Rotated Sorted Array"
+      description: "Given a sorted array that has been rotated, find the minimum element."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/"
+    - id: search-in-rotated-sorted-array
+      title: "Searching for a Target in a Rotated Sorted Array"
+      description: "Given a rotated sorted array and a target, return the index of the target if found."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/search-in-rotated-sorted-array/"
+    - id: time-based-key-value-store
+      title: "Designing a Time-Based Key-Value Store"
+      description: "Design a data structure that stores key-value pairs with timestamps and retrieves values at or before a given timestamp."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/time-based-key-value-store/"
+    - id: median-of-two-sorted-arrays
+      title: "Finding the Median of Two Sorted Arrays"
+      description: "Given two sorted arrays, find the median of the combined sorted array in logarithmic time."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+
+- category: linked-list
+  problems:
+    - id: reverse-linked-list
+      title: "Reversing a Linked List"
+      description: "Given the head of a singly linked list, reverse the list and return the new head."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/reverse-linked-list/"
+    - id: merge-two-sorted-lists
+      title: "Merging Two Sorted Linked Lists"
+      description: "Given two sorted linked lists, merge them into one sorted linked list."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/merge-two-sorted-lists/"
+    - id: linked-list-cycle
+      title: "Detecting a Cycle in a Linked List"
+      description: "Given a linked list, determine if it contains a cycle."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/linked-list-cycle/"
+    - id: reorder-list
+      title: "Reordering a Linked List by Interleaving Ends"
+      description: "Given a linked list, reorder it so nodes alternate between the front and back of the list."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/reorder-list/"
+    - id: remove-nth-node-from-end-of-list
+      title: "Removing the Nth Node From the End of a List"
+      description: "Given a linked list, remove the nth node from the end and return the head."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/remove-nth-node-from-end-of-list/"
+    - id: copy-list-with-random-pointer
+      title: "Deep Copying a Linked List With Random Pointers"
+      description: "Given a linked list where each node has a next pointer and a random pointer, create a deep copy."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/copy-list-with-random-pointer/"
+    - id: add-two-numbers
+      title: "Adding Two Numbers Represented as Linked Lists"
+      description: "Given two linked lists representing numbers in reverse order, return their sum as a linked list."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/add-two-numbers/"
+    - id: find-the-duplicate-number
+      title: "Finding the Duplicate in an Array of N Plus One Integers"
+      description: "Given an array of n+1 integers where each is between 1 and n, find the one duplicate number without modifying the array."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/find-the-duplicate-number/"
+    - id: lru-cache
+      title: "Designing a Least Recently Used Cache"
+      description: "Design a data structure that follows LRU eviction policy with O(1) get and put operations."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/lru-cache/"
+    - id: merge-k-sorted-lists
+      title: "Merging K Sorted Linked Lists"
+      description: "Given an array of k sorted linked lists, merge them into one sorted linked list."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/merge-k-sorted-lists/"
+    - id: reverse-nodes-in-k-group
+      title: "Reversing Nodes in Groups of K"
+      description: "Given a linked list, reverse every group of k consecutive nodes."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/reverse-nodes-in-k-group/"
+
+- category: trees
+  problems:
+    - id: invert-binary-tree
+      title: "Inverting a Binary Tree"
+      description: "Given the root of a binary tree, invert the tree by swapping left and right children at every node."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/invert-binary-tree/"
+    - id: maximum-depth-of-binary-tree
+      title: "Finding the Maximum Depth of a Binary Tree"
+      description: "Given a binary tree, find the maximum depth from the root to the farthest leaf node."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/"
+    - id: diameter-of-binary-tree
+      title: "Finding the Diameter of a Binary Tree"
+      description: "Given a binary tree, find the length of the longest path between any two nodes."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/diameter-of-binary-tree/"
+    - id: balanced-binary-tree
+      title: "Checking if a Binary Tree is Height-Balanced"
+      description: "Determine if a binary tree is balanced, meaning the depth of the two subtrees of every node never differs by more than one."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/balanced-binary-tree/"
+    - id: same-tree
+      title: "Checking if Two Binary Trees Are Identical"
+      description: "Given two binary trees, determine if they are structurally identical with the same node values."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/same-tree/"
+    - id: subtree-of-another-tree
+      title: "Checking if a Tree is a Subtree of Another"
+      description: "Given two binary trees, determine if one tree is a subtree of the other."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/subtree-of-another-tree/"
+    - id: lowest-common-ancestor-of-a-bst
+      title: "Finding the Lowest Common Ancestor in a BST"
+      description: "Given a binary search tree and two nodes, find their lowest common ancestor."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/"
+    - id: binary-tree-level-order-traversal
+      title: "Traversing a Binary Tree Level by Level"
+      description: "Given a binary tree, return all node values grouped by level from top to bottom."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/binary-tree-level-order-traversal/"
+    - id: binary-tree-right-side-view
+      title: "Viewing a Binary Tree From the Right Side"
+      description: "Given a binary tree, return the values of nodes visible when looking from the right side."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/binary-tree-right-side-view/"
+    - id: count-good-nodes-in-binary-tree
+      title: "Counting Good Nodes in a Binary Tree"
+      description: "Count the number of nodes in a binary tree where the node's value is greater than or equal to all values on the path from the root."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/count-good-nodes-in-binary-tree/"
+    - id: validate-binary-search-tree
+      title: "Validating a Binary Search Tree"
+      description: "Determine if a binary tree satisfies the binary search tree property."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/validate-binary-search-tree/"
+    - id: kth-smallest-element-in-a-bst
+      title: "Finding the Kth Smallest Element in a BST"
+      description: "Given a BST and an integer k, find the kth smallest element in the tree."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/"
+    - id: construct-binary-tree-from-preorder-and-inorder
+      title: "Constructing a Binary Tree From Traversal Orders"
+      description: "Given preorder and inorder traversal arrays, reconstruct the original binary tree."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+    - id: binary-tree-maximum-path-sum
+      title: "Finding the Maximum Path Sum in a Binary Tree"
+      description: "Given a binary tree, find the maximum sum of any path where each node can only appear once."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/binary-tree-maximum-path-sum/"
+    - id: serialize-and-deserialize-binary-tree
+      title: "Serializing and Deserializing a Binary Tree"
+      description: "Design an algorithm to convert a binary tree to a string and reconstruct it back."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/"
+
+- category: heap-priority-queue
+  problems:
+    - id: kth-largest-element-in-a-stream
+      title: "Tracking the Kth Largest Element in a Stream"
+      description: "Design a class that finds the kth largest element in a stream of numbers."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/kth-largest-element-in-a-stream/"
+    - id: last-stone-weight
+      title: "Simulating a Last Stone Weight Game"
+      description: "Given an array of stone weights, repeatedly smash the two heaviest stones and return the last remaining weight."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/last-stone-weight/"
+    - id: k-closest-points-to-origin
+      title: "Finding the K Closest Points to the Origin"
+      description: "Given an array of points, find the k closest points to the origin."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/k-closest-points-to-origin/"
+    - id: kth-largest-element-in-an-array
+      title: "Finding the Kth Largest Element in an Array"
+      description: "Given an unsorted array and k, return the kth largest element."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/kth-largest-element-in-an-array/"
+    - id: task-scheduler
+      title: "Scheduling Tasks With Cooldown Intervals"
+      description: "Given tasks with a cooldown period between identical tasks, find the minimum time to complete all tasks."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/task-scheduler/"
+    - id: design-twitter
+      title: "Designing a Simplified Twitter Feed"
+      description: "Design a simplified Twitter where users can post tweets, follow others, and retrieve the 10 most recent tweets in their feed."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/design-twitter/"
+    - id: find-median-from-data-stream
+      title: "Finding the Median From a Data Stream"
+      description: "Design a data structure that supports adding numbers and finding the median of all added numbers efficiently."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/find-median-from-data-stream/"
+
+- category: backtracking
+  problems:
+    - id: subsets
+      title: "Generating All Subsets of a Set"
+      description: "Given an array of distinct integers, return all possible subsets."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/subsets/"
+    - id: combination-sum
+      title: "Finding Combinations That Sum to a Target"
+      description: "Given an array of candidates and a target, find all unique combinations where the candidates sum to the target. Numbers can be reused."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/combination-sum/"
+    - id: combination-sum-ii
+      title: "Finding Combinations That Sum to a Target Without Reuse"
+      description: "Given an array with possible duplicates and a target, find all unique combinations that sum to the target. Each number can only be used once."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/combination-sum-ii/"
+    - id: permutations
+      title: "Generating All Permutations of an Array"
+      description: "Given an array of distinct integers, return all possible permutations."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/permutations/"
+    - id: subsets-ii
+      title: "Generating All Unique Subsets With Duplicates"
+      description: "Given an array that may contain duplicates, return all possible unique subsets."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/subsets-ii/"
+    - id: generate-parentheses
+      title: "Generating All Valid Parentheses Combinations"
+      description: "Given n pairs of parentheses, generate all combinations of well-formed parentheses."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/generate-parentheses/"
+    - id: word-search
+      title: "Searching for a Word in a Grid"
+      description: "Given a 2D board of characters and a word, determine if the word exists in the grid by moving to adjacent cells."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/word-search/"
+    - id: palindrome-partitioning
+      title: "Partitioning a String Into Palindrome Substrings"
+      description: "Given a string, partition it such that every substring is a palindrome. Return all possible partitions."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/palindrome-partitioning/"
+    - id: letter-combinations-of-a-phone-number
+      title: "Mapping Phone Number Digits to Letter Combinations"
+      description: "Given a string of digits 2-9, return all possible letter combinations that the digits could represent on a phone keypad."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/letter-combinations-of-a-phone-number/"
+    - id: n-queens
+      title: "Placing N Queens on a Board Without Conflicts"
+      description: "Place n queens on an n×n chessboard so that no two queens threaten each other. Return all distinct solutions."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/n-queens/"
+
+- category: tries
+  problems:
+    - id: implement-trie-prefix-tree
+      title: "Implementing a Prefix Tree"
+      description: "Implement a trie with insert, search, and startsWith operations."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/implement-trie-prefix-tree/"
+    - id: design-add-and-search-words-data-structure
+      title: "Designing a Word Dictionary With Wildcard Search"
+      description: "Design a data structure that supports adding words and searching with dot wildcards that match any character."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/design-add-and-search-words-data-structure/"
+    - id: word-search-ii
+      title: "Finding All Words From a Dictionary in a Grid"
+      description: "Given a 2D board and a list of words, find all words that can be formed by moving to adjacent cells."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/word-search-ii/"
+
+- category: graphs
+  problems:
+    - id: number-of-islands
+      title: "Counting the Number of Islands in a Grid"
+      description: "Given a 2D grid of ones and zeros, count the number of connected groups of ones (islands)."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/number-of-islands/"
+    - id: max-area-of-island
+      title: "Finding the Largest Island by Area"
+      description: "Given a 2D grid, find the maximum area of an island (connected group of ones)."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/max-area-of-island/"
+    - id: clone-graph
+      title: "Deep Copying a Graph"
+      description: "Given a reference to a node in an undirected graph, return a deep copy of the entire graph."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/clone-graph/"
+    - id: walls-and-gates
+      title: "Filling Distances to the Nearest Gate"
+      description: "Given a grid with walls, gates, and empty rooms, fill each room with the distance to its nearest gate."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/walls-and-gates/"
+    - id: rotting-oranges
+      title: "Simulating Rotting Oranges Spreading"
+      description: "Given a grid of fresh and rotten oranges, determine the minimum time for all oranges to rot."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/rotting-oranges/"
+    - id: pacific-atlantic-water-flow
+      title: "Finding Cells That Drain to Both Oceans"
+      description: "Given a height map, find all cells from which water can flow to both the Pacific and Atlantic oceans."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/pacific-atlantic-water-flow/"
+    - id: surrounded-regions
+      title: "Capturing Surrounded Regions on a Board"
+      description: "Given a board with X and O, capture all O regions that are completely surrounded by X."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/surrounded-regions/"
+    - id: course-schedule
+      title: "Determining if All Courses Can Be Completed"
+      description: "Given course prerequisites, determine if it is possible to finish all courses (cycle detection in directed graph)."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/course-schedule/"
+    - id: course-schedule-ii
+      title: "Finding a Valid Order to Complete All Courses"
+      description: "Given course prerequisites, return a valid ordering to complete all courses (topological sort)."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/course-schedule-ii/"
+    - id: graph-valid-tree
+      title: "Checking if a Graph Forms a Valid Tree"
+      description: "Given n nodes and edges, determine if the undirected graph forms a valid tree (connected, no cycles)."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/graph-valid-tree/"
+    - id: number-of-connected-components
+      title: "Counting Connected Components in an Undirected Graph"
+      description: "Given n nodes and edges, count the number of connected components in the undirected graph."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/"
+    - id: redundant-connection
+      title: "Finding the Redundant Edge in a Graph"
+      description: "Given a graph that was originally a tree with one extra edge, find the edge that can be removed to restore the tree."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/redundant-connection/"
+    - id: word-ladder
+      title: "Finding the Shortest Word Transformation Sequence"
+      description: "Given a begin word, end word, and dictionary, find the shortest transformation sequence changing one letter at a time."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/word-ladder/"
+
+- category: advanced-graphs
+  problems:
+    - id: network-delay-time
+      title: "Calculating Network Signal Propagation Time"
+      description: "Given a network of nodes and weighted edges, find the time for a signal to reach all nodes from a source."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/network-delay-time/"
+    - id: reconstruct-itinerary
+      title: "Reconstructing a Flight Itinerary"
+      description: "Given a list of airline tickets, reconstruct the itinerary in lexical order starting from JFK."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/reconstruct-itinerary/"
+    - id: min-cost-to-connect-all-points
+      title: "Finding the Minimum Cost to Connect All Points"
+      description: "Given points on a plane, find the minimum cost to connect all points using Manhattan distance."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/min-cost-to-connect-all-points/"
+    - id: swim-in-rising-water
+      title: "Finding the Minimum Time to Swim Across a Grid"
+      description: "Given a grid where water rises over time, find the minimum time to swim from top-left to bottom-right."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/swim-in-rising-water/"
+    - id: alien-dictionary
+      title: "Deriving the Order of an Alien Alphabet"
+      description: "Given a sorted list of words in an alien language, derive the order of characters in the alphabet."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/alien-dictionary/"
+    - id: cheapest-flights-within-k-stops
+      title: "Finding the Cheapest Flight With Limited Stops"
+      description: "Given flights with prices, find the cheapest route from source to destination with at most k stops."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/cheapest-flights-within-k-stops/"
+
+- category: 1d-dynamic-programming
+  problems:
+    - id: climbing-stairs
+      title: "Counting Ways to Climb Stairs"
+      description: "Given n steps, count the number of distinct ways to reach the top taking 1 or 2 steps at a time."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/climbing-stairs/"
+    - id: min-cost-climbing-stairs
+      title: "Finding the Minimum Cost to Climb Stairs"
+      description: "Given a cost array, find the minimum cost to reach the top of the staircase."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/min-cost-climbing-stairs/"
+    - id: house-robber
+      title: "Maximizing Robbery Loot Without Adjacent Houses"
+      description: "Given an array of house values, find the maximum amount you can rob without robbing two adjacent houses."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/house-robber/"
+    - id: house-robber-ii
+      title: "Maximizing Robbery Loot in a Circular Neighborhood"
+      description: "Same as house robber but houses are arranged in a circle, so the first and last houses are adjacent."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/house-robber-ii/"
+    - id: longest-palindromic-substring
+      title: "Finding the Longest Palindromic Substring"
+      description: "Given a string, find the longest substring that reads the same forwards and backwards."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/longest-palindromic-substring/"
+    - id: palindromic-substrings
+      title: "Counting All Palindromic Substrings"
+      description: "Given a string, count the total number of substrings that are palindromes."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/palindromic-substrings/"
+    - id: decode-ways
+      title: "Counting Ways to Decode a Numeric String"
+      description: "Given a string of digits, count the number of ways to decode it where A=1, B=2, ..., Z=26."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/decode-ways/"
+    - id: coin-change
+      title: "Finding the Fewest Coins to Make a Target Amount"
+      description: "Given coin denominations and a target amount, find the minimum number of coins needed."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/coin-change/"
+    - id: maximum-product-subarray
+      title: "Finding the Subarray With Maximum Product"
+      description: "Given an integer array, find the contiguous subarray with the largest product."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/maximum-product-subarray/"
+    - id: word-break
+      title: "Determining if a String Can Be Segmented Into Dictionary Words"
+      description: "Given a string and a dictionary, determine if the string can be segmented into dictionary words."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/word-break/"
+    - id: longest-increasing-subsequence
+      title: "Finding the Longest Increasing Subsequence"
+      description: "Given an array, find the length of the longest strictly increasing subsequence."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/longest-increasing-subsequence/"
+    - id: partition-equal-subset-sum
+      title: "Partitioning an Array Into Two Equal Sum Subsets"
+      description: "Given an array, determine if it can be partitioned into two subsets with equal sum."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/partition-equal-subset-sum/"
+
+- category: 2d-dynamic-programming
+  problems:
+    - id: unique-paths
+      title: "Counting Unique Paths in a Grid"
+      description: "Given an m×n grid, count the number of unique paths from top-left to bottom-right moving only right or down."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/unique-paths/"
+    - id: longest-common-subsequence
+      title: "Finding the Longest Common Subsequence"
+      description: "Given two strings, find the length of their longest common subsequence."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/longest-common-subsequence/"
+    - id: best-time-to-buy-and-sell-stock-with-cooldown
+      title: "Maximizing Stock Profit With a Cooldown Period"
+      description: "Given stock prices, find maximum profit with the constraint that you must wait one day after selling before buying again."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/"
+    - id: coin-change-ii
+      title: "Counting Combinations to Make a Target Amount"
+      description: "Given coin denominations and a target, count the number of distinct combinations that sum to the target."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/coin-change-ii/"
+    - id: target-sum
+      title: "Counting Ways to Assign Signs to Reach a Target Sum"
+      description: "Given an array and a target, count the ways to assign plus or minus signs to each element to reach the target."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/target-sum/"
+    - id: interleaving-string
+      title: "Checking if a String is an Interleaving of Two Others"
+      description: "Given three strings, determine if the third is formed by interleaving the first two."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/interleaving-string/"
+    - id: longest-increasing-path-in-a-matrix
+      title: "Finding the Longest Increasing Path in a Matrix"
+      description: "Given a matrix, find the length of the longest path where each cell is strictly greater than the previous."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/"
+    - id: distinct-subsequences
+      title: "Counting Distinct Subsequences of a String in Another"
+      description: "Given two strings, count the number of distinct subsequences of the first that equal the second."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/distinct-subsequences/"
+    - id: edit-distance
+      title: "Finding the Minimum Edits to Transform One String Into Another"
+      description: "Given two strings, find the minimum number of insert, delete, or replace operations to convert one to the other."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/edit-distance/"
+    - id: burst-balloons
+      title: "Maximizing Coins From Bursting Balloons"
+      description: "Given balloons with values, find the maximum coins collected by bursting them in an optimal order."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/burst-balloons/"
+    - id: regular-expression-matching
+      title: "Implementing Regular Expression Matching"
+      description: "Implement pattern matching with dot and star wildcards supporting the full input string."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/regular-expression-matching/"
+
+- category: greedy
+  problems:
+    - id: maximum-subarray
+      title: "Finding the Subarray With Maximum Sum"
+      description: "Given an integer array, find the contiguous subarray with the largest sum."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/maximum-subarray/"
+    - id: jump-game
+      title: "Determining if You Can Reach the End of an Array"
+      description: "Given an array of jump lengths, determine if you can reach the last index starting from the first."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/jump-game/"
+    - id: jump-game-ii
+      title: "Finding the Minimum Jumps to Reach the End"
+      description: "Given an array of jump lengths, find the minimum number of jumps to reach the last index."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/jump-game-ii/"
+    - id: gas-station
+      title: "Finding the Starting Gas Station for a Circular Route"
+      description: "Given gas and cost arrays for stations in a circle, find the starting station to complete the circuit."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/gas-station/"
+    - id: hand-of-straights
+      title: "Dividing Cards Into Consecutive Groups"
+      description: "Given an array of card values and group size, determine if cards can be divided into groups of consecutive values."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/hand-of-straights/"
+    - id: merge-triplets-to-form-target
+      title: "Merging Triplets to Form a Target Triplet"
+      description: "Given an array of triplets and a target triplet, determine if the target can be formed by taking max values from selected triplets."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/merge-triplets-to-form-target-triplet/"
+    - id: partition-labels
+      title: "Partitioning a String Into Maximum Parts"
+      description: "Given a string, partition it into as many parts as possible so that each character appears in at most one part."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/partition-labels/"
+    - id: valid-parenthesis-string
+      title: "Checking Validity of a Parenthesis String With Wildcards"
+      description: "Given a string with parentheses and stars (wildcards), determine if it can be valid."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/valid-parenthesis-string/"
+
+- category: intervals
+  problems:
+    - id: insert-interval
+      title: "Inserting a New Interval Into a Sorted List"
+      description: "Given a sorted list of non-overlapping intervals and a new interval, insert it and merge if necessary."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/insert-interval/"
+    - id: merge-intervals
+      title: "Merging Overlapping Intervals"
+      description: "Given an array of intervals, merge all overlapping intervals."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/merge-intervals/"
+    - id: non-overlapping-intervals
+      title: "Finding the Minimum Removals for Non-Overlapping Intervals"
+      description: "Given intervals, find the minimum number to remove so that the rest are non-overlapping."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/non-overlapping-intervals/"
+    - id: meeting-rooms
+      title: "Determining if All Meetings Can Be Attended"
+      description: "Given meeting time intervals, determine if a person can attend all meetings without overlap."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/meeting-rooms/"
+    - id: meeting-rooms-ii
+      title: "Finding the Minimum Meeting Rooms Required"
+      description: "Given meeting time intervals, find the minimum number of conference rooms required."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/meeting-rooms-ii/"
+    - id: minimum-interval-to-include-each-query
+      title: "Finding the Smallest Interval Containing Each Query"
+      description: "Given intervals and queries, find the size of the smallest interval containing each query point."
+      difficulty: hard
+      leetcode_url: "https://leetcode.com/problems/minimum-interval-to-include-each-query/"
+
+- category: math-and-geometry
+  problems:
+    - id: rotate-image
+      title: "Rotating a Matrix 90 Degrees"
+      description: "Given an n×n matrix, rotate it 90 degrees clockwise in-place."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/rotate-image/"
+    - id: spiral-matrix
+      title: "Traversing a Matrix in Spiral Order"
+      description: "Given an m×n matrix, return all elements in spiral order."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/spiral-matrix/"
+    - id: set-matrix-zeroes
+      title: "Setting Entire Rows and Columns to Zero"
+      description: "Given a matrix, if an element is zero, set its entire row and column to zeros."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/set-matrix-zeroes/"
+    - id: happy-number
+      title: "Determining if a Number is a Happy Number"
+      description: "Determine if repeatedly summing the squares of digits eventually reaches one."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/happy-number/"
+    - id: plus-one
+      title: "Adding One to a Number Represented as an Array"
+      description: "Given a number represented as an array of digits, increment it by one."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/plus-one/"
+    - id: pow-x-n
+      title: "Computing Power of a Number Efficiently"
+      description: "Implement a function to compute x raised to the power n using fast exponentiation."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/powx-n/"
+    - id: multiply-strings
+      title: "Multiplying Two Numbers Represented as Strings"
+      description: "Given two numbers as strings, return their product as a string without using built-in big integer libraries."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/multiply-strings/"
+    - id: detect-squares
+      title: "Detecting Axis-Aligned Squares From Points"
+      description: "Design a data structure that adds points and counts the number of axis-aligned squares that can be formed."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/detect-squares/"
+
+- category: bit-manipulation
+  problems:
+    - id: single-number
+      title: "Finding the Number That Appears Only Once"
+      description: "Given an array where every element appears twice except one, find the unique element."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/single-number/"
+    - id: number-of-1-bits
+      title: "Counting the Number of Set Bits"
+      description: "Given an integer, count the number of 1 bits in its binary representation."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/number-of-1-bits/"
+    - id: counting-bits
+      title: "Counting Bits for Every Number Up to N"
+      description: "Given n, return an array where each element is the number of 1 bits in the binary representation of that index."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/counting-bits/"
+    - id: reverse-bits
+      title: "Reversing the Bits of an Integer"
+      description: "Reverse the bits of a 32-bit unsigned integer."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/reverse-bits/"
+    - id: missing-number
+      title: "Finding the Missing Number in a Sequence"
+      description: "Given an array of n distinct numbers from 0 to n, find the one missing number."
+      difficulty: easy
+      leetcode_url: "https://leetcode.com/problems/missing-number/"
+    - id: sum-of-two-integers
+      title: "Adding Two Numbers Without the Plus Operator"
+      description: "Calculate the sum of two integers without using the plus or minus operators."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/sum-of-two-integers/"
+    - id: reverse-integer
+      title: "Reversing the Digits of an Integer"
+      description: "Given a 32-bit signed integer, reverse its digits and handle overflow."
+      difficulty: medium
+      leetcode_url: "https://leetcode.com/problems/reverse-integer/"

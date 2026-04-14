@@ -1,0 +1,232 @@
+{
+  "id": "daily-temperatures",
+  "title": "Finding How Many Days Until a Warmer Temperature",
+  "difficulty": "medium",
+  "category": "stack",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through a specific input step by step to show how the algorithm works"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The simplest, most straightforward solution without optimization"
+      },
+      {
+        "phrase": "monotonic stack",
+        "explanation": "A stack that maintains elements in either non-increasing or non-decreasing order"
+      },
+      {
+        "phrase": "time complexity trade-off",
+        "explanation": "Choosing between a faster algorithm that may use more memory, or vice versa"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that tests the boundaries of your solution"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Stack",
+        "definition": "A last-in, first-out data structure where elements are added and removed from the top"
+      },
+      {
+        "term": "Monotonic Stack",
+        "definition": "A stack where elements are kept in sorted order, either always increasing or always decreasing from bottom to top"
+      },
+      {
+        "term": "Nested Loop",
+        "definition": "A loop inside another loop, often leading to quadratic time complexity"
+      },
+      {
+        "term": "Index",
+        "definition": "The position number of an element in an array, typically starting from zero"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows as the input size increases"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Deque<Integer> stack = new ArrayDeque<>()",
+        "description": "Creates a new stack using ArrayDeque, the recommended stack implementation in Java"
+      },
+      {
+        "signature": "stack.push(element)",
+        "description": "Pushes an element onto the top of the stack"
+      },
+      {
+        "signature": "stack.pop()",
+        "description": "Removes and returns the element from the top of the stack"
+      },
+      {
+        "signature": "stack.peek()",
+        "description": "Returns the top element of the stack without removing it"
+      },
+      {
+        "signature": "new int[n]",
+        "description": "Creates a new integer array of size n, initialized with zeros by default"
+      }
+    ]
+  },
+  "concept": "Given an array of daily temperatures, return an array where each element tells how many days you must wait until a warmer temperature. If no future day is warmer, the answer is zero for that day.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Nested Loops",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "summary": "For each day, scan all future days to find the first warmer temperature."
+    },
+    {
+      "level": 2,
+      "label": "Monotonic Stack",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a decreasing monotonic stack of indices. When a warmer day is found, pop and compute the difference for each resolved day."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Input[\"Input: temperatures\"]\n        D0[\"Day 0: 73\"]\n        D1[\"Day 1: 74\"]\n        D2[\"Day 2: 75\"]\n        D3[\"Day 3: 71\"]\n        D4[\"Day 4: 69\"]\n        D5[\"Day 5: 72\"]\n        D6[\"Day 6: 76\"]\n        D7[\"Day 7: 73\"]\n    end\n    subgraph Output[\"Output: wait days\"]\n        R0[\"1\"]:::red\n        R1[\"1\"]:::red\n        R2[\"4\"]:::red\n        R3[\"2\"]:::red\n        R4[\"1\"]:::red\n        R5[\"1\"]:::red\n        R6[\"0\"]:::red\n        R7[\"0\"]:::red\n    end\n    D0 --> R0\n    D1 --> R1\n    D2 --> R2\n    D3 --> R3\n    D4 --> R4\n    D5 --> R5\n    D6 --> R6\n    D7 --> R7\n    classDef red fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an array of integers representing daily temperatures. For each day, you need to find how many days you have to wait until a warmer temperature appears. If no warmer day exists in the future, the answer for that day is zero.",
+            "audio_file": "daily-temperatures-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So for an input like 73, 74, 75, 71, 69, 72, 76, 73, day zero has temperature 73, and the next day is 74 which is warmer, so the answer for day zero is 1. Is that correct?",
+            "audio_file": "daily-temperatures-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. And a few clarifications: the array length can be up to thirty thousand, and each temperature is between 30 and 100 inclusive. You should return an array of the same length as the input.",
+            "audio_file": "daily-temperatures-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? If the array is empty, do I return an empty array? And if all temperatures are the same, every position gets zero since no warmer day exists, right?",
+            "audio_file": "daily-temperatures-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes to both. An empty input returns an empty output, and if no future day is strictly warmer, the value is zero.",
+            "audio_file": "daily-temperatures-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright. So to summarize: given an array of temperatures, I return an array where each element is the number of days until a strictly warmer temperature, or zero if none exists. Let me start with a brute force approach.",
+            "audio_file": "daily-temperatures-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Nested Loops",
+        "diagram": "graph TD\n    subgraph BF[\"Brute Force: temps = 73, 74, 75, 71, 69, 72, 76, 73\"]\n        S0[\"i=0, temp=73\"]:::blue --> S0a[\"j=1: 74 > 73 ✓ → wait = 1\"]\n        S1[\"i=3, temp=71\"]:::blue --> S1a[\"j=4: 69 < 71 ✗\"]\n        S1a --> S1b[\"j=5: 72 > 71 ✓ → wait = 2\"]\n        S2[\"i=6, temp=76\"]:::blue --> S2a[\"j=7: 73 < 76 ✗\"]\n        S2a --> S2b[\"No warmer day → wait = 0\"]\n    end\n    classDef blue fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is to use two nested loops. For each day at index i, I scan forward from i plus one to the end. The first day j where the temperature is strictly greater gives the answer as j minus i.",
+            "audio_file": "daily-temperatures-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through the example. At index 3 the temperature is 71. I check index 4 which is 69, not warmer. Then index 5 is 72, which is warmer, so the answer is 5 minus 3, which equals 2.",
+            "audio_file": "daily-temperatures-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At index 6 the temperature is 76. I check index 7 which is 73, not warmer. No more days exist, so the answer is zero.",
+            "audio_file": "daily-temperatures-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "daily-temperatures-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In the worst case, every day scans all remaining days, giving O of n-squared time. Space is O of 1 excluding the output array. Can I do better?",
+            "audio_file": "daily-temperatures-brute-force-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes. Think about what information you're recalculating. Is there a way to avoid re-scanning future days for every position?",
+            "audio_file": "daily-temperatures-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Monotonic Stack",
+        "diagram": "graph TD\n    subgraph MS[\"Monotonic Stack: temps = 73, 74, 75, 71, 69, 72, 76, 73\"]\n        P0[\"i=0: push 0\nStack: [0]\"]:::purple\n        P1[\"i=1: 74>73, pop 0→ans[0]=1\npush 1. Stack: [1]\"]:::purple\n        P2[\"i=2: 75>74, pop 1→ans[1]=1\npush 2. Stack: [2]\"]:::purple\n        P3[\"i=3: 71<75, push 3\nStack: [2,3]\"]:::purple\n        P4[\"i=4: 69<71, push 4\nStack: [2,3,4]\"]:::purple\n        P5[\"i=5: 72>69 pop 4→ans[4]=1\n72>71 pop 3→ans[3]=2\npush 5. Stack: [2,5]\"]:::purple\n        P6[\"i=6: 76>72 pop 5→ans[5]=1\n76>75 pop 2→ans[2]=4\npush 6. Stack: [6]\"]:::purple\n        P7[\"i=7: 73<76, push 7\nStack: [6,7]\nRemaining → ans=0\"]:::purple\n    end\n    P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7\n    classDef purple fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can use a monotonic decreasing stack that stores indices. I iterate through the array once. When the current temperature is warmer than the temperature at the index on top of the stack, I pop and record the difference.",
+            "audio_file": "daily-temperatures-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me trace through. I push index 0. At index 1, 74 is greater than 73, so I pop index 0 and set answer at 0 to 1 minus 0 equals 1. Then push index 1.",
+            "audio_file": "daily-temperatures-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At index 5, the temperature is 72. I pop index 4 since 72 is greater than 69. The answer at index 4 is 5 minus 4, which is 1. Then 72 is also greater than 71 at index 3, so I pop again. The answer at index 3 is 5 minus 3, which is 2.",
+            "audio_file": "daily-temperatures-optimal-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At index 6, temperature 76 causes me to pop index 5 and index 2, setting their answers to 1 and 4 respectively. After processing all days, indices still on the stack get zero since no warmer day was found.",
+            "audio_file": "daily-temperatures-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great. And the complexity?",
+            "audio_file": "daily-temperatures-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each index is pushed and popped at most once, so the total operations are O of n. Space is O of n for the stack. This is a significant improvement over the brute force.",
+            "audio_file": "daily-temperatures-optimal-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Brute Force\nTime: O of n-squared\nSpace: O of 1\"]:::blue\n        OPT[\"Monotonic Stack\nTime: O of n\nSpace: O of n\"]:::purple\n    end\n    BF -->|\"Optimize with stack\"| OPT\n    classDef blue fill:#60a5fa,color:#000\n    classDef purple fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. Let's recap. The brute force uses nested loops with O of n-squared time. The monotonic stack processes each element at most twice, achieving O of n time with O of n space.",
+            "audio_file": "daily-temperatures-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that the monotonic stack lets us efficiently match each day with its next warmer day. Instead of scanning forward repeatedly, we resolve multiple waiting days the moment a warmer temperature appears.",
+            "audio_file": "daily-temperatures-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. This pattern of using a monotonic stack to find the next greater element is very common in interview problems. Well done.",
+            "audio_file": "daily-temperatures-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

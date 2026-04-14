@@ -1,0 +1,50 @@
+[
+  {
+    "id": "best-time-to-buy-and-sell-stock",
+    "title": "Finding the Best Time to Buy and Sell a Stock",
+    "difficulty": "easy",
+    "sort_order": 0,
+    "content_file": "best-time-to-buy-and-sell-stock.json",
+    "leetcode_url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"
+  },
+  {
+    "id": "longest-substring-without-repeating-characters",
+    "title": "Finding the Longest Substring Without Repeating Characters",
+    "difficulty": "medium",
+    "sort_order": 1,
+    "content_file": "longest-substring-without-repeating-characters.json",
+    "leetcode_url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+  },
+  {
+    "id": "longest-repeating-character-replacement",
+    "title": "Longest Substring After Replacing K Characters",
+    "difficulty": "medium",
+    "sort_order": 2,
+    "content_file": "longest-repeating-character-replacement.json",
+    "leetcode_url": "https://leetcode.com/problems/longest-repeating-character-replacement/"
+  },
+  {
+    "id": "permutation-in-string",
+    "title": "Checking if a String Contains a Permutation of Another",
+    "difficulty": "medium",
+    "sort_order": 3,
+    "content_file": "permutation-in-string.json",
+    "leetcode_url": "https://leetcode.com/problems/permutation-in-string/"
+  },
+  {
+    "id": "minimum-window-substring",
+    "title": "Finding the Smallest Window Containing All Characters",
+    "difficulty": "hard",
+    "sort_order": 4,
+    "content_file": "minimum-window-substring.json",
+    "leetcode_url": "https://leetcode.com/problems/minimum-window-substring/"
+  },
+  {
+    "id": "sliding-window-maximum",
+    "title": "Finding the Maximum in Each Sliding Window",
+    "difficulty": "hard",
+    "sort_order": 5,
+    "content_file": "sliding-window-maximum.json",
+    "leetcode_url": "https://leetcode.com/problems/sliding-window-maximum/"
+  }
+]

@@ -1,0 +1,228 @@
+{
+  "id": "same-tree",
+  "title": "Checking if Two Binary Trees Are Identical",
+  "difficulty": "easy",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "structurally identical",
+        "explanation": "Having the exact same shape and arrangement of nodes"
+      },
+      {
+        "phrase": "base case",
+        "explanation": "The simplest condition in a recursive function that stops further recursion"
+      },
+      {
+        "phrase": "traverse the tree",
+        "explanation": "Visit every node in the tree following a specific order"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that tests the boundaries of a solution"
+      },
+      {
+        "phrase": "level by level",
+        "explanation": "Processing nodes one depth at a time, from top to bottom"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "BFS",
+        "definition": "Breadth-First Search, an algorithm that explores nodes level by level using a queue"
+      },
+      {
+        "term": "DFS",
+        "definition": "Depth-First Search, an algorithm that explores as deep as possible before backtracking"
+      },
+      {
+        "term": "Queue",
+        "definition": "A first-in-first-out data structure used in breadth-first traversal"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Queue<TreeNode> queue = new LinkedList<>()",
+        "description": "Creates a new queue backed by a linked list, commonly used for BFS"
+      },
+      {
+        "signature": "queue.offer(node)",
+        "description": "Adds a node to the end of the queue"
+      },
+      {
+        "signature": "queue.poll()",
+        "description": "Removes and returns the node at the front of the queue"
+      },
+      {
+        "signature": "queue.isEmpty()",
+        "description": "Returns true if the queue contains no elements"
+      }
+    ]
+  },
+  "concept": "Given two binary trees, determine if they are structurally identical with the same node values. Two trees are considered the same if they have the same structure and every corresponding node has the same value.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Recursive DFS",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "summary": "Recursively compare each corresponding node in both trees. If both nodes are null, they match. If one is null or values differ, they don't match. Otherwise, recurse on left and right children."
+    },
+    {
+      "level": 2,
+      "label": "Iterative BFS with Queue",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a queue to compare nodes level by level. Push pairs of corresponding nodes and check each pair for equality as you dequeue them."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    subgraph Tree1[\"Tree p\"]\n        A1[\"1\"]:::red --> B1[\"2\"]:::red\n        A1 --> C1[\"3\"]:::red\n    end\n    subgraph Tree2[\"Tree q\"]\n        A2[\"1\"]:::red --> B2[\"2\"]:::red\n        A2 --> C2[\"3\"]:::red\n    end\n    classDef red fill:#f87171,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's your problem. You're given the roots of two binary trees, p and q. Write a function that returns true if the two trees are identical, meaning they have the same structure and the same values at every node.",
+            "audio_file": "same-tree-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to compare both shape and values. A few clarifying questions: can the trees be empty? And what type are the node values?",
+            "audio_file": "same-tree-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, either or both trees can be empty, meaning the root is null. Node values are integers. The number of nodes ranges from zero to one hundred.",
+            "audio_file": "same-tree-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about duplicates? Can the same value appear more than once in a tree?",
+            "audio_file": "same-tree-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, duplicates are allowed. The key point is that every corresponding position must have the same value.",
+            "audio_file": "same-tree-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So if both roots are null, return true. If only one is null, return false. Otherwise, check that values match and both subtrees are identical. Let me walk through some approaches.",
+            "audio_file": "same-tree-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "recursive-dfs",
+        "level": 1,
+        "title": "Recursive DFS",
+        "diagram": "graph TD\n    S[\"isSameTree p=1, q=1\"]:::blue --> L[\"isSameTree p=2, q=2\"]:::blue\n    S --> R[\"isSameTree p=3, q=3\"]:::blue\n    L --> LL[\"isSameTree null, null → true\"]:::blue\n    L --> LR[\"isSameTree null, null → true\"]:::blue\n    R --> RL[\"isSameTree null, null → true\"]:::blue\n    R --> RR[\"isSameTree null, null → true\"]:::blue\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a recursive approach using depth-first search. The base cases are straightforward: if both nodes are null, return true. If only one is null, or the values differ, return false.",
+            "audio_file": "same-tree-recursive-dfs-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then I recursively call the function on the left children of both trees and the right children of both trees. Only if both calls return true do we return true.",
+            "audio_file": "same-tree-recursive-dfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through an example. Say both trees are: root one, left child two, right child three.",
+            "audio_file": "same-tree-recursive-dfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We start at the roots. Both are one, so values match. We recurse left: both are two, values match. Then we recurse on their children, which are all null, so we return true. Same on the right with three. Everything matches, so the result is true.",
+            "audio_file": "same-tree-recursive-dfs-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity?",
+            "audio_file": "same-tree-recursive-dfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n, where n is the smaller number of nodes, since we visit each node once. Space complexity is O of h, where h is the tree height, due to the recursion stack. In the worst case of a skewed tree, that becomes O of n.",
+            "audio_file": "same-tree-recursive-dfs-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "iterative-bfs",
+        "level": 2,
+        "title": "Iterative BFS with Queue",
+        "diagram": "graph TD\n    Q0[\"Queue: pair 1,1\"]:::purple --> CHECK1[\"Dequeue: 1==1 ✓\"]:::purple\n    CHECK1 --> Q1[\"Queue: pair 2,2 | pair 3,3\"]:::purple\n    Q1 --> CHECK2[\"Dequeue: 2==2 ✓\"]:::purple\n    CHECK2 --> Q2[\"Queue: pair 3,3\"]:::purple\n    Q2 --> CHECK3[\"Dequeue: 3==3 ✓\"]:::purple\n    CHECK3 --> DONE[\"Queue empty → true\"]:::purple\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "An alternative is an iterative approach using breadth-first search. I use a queue that stores pairs of nodes, one from each tree. I start by adding both roots as a pair.",
+            "audio_file": "same-tree-iterative-bfs-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each pair I dequeue, if both are null I continue. If only one is null or values differ, I return false. Otherwise, I enqueue the left children as a pair and the right children as a pair.",
+            "audio_file": "same-tree-iterative-bfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Use the same example: root one, left two, right three for both trees.",
+            "audio_file": "same-tree-iterative-bfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I enqueue the pair one and one. I dequeue it, values match, then enqueue pairs two-two and three-three. I dequeue two-two, values match, their children are null so nothing is added. I dequeue three-three, same thing. The queue is empty, so I return true.",
+            "audio_file": "same-tree-iterative-bfs-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does this compare to the recursive approach in complexity?",
+            "audio_file": "same-tree-iterative-bfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is still O of n. Space is O of n in the worst case because the queue can hold up to an entire level of the tree. For a balanced tree, the widest level has about n over two nodes. The advantage is we avoid recursion stack overflow on very deep trees.",
+            "audio_file": "same-tree-iterative-bfs-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        A[\"Recursive DFS\nO of n time\nO of h space\"]:::blue\n        B[\"Iterative BFS\nO of n time\nO of n space\"]:::purple\n    end\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Good work. Which approach would you recommend in an interview?",
+            "audio_file": "same-tree-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I'd go with the recursive DFS approach. It's clean, easy to explain, and has better space complexity for balanced trees. The iterative BFS is worth mentioning as a follow-up since it avoids stack overflow on extremely deep trees.",
+            "audio_file": "same-tree-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Agreed. The recursive solution is elegant and shows strong understanding of tree traversal. Both are valid and run in linear time.",
+            "audio_file": "same-tree-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

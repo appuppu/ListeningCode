@@ -1,0 +1,238 @@
+{
+  "id": "car-fleet",
+  "title": "Counting Car Fleets Arriving at a Destination",
+  "difficulty": "medium",
+  "category": "stack",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "catch up to",
+        "explanation": "To reach the same position as something ahead of you"
+      },
+      {
+        "phrase": "fleet of cars",
+        "explanation": "A group of cars traveling together at the same speed"
+      },
+      {
+        "phrase": "time to reach",
+        "explanation": "The duration needed to arrive at a destination"
+      },
+      {
+        "phrase": "work backwards from",
+        "explanation": "To start analyzing from the end toward the beginning"
+      },
+      {
+        "phrase": "bottleneck effect",
+        "explanation": "When a slower entity limits the speed of those behind it"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Car Fleet",
+        "definition": "A group of one or more cars that travel at the speed of the slowest car because they cannot pass each other"
+      },
+      {
+        "term": "Monotonic Stack",
+        "definition": "A stack where elements are kept in strictly increasing or decreasing order"
+      },
+      {
+        "term": "Sorting by Key",
+        "definition": "Arranging elements based on a specific attribute such as position"
+      },
+      {
+        "term": "Time to Destination",
+        "definition": "Calculated as the remaining distance divided by speed"
+      },
+      {
+        "term": "Greedy Comparison",
+        "definition": "Making locally optimal choices at each step to build a global solution"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Arrays.sort(int[][])",
+        "description": "Sorts a two-dimensional array, useful for sorting cars by position"
+      },
+      {
+        "signature": "Stack.push(E item)",
+        "description": "Pushes an element onto the top of the stack"
+      },
+      {
+        "signature": "Stack.peek()",
+        "description": "Returns the top element without removing it"
+      },
+      {
+        "signature": "Stack.size()",
+        "description": "Returns the number of elements in the stack"
+      }
+    ]
+  },
+  "concept": "Given an array of car positions and their speeds, all heading toward a common destination at a given target position, determine how many distinct car fleets will arrive at the destination. A car fleet is formed when a faster car catches up to a slower car ahead; they then travel together at the slower car's speed.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force Simulation",
+      "time_complexity": "O(n * target)",
+      "space_complexity": "O(n)",
+      "summary": "Simulate each time step, moving all cars and merging them into fleets when they meet or overlap."
+    },
+    {
+      "level": 2,
+      "label": "Sort and Compare Arrival Times",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "summary": "Sort cars by position, compute each car's time to reach the target, and count how many distinct fleets form by comparing arrival times from the car closest to the target backward."
+    },
+    {
+      "level": 3,
+      "label": "Stack-Based Fleet Counting",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "summary": "Sort by position, then use a stack to track fleet leaders. Push arrival times and pop when a car merges into the fleet ahead."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Car Fleet Problem",
+        "diagram": "graph TD\n    style T fill:#f87171,color:#fff\n    style C0 fill:#f87171,color:#fff\n    style C1 fill:#f87171,color:#fff\n    style C2 fill:#f87171,color:#fff\n    T[\"Target = 12\"]\n    C0[\"Car A: pos=10, speed=2\"]\n    C1[\"Car B: pos=8, speed=4\"]\n    C2[\"Car C: pos=0, speed=1\"]\n    C0 -->|\"time=1.0\"| T\n    C1 -->|\"time=1.0\"| T\n    C2 -->|\"time=12.0\"| T",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's work on a problem. Imagine cars on a one-lane road, all heading toward the same destination. Each car has a starting position and a speed. Cars cannot pass each other. If a faster car catches a slower one, they form a fleet and travel at the slower speed. Given the target position, an array of positions, and an array of speeds, return the number of car fleets that arrive at the target.",
+            "audio_file": "car-fleet-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Interesting. So if a car catches up to another before reaching the target, they merge into one fleet. Can positions be unsorted? And are all positions unique?",
+            "audio_file": "car-fleet-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, positions can be given in any order, but every position is unique. Positions and speeds are positive integers. The array length can be up to ten thousand.",
+            "audio_file": "car-fleet-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What if the array is empty or has one car?",
+            "audio_file": "car-fleet-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "If empty, return zero. One car means one fleet. Let's use this example: target equals twelve, positions are ten, eight, zero, and speeds are two, four, one.",
+            "audio_file": "car-fleet-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. Car A at ten with speed two takes one second. Car B at eight with speed four also takes one second, so B catches A and they form one fleet. Car C at zero with speed one takes twelve seconds and never catches up. So the answer is two fleets. Let me think about approaches.",
+            "audio_file": "car-fleet-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Simulation",
+        "diagram": "graph TD\n    style S0 fill:#60a5fa,color:#fff\n    style S1 fill:#60a5fa,color:#fff\n    style S2 fill:#60a5fa,color:#fff\n    style R fill:#60a5fa,color:#fff\n    S0[\"t=0: A=10, B=8, C=0\"]\n    S1[\"t=1: A=12 arrives, B=12 arrives, C=1\"]\n    S2[\"t=12: C=12 arrives\"]\n    R[\"Result: 2 fleets\"]\n    S0 --> S1\n    S1 --> S2\n    S2 --> R",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest idea is to simulate time step by step. At each step, move every car forward by its speed. If a car reaches or passes a car ahead, merge them into a fleet. Continue until all cars reach the target, then count the fleets.",
+            "audio_file": "car-fleet-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of that approach?",
+            "audio_file": "car-fleet-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "It's O of n times target in the worst case because we might simulate up to target time steps, and at each step we check all n cars. Space is O of n to store car states. This is too slow for large targets.",
+            "audio_file": "car-fleet-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. Can you skip the simulation entirely?",
+            "audio_file": "car-fleet-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "sort-compare",
+        "level": 2,
+        "title": "Sort and Compare Arrival Times",
+        "diagram": "graph TD\n    style S1 fill:#a78bfa,color:#fff\n    style S2 fill:#a78bfa,color:#fff\n    style S3 fill:#a78bfa,color:#fff\n    style S4 fill:#a78bfa,color:#fff\n    style R fill:#a78bfa,color:#fff\n    S1[\"Sort by position desc: A=10, B=8, C=0\"]\n    S2[\"Arrival times: A=1.0, B=1.0, C=12.0\"]\n    S3[\"A: new fleet, count=1. B: 1.0 <= 1.0, merges with A\"]\n    S4[\"C: 12.0 > 1.0, new fleet, count=2\"]\n    R[\"Answer: 2 fleets\"]\n    S1 --> S2 --> S3 --> S4 --> R",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of simulating, I can calculate each car's arrival time directly as target minus position divided by speed. Then I sort cars by position in descending order, starting from the car closest to the target. I walk through the sorted list and track the current maximum arrival time. If a car's time exceeds the current max, it starts a new fleet.",
+            "audio_file": "car-fleet-sort-compare-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why does sorting by position and comparing times work?",
+            "audio_file": "car-fleet-sort-compare-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "A car behind can only merge with the car directly ahead. If a behind car's arrival time is less than or equal to the car ahead, it catches up and merges. If its time is greater, it's too slow to catch up and forms a new fleet. By processing from front to back, we just compare against the current fleet leader's time.",
+            "audio_file": "car-fleet-sort-compare-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. The time complexity is O of n log n for sorting, and space is O of n. Can you formalize this with a stack?",
+            "audio_file": "car-fleet-sort-compare-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Stack-Based Fleet Counting",
+        "diagram": "graph TD\n    style S1 fill:#fb923c,color:#fff\n    style S2 fill:#fb923c,color:#fff\n    style S3 fill:#fb923c,color:#fff\n    style S4 fill:#fb923c,color:#fff\n    style R fill:#fb923c,color:#fff\n    S1[\"Sort desc by position: A=10, B=8, C=0\"]\n    S2[\"Push A time=1.0 → Stack: [1.0]\"]\n    S3[\"B time=1.0 ≤ top 1.0 → skip. Stack: [1.0]\"]\n    S4[\"C time=12.0 > top 1.0 → push. Stack: [1.0, 12.0]\"]\n    R[\"Stack size = 2 fleets\"]\n    S1 --> S2 --> S3 --> S4 --> R",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I'll use a stack to make the logic cleaner. After sorting by position descending, I iterate through each car. I compute its arrival time. If the stack is empty or the time is greater than the top of the stack, I push it. Otherwise, the car merges with the fleet on top. The final stack size is the number of fleets.",
+            "audio_file": "car-fleet-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example with the stack.",
+            "audio_file": "car-fleet-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sorted by position descending: car A at ten, car B at eight, car C at zero. Push A's time one point zero. B's time is one point zero, not greater than the top, so skip it. C's time is twelve point zero, greater than the top, so push it. Stack has two elements, so the answer is two.",
+            "audio_file": "car-fleet-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The complexity is the same as the previous approach, O of n log n time and O of n space, but the stack gives a clean structure. Well done.",
+            "audio_file": "car-fleet-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary of Approaches",
+        "diagram": "graph TD\n    subgraph Comparison\n    BF[\"Brute Force\\nO of n times target\\nO of n space\"]\n    SC[\"Sort and Compare\\nO of n log n\\nO of n space\"]\n    ST[\"Stack-Based\\nO of n log n\\nO of n space\"]\n    end\n    style BF fill:#60a5fa,color:#fff\n    style SC fill:#a78bfa,color:#fff\n    style ST fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. You moved from a slow simulation to an efficient sort-and-compare solution, and then structured it neatly with a stack. The key insight is that calculating arrival times and processing cars from nearest to farthest lets us determine fleets without simulation.",
+            "audio_file": "car-fleet-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes. The critical realization is that a car behind with a shorter arrival time will always merge into the fleet ahead. Sorting by position and using a stack makes this comparison straightforward. The stack naturally tracks fleet leaders.",
+            "audio_file": "car-fleet-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

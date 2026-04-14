@@ -1,0 +1,213 @@
+{
+  "id": "add-two-numbers",
+  "title": "Adding Two Numbers Represented as Linked Lists",
+  "difficulty": "medium",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "traverse the list",
+        "explanation": "Move through each node of a linked list one by one from head to tail"
+      },
+      {
+        "phrase": "carry over",
+        "explanation": "When a sum exceeds nine, the extra digit is carried to the next position"
+      },
+      {
+        "phrase": "in reverse order",
+        "explanation": "The least significant digit comes first, opposite of normal number representation"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that may require special handling"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "Manually step through the algorithm with a concrete input to verify correctness"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Singly Linked List",
+        "definition": "A data structure where each node holds a value and a pointer to the next node"
+      },
+      {
+        "term": "Dummy Node",
+        "definition": "A placeholder node placed before the head to simplify insertion logic"
+      },
+      {
+        "term": "Carry",
+        "definition": "The overflow value when a digit sum is ten or greater, passed to the next position"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time grows relative to input size"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "new ListNode(int val)",
+        "description": "Creates a new linked list node with the given value"
+      },
+      {
+        "signature": "node.next",
+        "description": "Accesses or sets the pointer to the next node in the list"
+      },
+      {
+        "signature": "node.val",
+        "description": "Accesses the integer value stored in the current node"
+      },
+      {
+        "signature": "Math.floor(int a / int b)",
+        "description": "Returns the integer quotient, used to extract the carry digit"
+      }
+    ]
+  },
+  "concept": "Given two non-empty linked lists representing two non-negative integers stored in reverse order, where each node contains a single digit, add the two numbers and return the sum as a linked list in reverse order.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Convert to Integer and Back",
+      "time_complexity": "O(n + m)",
+      "space_complexity": "O(max(n, m))",
+      "summary": "Convert both linked lists to integers, add them, then convert the sum back to a linked list. Simple but fails for very large numbers."
+    },
+    {
+      "level": 2,
+      "label": "Iterative Digit-by-Digit Addition with Carry",
+      "time_complexity": "O(max(n, m))",
+      "space_complexity": "O(max(n, m))",
+      "summary": "Traverse both lists simultaneously, adding digits and tracking carry, building the result list node by node using a dummy head."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph LR\n    subgraph List1[\"List 1: 342\"]\n        A1[\"2\"]:::red --> A2[\"4\"]:::red --> A3[\"3\"]:::red\n    end\n    subgraph List2[\"List 2: 465\"]\n        B1[\"5\"]:::red --> B2[\"6\"]:::red --> B3[\"4\"]:::red\n    end\n    subgraph Result[\"Result: 807\"]\n        C1[\"7\"] --> C2[\"0\"] --> C3[\"8\"]\n    end\n    List1 -.->|\" + \"| List2\n    List2 -.->|\" = \"| Result\n    classDef red fill:#f87171,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given two linked lists, each representing a non-negative integer. The digits are stored in reverse order, so the ones digit comes first. Add the two numbers and return the sum as a new linked list, also in reverse order.",
+            "audio_file": "add-two-numbers-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me make sure I understand. If the number is three hundred forty-two, the list would be two, then four, then three. Is each node guaranteed to hold a single digit from zero to nine?",
+            "audio_file": "add-two-numbers-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. Each node holds one digit, zero through nine. Both lists are non-empty and don't have leading zeros, except for the number zero itself.",
+            "audio_file": "add-two-numbers-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Can the two lists have different lengths? And is there a limit on how large the numbers can be?",
+            "audio_file": "add-two-numbers-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the lists can differ in length. Each list has between one and one hundred nodes, so the numbers can be very large, well beyond what a normal integer can hold.",
+            "audio_file": "add-two-numbers-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to traverse both lists, add corresponding digits with a carry, and build a new linked list for the result. Let me start with a straightforward approach.",
+            "audio_file": "add-two-numbers-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Convert to Integer and Back",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Convert to Numbers\"]\n        A[\"2 → 4 → 3\"]:::blue --> B[\"342\"]:::blue\n        C[\"5 → 6 → 4\"]:::blue --> D[\"465\"]:::blue\n    end\n    subgraph Step2[\"Step 2: Add\"]\n        E[\"342 + 465 = 807\"]:::blue\n    end\n    subgraph Step3[\"Step 3: Convert Back\"]\n        F[\"807\"]:::blue --> G[\"7 → 0 → 8\"]:::blue\n    end\n    Step1 --> Step2 --> Step3\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is simple. I traverse each list and reconstruct the actual integer. For list two, four, three, I build three hundred forty-two. Then I add the two integers and convert the sum back into a linked list in reverse order.",
+            "audio_file": "add-two-numbers-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's a clear approach. What's the time and space complexity?",
+            "audio_file": "add-two-numbers-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n plus m to traverse both lists, and O of max n m to build the result. Space is O of max n m for the output list. But there's a big problem: if the list has a hundred digits, the number is way too large to store in a long or even a big integer efficiently.",
+            "audio_file": "add-two-numbers-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. Integer overflow is a real concern. Can you think of a way to add the digits directly without converting to a full number?",
+            "audio_file": "add-two-numbers-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Iterative Digit-by-Digit Addition with Carry",
+        "diagram": "graph TD\n    subgraph Input[\"Input Lists\"]\n        L1[\"2 → 4 → 3\"]:::purple\n        L2[\"5 → 6 → 4\"]:::purple\n    end\n    subgraph Pass1[\"Position 1\"]\n        P1[\"2 + 5 = 7, carry 0\"]:::purple\n    end\n    subgraph Pass2[\"Position 2\"]\n        P2[\"4 + 6 = 10, write 0, carry 1\"]:::purple\n    end\n    subgraph Pass3[\"Position 3\"]\n        P3[\"3 + 4 + 1 = 8, carry 0\"]:::purple\n    end\n    subgraph Result[\"Result\"]\n        R[\"7 → 0 → 8\"]:::purple\n    end\n    Input --> Pass1 --> Pass2 --> Pass3 --> Result\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of converting, I process both lists digit by digit, just like manual addition. I use a dummy node to simplify building the result. I initialize a carry variable to zero.",
+            "audio_file": "add-two-numbers-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through the example. List one is two, four, three and list two is five, six, four. At position one, two plus five is seven, carry is zero. I create a node with seven.",
+            "audio_file": "add-two-numbers-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At position two, four plus six is ten. I write zero and carry one. At position three, three plus four plus the carry one equals eight, carry zero. The result list is seven, zero, eight.",
+            "audio_file": "add-two-numbers-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What if one list is longer, or there's a carry left after both lists end?",
+            "audio_file": "add-two-numbers-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I keep looping while either list has nodes or carry is non-zero. If one list is exhausted, I treat its digit as zero. If carry remains after both lists end, I add one more node. This handles cases like five plus five giving a new node with one.",
+            "audio_file": "add-two-numbers-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The time complexity is O of max n m since we visit each node once. Space is the same for the output list. This is efficient and avoids overflow. Well done.",
+            "audio_file": "add-two-numbers-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Compare[\"Approach Comparison\"]\n        A[\"Level 1: Convert to Integer\nO of n+m time\nOverflow risk\"]:::blue\n        B[\"Level 2: Digit-by-Digit\nO of max n,m time\nNo overflow\"]:::purple\n    end\n    A -->|\"Improved\"| B\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's recap. The brute force converts lists to integers, which is simple but fails for large inputs due to overflow.",
+            "audio_file": "add-two-numbers-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach adds digits one by one with a carry, using a dummy node. It runs in O of max n m time and handles all edge cases, including different lengths and a final carry. The key insight is that reverse order actually helps us, because addition naturally starts from the least significant digit.",
+            "audio_file": "add-two-numbers-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

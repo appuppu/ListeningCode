@@ -1,0 +1,312 @@
+{
+  "id": "valid-anagram",
+  "title": "Checking if Two Strings Are Anagrams",
+  "difficulty": "easy",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "character frequency",
+        "explanation": "How many times each character appears in a string"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that may require special handling"
+      },
+      {
+        "phrase": "time complexity",
+        "explanation": "A measure of how the running time of an algorithm grows as the input size increases"
+      },
+      {
+        "phrase": "space complexity",
+        "explanation": "A measure of how much extra memory an algorithm uses relative to input size"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The most straightforward solution that checks all possibilities without clever optimization"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Anagram",
+        "definition": "A word or phrase formed by rearranging all the letters of another word or phrase, using each letter exactly once"
+      },
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs and provides fast lookup, insertion, and deletion by key"
+      },
+      {
+        "term": "Sorting",
+        "definition": "Arranging elements in a specific order, such as alphabetical or numerical"
+      },
+      {
+        "term": "Character Array",
+        "definition": "An array where each element is a single character, often used to manipulate strings"
+      },
+      {
+        "term": "Frequency Count",
+        "definition": "A technique of counting how many times each distinct element appears in a collection"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "String.toCharArray()",
+        "description": "Converts a string into an array of characters"
+      },
+      {
+        "signature": "Arrays.sort(char[])",
+        "description": "Sorts a character array in ascending alphabetical order"
+      },
+      {
+        "signature": "Arrays.equals(char[], char[])",
+        "description": "Compares two character arrays element by element and returns true if they are identical"
+      },
+      {
+        "signature": "HashMap.getOrDefault(key, defaultValue)",
+        "description": "Returns the value mapped to the key, or the default value if the key is not present"
+      },
+      {
+        "signature": "String.length()",
+        "description": "Returns the number of characters in the string"
+      }
+    ]
+  },
+  "concept": "Given two strings s and t, determine whether t is an anagram of s. Two strings are anagrams if they contain the exact same characters with the exact same frequencies, just in a different order.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Sorting Approach",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "summary": "Sort both strings and compare them directly. If the sorted versions are identical, the strings are anagrams."
+    },
+    {
+      "level": 2,
+      "label": "Hash Map Frequency Count",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a hash map to count character frequencies in the first string, then decrement counts using the second string. If all counts return to zero, the strings are anagrams."
+    },
+    {
+      "level": 3,
+      "label": "Fixed-Size Array Frequency Count",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use a fixed-size integer array of length 26 to track character frequencies. Since the alphabet size is constant, space complexity is O of 1."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: two strings s and t\"] --> B{\"Same length?\"}\n    B -- No --> C[\"Return false immediately\"]\n    B -- Yes --> D[\"Compare character frequencies\"]\n    D --> E{\"All frequencies match?\"}\n    E -- Yes --> F[\"Return true — they are anagrams\"]\n    E -- No --> G[\"Return false — not anagrams\"]\n    style A fill:#f87171,color:#000\n    style F fill:#f87171,color:#000\n    style G fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's work through a string problem today. I'm going to give you two strings, and I'd like you to write a function that determines whether one string is an anagram of the other. For example, if I give you the strings 'listen' and 'silent', your function should return true because they contain the exact same letters, just rearranged. Does that make sense so far?",
+            "audio_file": "valid-anagram-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes, that makes sense. So I need to check if both strings use the exact same characters with the exact same frequencies. Before I start, I have a few clarifying questions. First, can I assume the strings only contain lowercase English letters, or could there be uppercase letters, digits, or special characters?",
+            "audio_file": "valid-anagram-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good question. For this problem, you can assume both strings consist only of lowercase English letters, so just the 26 letters from a to z. No spaces, digits, or special characters.",
+            "audio_file": "valid-anagram-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it, that simplifies things. My next question is about edge cases. What if one or both of the strings are empty? And can the strings be different lengths?",
+            "audio_file": "valid-anagram-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "If both strings are empty, you should return true since they trivially have the same characters. And yes, the strings can be different lengths. If they are different lengths, they obviously cannot be anagrams.",
+            "audio_file": "valid-anagram-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "That makes sense. And what about the expected return type? Should the function return a boolean?",
+            "audio_file": "valid-anagram-intro-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, return a boolean. True if the two strings are anagrams of each other, false otherwise.",
+            "audio_file": "valid-anagram-intro-i4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright, let me summarize the problem. I'm given two strings s and t consisting of lowercase English letters. I need to return true if t is an anagram of s, meaning both strings contain the same characters with the same frequencies. An early check would be that if the lengths differ, I can immediately return false. I'll think about a few approaches, starting from the most straightforward one.",
+            "audio_file": "valid-anagram-intro-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Sorting Approach",
+        "diagram": "graph TD\n    A[\"Input: s = 'anagram', t = 'nagaram'\"] --> B[\"Convert both strings to character arrays\"]\n    B --> C[\"Sort both arrays\"]\n    C --> D[\"s sorted: 'a a a g m n r'\"]\n    C --> E[\"t sorted: 'a a a g m n r'\"]\n    D --> F{\"Are sorted arrays equal?\"}\n    E --> F\n    F -- Yes --> G[\"Return true\"]\n    F -- No --> H[\"Return false\"]\n    style A fill:#60a5fa,color:#000\n    style C fill:#60a5fa,color:#000\n    style G fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is the sorting approach. The key insight is that if two strings are anagrams, then when you sort the characters in both strings, the results will be identical. For example, sorting both 'listen' and 'silent' would give you 'e i l n s t' in both cases.",
+            "audio_file": "valid-anagram-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's a reasonable starting point. Walk me through the steps.",
+            "audio_file": "valid-anagram-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "First, I check if the two strings have different lengths. If they do, I return false right away. Then, I convert both strings into character arrays using the toCharArray method. Next, I sort both arrays using Arrays dot sort. Finally, I compare the two sorted arrays using Arrays dot equals. If they match, I return true. Otherwise, I return false.",
+            "audio_file": "valid-anagram-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What is the time and space complexity of this approach?",
+            "audio_file": "valid-anagram-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n log n because sorting is the dominant operation. The space complexity is O of n because we create character arrays from both strings. This works correctly, but we can do better than n log n.",
+            "audio_file": "valid-anagram-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashmap",
+        "level": 2,
+        "title": "Hash Map Frequency Count",
+        "diagram": "graph TD\n    A[\"Input: s = 'anagram', t = 'nagaram'\"] --> B[\"Create a HashMap for character counts\"]\n    B --> C[\"Iterate through s: increment count for each char\"]\n    C --> D[\"Map: {a:3, n:1, g:1, r:1, m:1}\"]\n    D --> E[\"Iterate through t: decrement count for each char\"]\n    E --> F[\"Map: {a:0, n:0, g:0, r:0, m:0}\"]\n    F --> G{\"All counts are zero?\"}\n    G -- Yes --> H[\"Return true\"]\n    G -- No --> I[\"Return false\"]\n    style A fill:#a78bfa,color:#000\n    style D fill:#a78bfa,color:#000\n    style F fill:#a78bfa,color:#000\n    style H fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "To improve the time complexity, I can use a hash map to count character frequencies. The idea is simple. Two strings are anagrams if and only if every character appears the same number of times in both strings.",
+            "audio_file": "valid-anagram-hashmap-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "OK, how would you implement that?",
+            "audio_file": "valid-anagram-hashmap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "First, I do the same length check as before. Then I create a HashMap where the key is a character and the value is its count. I iterate through the first string s and for each character, I increment its count using getOrDefault with a default of zero plus one.",
+            "audio_file": "valid-anagram-hashmap-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then I iterate through the second string t and decrement the count for each character. If at any point a character's count goes below zero, it means t has a character that s doesn't have, or has more of it, so I return false. After processing all characters, if no count went negative, I return true.",
+            "audio_file": "valid-anagram-hashmap-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why does it work to only check for negative counts? Don't you need to verify all counts are exactly zero?",
+            "audio_file": "valid-anagram-hashmap-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Great observation. Since we already verified that both strings have the same length, if no count goes below zero during the second pass, then all counts must end at exactly zero. The total increments from the first string equal the total decrements from the second string because both strings have the same length.",
+            "audio_file": "valid-anagram-hashmap-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What are the time and space complexities?",
+            "audio_file": "valid-anagram-hashmap-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n because we iterate through each string once, and each hash map operation is O of 1 on average. The space complexity is O of n in the worst case because the hash map could store up to n distinct characters. However, since we're limited to 26 lowercase letters, the space is effectively bounded, which leads me to an even cleaner solution.",
+            "audio_file": "valid-anagram-hashmap-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Fixed-Size Array Frequency Count",
+        "diagram": "graph TD\n    A[\"Input: s = 'anagram', t = 'nagaram'\"] --> B[\"Create int array of size 26, all zeros\"]\n    B --> C[\"For each char in s: count[char - 'a']++\"]\n    C --> D[\"Array represents frequency of each letter\"]\n    D --> E[\"For each char in t: count[char - 'a']--\"]\n    E --> F{\"Any count not equal to zero?\"}\n    F -- Yes --> G[\"Return false\"]\n    F -- No --> H[\"Return true\"]\n    style A fill:#fb923c,color:#000\n    style B fill:#fb923c,color:#000\n    style D fill:#fb923c,color:#000\n    style H fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Since the problem states that strings contain only lowercase English letters, I can replace the hash map with a fixed-size integer array of length 26. Each index corresponds to a letter: index zero for 'a', index one for 'b', and so on up to index 25 for 'z'.",
+            "audio_file": "valid-anagram-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How do you map a character to its array index?",
+            "audio_file": "valid-anagram-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I subtract the character 'a' from the current character. In Java, characters have numeric values, so 'a' minus 'a' gives zero, 'b' minus 'a' gives one, and so on. This maps each letter directly to an index in the array.",
+            "audio_file": "valid-anagram-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The algorithm is the same as the hash map approach. First, check if the lengths differ. Then iterate through string s and increment the count at the corresponding index. Next, iterate through string t and decrement the count. Finally, check if all 26 entries in the array are zero. If they are, return true. Otherwise, return false.",
+            "audio_file": "valid-anagram-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does this improve on the hash map version?",
+            "audio_file": "valid-anagram-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity remains O of n since we still iterate through both strings once. But the space complexity improves to O of 1, because the array is always size 26 regardless of the input size. Array access is also faster than hash map operations in practice because there's no hashing overhead. This makes it both theoretically optimal and practically fast.",
+            "audio_file": "valid-anagram-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Could you also optimize by combining both loops into one?",
+            "audio_file": "valid-anagram-optimal-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes, since both strings have the same length, I can use a single loop. In each iteration, I increment the count for the character from s and decrement the count for the character from t. After the loop, I check if all counts are zero. This reduces the number of passes but doesn't change the overall time complexity. It's still O of n.",
+            "audio_file": "valid-anagram-optimal-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Solution Comparison",
+        "diagram": "graph TD\n    subgraph Comparison[\"Approach Comparison\"]\n        A[\"Level 1: Sorting\\nTime: O of n log n\\nSpace: O of n\"] \n        B[\"Level 2: Hash Map\\nTime: O of n\\nSpace: O of n\"]\n        C[\"Level 3: Fixed Array\\nTime: O of n\\nSpace: O of 1\"]\n    end\n    A --> D{\"Key Insight\"}\n    B --> D\n    C --> D\n    D --> E[\"Anagrams have identical\\ncharacter frequencies\"]\n    style A fill:#60a5fa,color:#000\n    style B fill:#a78bfa,color:#000\n    style C fill:#fb923c,color:#000\n    style E fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Let's summarize the three approaches we discussed today.",
+            "audio_file": "valid-anagram-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. The first approach was sorting. We sort both strings and compare them. It's simple and easy to implement, but the time complexity is O of n log n due to sorting, and the space complexity is O of n for the character arrays.",
+            "audio_file": "valid-anagram-summary-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The second approach used a hash map to count character frequencies. We iterate through the first string to build a frequency map, then iterate through the second string to verify. This brings the time complexity down to O of n, though the space is still O of n for the hash map.",
+            "audio_file": "valid-anagram-summary-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The third and optimal approach replaces the hash map with a fixed-size integer array of length 26. Since the input is limited to lowercase English letters, the array size is constant. This gives us O of n time complexity and O of 1 space complexity, making it the best solution both in theory and in practice.",
+            "audio_file": "valid-anagram-summary-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. The key takeaway here is that when the character set is fixed and known, using an array instead of a hash map is a clean optimization. It eliminates hashing overhead and reduces space complexity to constant. Well done.",
+            "audio_file": "valid-anagram-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

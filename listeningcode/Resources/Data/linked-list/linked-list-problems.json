@@ -1,0 +1,90 @@
+[
+  {
+    "id": "reverse-linked-list",
+    "title": "Reversing a Linked List",
+    "difficulty": "easy",
+    "sort_order": 0,
+    "content_file": "reverse-linked-list.json",
+    "leetcode_url": "https://leetcode.com/problems/reverse-linked-list/"
+  },
+  {
+    "id": "merge-two-sorted-lists",
+    "title": "Merging Two Sorted Linked Lists",
+    "difficulty": "easy",
+    "sort_order": 1,
+    "content_file": "merge-two-sorted-lists.json",
+    "leetcode_url": "https://leetcode.com/problems/merge-two-sorted-lists/"
+  },
+  {
+    "id": "linked-list-cycle",
+    "title": "Detecting a Cycle in a Linked List",
+    "difficulty": "easy",
+    "sort_order": 2,
+    "content_file": "linked-list-cycle.json",
+    "leetcode_url": "https://leetcode.com/problems/linked-list-cycle/"
+  },
+  {
+    "id": "reorder-list",
+    "title": "Reordering a Linked List by Interleaving Ends",
+    "difficulty": "medium",
+    "sort_order": 3,
+    "content_file": "reorder-list.json",
+    "leetcode_url": "https://leetcode.com/problems/reorder-list/"
+  },
+  {
+    "id": "remove-nth-node-from-end-of-list",
+    "title": "Removing the Nth Node From the End of a List",
+    "difficulty": "medium",
+    "sort_order": 4,
+    "content_file": "remove-nth-node-from-end-of-list.json",
+    "leetcode_url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/"
+  },
+  {
+    "id": "copy-list-with-random-pointer",
+    "title": "Deep Copying a Linked List With Random Pointers",
+    "difficulty": "medium",
+    "sort_order": 5,
+    "content_file": "copy-list-with-random-pointer.json",
+    "leetcode_url": "https://leetcode.com/problems/copy-list-with-random-pointer/"
+  },
+  {
+    "id": "add-two-numbers",
+    "title": "Adding Two Numbers Represented as Linked Lists",
+    "difficulty": "medium",
+    "sort_order": 6,
+    "content_file": "add-two-numbers.json",
+    "leetcode_url": "https://leetcode.com/problems/add-two-numbers/"
+  },
+  {
+    "id": "find-the-duplicate-number",
+    "title": "Finding the Duplicate in an Array of N Plus One Integers",
+    "difficulty": "medium",
+    "sort_order": 7,
+    "content_file": "find-the-duplicate-number.json",
+    "leetcode_url": "https://leetcode.com/problems/find-the-duplicate-number/"
+  },
+  {
+    "id": "lru-cache",
+    "title": "Designing a Least Recently Used Cache",
+    "difficulty": "medium",
+    "sort_order": 8,
+    "content_file": "lru-cache.json",
+    "leetcode_url": "https://leetcode.com/problems/lru-cache/"
+  },
+  {
+    "id": "merge-k-sorted-lists",
+    "title": "Merging K Sorted Linked Lists",
+    "difficulty": "hard",
+    "sort_order": 9,
+    "content_file": "merge-k-sorted-lists.json",
+    "leetcode_url": "https://leetcode.com/problems/merge-k-sorted-lists/"
+  },
+  {
+    "id": "reverse-nodes-in-k-group",
+    "title": "Reversing Nodes in Groups of K",
+    "difficulty": "hard",
+    "sort_order": 10,
+    "content_file": "reverse-nodes-in-k-group.json",
+    "leetcode_url": "https://leetcode.com/problems/reverse-nodes-in-k-group/"
+  }
+]

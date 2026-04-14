@@ -1,0 +1,232 @@
+{
+  "id": "valid-parentheses",
+  "title": "Checking if Parentheses Are Balanced",
+  "difficulty": "easy",
+  "category": "stack",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific test case showing how the algorithm works"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      },
+      {
+        "phrase": "pop off the stack",
+        "explanation": "To remove and return the top element from a stack data structure"
+      },
+      {
+        "phrase": "time complexity",
+        "explanation": "A measure of how the running time grows as the input size increases"
+      },
+      {
+        "phrase": "map to",
+        "explanation": "To associate one value with another, often using a hash map"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Stack",
+        "definition": "A last-in, first-out data structure where elements are added and removed from the top"
+      },
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs for fast lookup"
+      },
+      {
+        "term": "Balanced Brackets",
+        "definition": "A string where every opening bracket has a corresponding closing bracket in the correct nesting order"
+      },
+      {
+        "term": "LIFO",
+        "definition": "Last In First Out, the ordering principle of a stack"
+      },
+      {
+        "term": "Character Array",
+        "definition": "A sequence of characters that can be iterated over one by one"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Stack.push(E item)",
+        "description": "Pushes an item onto the top of the stack"
+      },
+      {
+        "signature": "Stack.pop()",
+        "description": "Removes and returns the top item from the stack"
+      },
+      {
+        "signature": "Stack.isEmpty()",
+        "description": "Returns true if the stack has no elements"
+      },
+      {
+        "signature": "Map.get(Object key)",
+        "description": "Returns the value associated with the given key, or null if not found"
+      },
+      {
+        "signature": "String.toCharArray()",
+        "description": "Converts a string into an array of characters"
+      }
+    ]
+  },
+  "concept": "Given a string containing only the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. A string is valid if every opening bracket has a matching closing bracket in the correct order.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Repeated Replacement",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(n)",
+      "summary": "Repeatedly scan the string and remove adjacent matching pairs until no more can be removed. If the string becomes empty, it is balanced."
+    },
+    {
+      "level": 2,
+      "label": "Stack-Based Matching",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a stack to push opening brackets and pop when a matching closing bracket appears. If the stack is empty at the end, the string is balanced."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: '( { [ ] } )'\"] --> B{\"Is every bracket matched?\"}\n    B -->|Yes| C[\"Return true\"]\n    D[\"Input: '( { [ ) } ]'\"] --> E{\"Is every bracket matched?\"}\n    E -->|No| F[\"Return false\"]\n    style A fill:#f87171,color:#000\n    style D fill:#f87171,color:#000\n    style C fill:#4ade80,color:#000\n    style F fill:#fbbf24,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given a string that contains only bracket characters: round parentheses, curly braces, and square brackets. You need to determine whether the string is valid, meaning every opening bracket has a matching closing bracket in the correct nesting order.",
+            "audio_file": "valid-parentheses-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So the string only contains these six characters and nothing else? And I return true if they're all properly matched and nested?",
+            "audio_file": "valid-parentheses-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The string will only have bracket characters. For example, open paren, open curly, open square, close square, close curly, close paren would be valid. But open paren, close curly would not.",
+            "audio_file": "valid-parentheses-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? Should an empty string return true? And what's the maximum length?",
+            "audio_file": "valid-parentheses-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "An empty string is considered valid, so return true. The length can be up to ten thousand characters.",
+            "audio_file": "valid-parentheses-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to check that each opening bracket has a matching closing bracket of the same type, and they must be correctly nested. Let me think about approaches.",
+            "audio_file": "valid-parentheses-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Repeated Replacement",
+        "diagram": "graph TD\n    A[\"'( { [ ] } )'\"] -->|\"Find '[ ]'\"| B[\"'( { } )'\"]\n    B -->|\"Find '{ }'\"| C[\"'( )'\"]\n    C -->|\"Find '( )'\"| D[\"'' (empty)\"]\n    D --> E[\"Empty → return true\"]\n    style A fill:#60a5fa,color:#000\n    style B fill:#60a5fa,color:#000\n    style C fill:#60a5fa,color:#000\n    style D fill:#60a5fa,color:#000\n    style E fill:#4ade80,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a brute force approach. I can repeatedly scan the string for adjacent matching pairs like open paren close paren, open curly close curly, or open square close square, and remove them. I keep doing this until no more pairs can be removed.",
+            "audio_file": "valid-parentheses-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Okay, walk me through an example.",
+            "audio_file": "valid-parentheses-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Take the string open paren, open curly, open square, close square, close curly, close paren. First pass, I find the adjacent pair open square close square and remove it, leaving open paren, open curly, close curly, close paren. Next pass, I remove open curly close curly. Then I remove open paren close paren. The string is empty, so I return true.",
+            "audio_file": "valid-parentheses-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of this approach?",
+            "audio_file": "valid-parentheses-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each pass scans the string in O of n time, and in the worst case I remove one pair per pass, so there could be n over two passes. That gives O of n-squared overall. Space is O of n for creating new strings.",
+            "audio_file": "valid-parentheses-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you do better than n-squared?",
+            "audio_file": "valid-parentheses-brute-force-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Stack-Based Matching",
+        "diagram": "graph TD\n    A[\"Read '('\"] -->|Push| B[\"Stack: ( \"]\n    B --> C[\"Read '{' \"]\n    C -->|Push| D[\"Stack: ( { \"]\n    D --> E[\"Read '[' \"]\n    E -->|Push| F[\"Stack: ( { [ \"]\n    F --> G[\"Read ']' \"]\n    G -->|\"Pop '[', match!\"| H[\"Stack: ( { \"]\n    H --> I[\"Read '}' \"]\n    I -->|\"Pop '{', match!\"| J[\"Stack: ( \"]\n    J --> K[\"Read ')' \"]\n    K -->|\"Pop '(', match!\"| L[\"Stack: empty\"]\n    L --> M[\"Empty → return true\"]\n    style A fill:#a78bfa,color:#000\n    style D fill:#a78bfa,color:#000\n    style F fill:#a78bfa,color:#000\n    style H fill:#a78bfa,color:#000\n    style J fill:#a78bfa,color:#000\n    style L fill:#a78bfa,color:#000\n    style M fill:#4ade80,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Yes. I can use a stack. I iterate through the string once. When I see an opening bracket, I push it onto the stack. When I see a closing bracket, I pop from the stack and check if it matches. If the stack is empty at the end, the string is valid.",
+            "audio_file": "valid-parentheses-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the same example using the stack.",
+            "audio_file": "valid-parentheses-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For open paren, open curly, open square, close square, close curly, close paren: I push open paren, then open curly, then open square. Now I see close square. I pop open square from the stack — they match. Then close curly — I pop open curly, they match. Then close paren — I pop open paren, match again. Stack is empty, so return true.",
+            "audio_file": "valid-parentheses-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What happens if there's a mismatch or the stack is empty when you try to pop?",
+            "audio_file": "valid-parentheses-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If I try to pop from an empty stack or the popped bracket doesn't match the current closing bracket, I immediately return false. I can use a hash map to store the mapping from closing brackets to their matching opening brackets for quick lookup.",
+            "audio_file": "valid-parentheses-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "valid-parentheses-optimal-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n since I traverse the string once. Space complexity is O of n in the worst case, when all characters are opening brackets and they all get pushed onto the stack.",
+            "audio_file": "valid-parentheses-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Brute Force\\nO of n-squared time\\nO of n space\"] --> B[\"Stack-Based\\nO of n time\\nO of n space\"]\n    style A fill:#60a5fa,color:#000\n    style B fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great. Let's recap the two approaches.",
+            "audio_file": "valid-parentheses-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The brute force repeatedly removes adjacent matching pairs, running in O of n-squared time. The stack approach processes each character once, giving us O of n time and O of n space. The stack solution is the standard way to solve bracket matching problems because the last-in first-out property naturally handles nesting.",
+            "audio_file": "valid-parentheses-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

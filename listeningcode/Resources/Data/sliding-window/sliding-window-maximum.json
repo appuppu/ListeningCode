@@ -1,0 +1,247 @@
+{
+  "id": "sliding-window-maximum",
+  "title": "Finding the Maximum in Each Sliding Window",
+  "difficulty": "hard",
+  "category": "sliding-window",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "sliding window",
+        "explanation": "A technique where a fixed-size subset moves across the data one step at a time"
+      },
+      {
+        "phrase": "brute force",
+        "explanation": "A straightforward approach that checks every possibility without optimization"
+      },
+      {
+        "phrase": "time complexity",
+        "explanation": "A measure of how the running time grows as input size increases"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that may cause unexpected behavior"
+      },
+      {
+        "phrase": "monotonic decreasing",
+        "explanation": "A sequence where each element is less than or equal to the one before it"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Deque",
+        "definition": "A double-ended queue that supports insertion and removal from both front and back in constant time"
+      },
+      {
+        "term": "Monotonic Deque",
+        "definition": "A deque maintained so that elements are always in sorted order, either increasing or decreasing"
+      },
+      {
+        "term": "Sliding Window",
+        "definition": "A subarray of fixed length k that shifts one position to the right at each step"
+      },
+      {
+        "term": "Amortized Time",
+        "definition": "The average time per operation over a sequence of operations, even if some individual operations are costly"
+      },
+      {
+        "term": "Index-based Tracking",
+        "definition": "Storing indices instead of values to track both position and value of elements"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Deque<Integer> deque = new ArrayDeque<>()",
+        "description": "Creates a double-ended queue backed by a resizable array"
+      },
+      {
+        "signature": "deque.peekFirst()",
+        "description": "Returns the element at the front of the deque without removing it"
+      },
+      {
+        "signature": "deque.peekLast()",
+        "description": "Returns the element at the back of the deque without removing it"
+      },
+      {
+        "signature": "deque.pollFirst()",
+        "description": "Removes and returns the element at the front of the deque"
+      },
+      {
+        "signature": "deque.offerLast(int index)",
+        "description": "Adds an element to the back of the deque"
+      }
+    ]
+  },
+  "concept": "Given an integer array and a window size k, slide a window of size k from left to right across the array. For each window position, find the maximum element. Return an array of all such maximums.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force Scan",
+      "time_complexity": "O(n * k)",
+      "space_complexity": "O(1)",
+      "summary": "For each window position, scan all k elements to find the maximum."
+    },
+    {
+      "level": 2,
+      "label": "Max-Heap Approach",
+      "time_complexity": "O(n log k)",
+      "space_complexity": "O(k)",
+      "summary": "Use a max-heap to track the current window's maximum, removing expired elements lazily."
+    },
+    {
+      "level": 3,
+      "label": "Monotonic Deque",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(k)",
+      "summary": "Maintain a decreasing deque of indices so the front always holds the current window's maximum."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Array: 1, 3, -1, -3, 5, 3, 6, 7\"] --> B[\"Window k = 3\"]\n    B --> C[\"Position 1: [1, 3, -1] → max 3\"]\n    B --> D[\"Position 2: [3, -1, -3] → max 3\"]\n    B --> E[\"Position 3: [-1, -3, 5] → max 5\"]\n    B --> F[\"Position 4: [-3, 5, 3] → max 5\"]\n    B --> G[\"Position 5: [5, 3, 6] → max 6\"]\n    B --> H[\"Position 6: [3, 6, 7] → max 7\"]\n    style A fill:#f87171\n    style B fill:#f87171",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an integer array and a number k. Imagine a window of size k sliding from the left end of the array to the right, one element at a time. At each position, you need to report the maximum value inside that window.",
+            "audio_file": "sliding-window-maximum-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So for example, with the array one, three, negative one, negative three, five, three, six, seven and k equals three, the first window holds one, three, negative one, giving a max of three. Then the window shifts right, and I repeat. Is that correct?",
+            "audio_file": "sliding-window-maximum-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. A few constraints: the array length can be up to a hundred thousand, and k is always between one and the array length. Elements can be negative.",
+            "audio_file": "sliding-window-maximum-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What if k equals one? Then each element is its own window, so the output is just the original array. And if k equals the array length, we return a single-element array with the overall maximum. Are those right?",
+            "audio_file": "sliding-window-maximum-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, both are correct. The output array will always have exactly n minus k plus one elements. Please return an integer array.",
+            "audio_file": "sliding-window-maximum-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to slide a window of size k across the array and collect the maximum of each window into a result array of size n minus k plus one. Let me start with a straightforward approach.",
+            "audio_file": "sliding-window-maximum-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force Scan",
+        "diagram": "graph TD\n    A[\"Window 1: [1, 3, -1]\"] -->|scan all 3| B[\"max = 3\"]\n    C[\"Window 2: [3, -1, -3]\"] -->|scan all 3| D[\"max = 3\"]\n    E[\"Window 3: [-1, -3, 5]\"] -->|scan all 3| F[\"max = 5\"]\n    G[\"Window 4: [-3, 5, 3]\"] -->|scan all 3| H[\"max = 5\"]\n    I[\"Window 5: [5, 3, 6]\"] -->|scan all 3| J[\"max = 6\"]\n    K[\"Window 6: [3, 6, 7]\"] -->|scan all 3| L[\"max = 7\"]\n    style A fill:#60a5fa\n    style C fill:#60a5fa\n    style E fill:#60a5fa\n    style G fill:#60a5fa\n    style I fill:#60a5fa\n    style K fill:#60a5fa",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest idea is to loop through each window starting position from index zero to n minus k. For each position, I scan all k elements to find the maximum and store it in the result.",
+            "audio_file": "sliding-window-maximum-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the cost of that approach.",
+            "audio_file": "sliding-window-maximum-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "There are about n minus k windows, and each window scan takes O of k time. So overall it's O of n times k. Space is O of one, ignoring the output array. When k is large, say close to n, this becomes O of n-squared, which is too slow for a hundred thousand elements.",
+            "audio_file": "sliding-window-maximum-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. The repeated scanning is the bottleneck. Can you think of a way to avoid rescanning the entire window each time?",
+            "audio_file": "sliding-window-maximum-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "heap",
+        "level": 2,
+        "title": "Max-Heap Approach",
+        "diagram": "graph TD\n    A[\"Add 1, 3, -1 to heap\"] --> B[\"Heap top = 3 → output 3\"]\n    B --> C[\"Add -3, heap top = 3 → output 3\"]\n    C --> D[\"Add 5, heap top = 5 → output 5\"]\n    D --> E[\"Add 3, heap top = 5 → output 5\"]\n    E --> F[\"Add 6, heap top = 6 → output 6\"]\n    F --> G[\"Add 7, heap top = 7 → output 7\"]\n    style A fill:#a78bfa\n    style B fill:#a78bfa\n    style D fill:#a78bfa\n    style F fill:#a78bfa",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can use a max-heap. I add each element along with its index. The heap's top always gives the largest value. Before recording the max, I check if the top element's index is still within the current window. If it's expired, I pop it and check the next one.",
+            "audio_file": "sliding-window-maximum-heap-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity of that?",
+            "audio_file": "sliding-window-maximum-heap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each insert and removal is O of log k. We insert n elements total, so it's O of n log k. That's much better than n times k. Space is O of k for the heap. However, in the worst case, stale elements can pile up, though they get cleaned lazily.",
+            "audio_file": "sliding-window-maximum-heap-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good improvement. Can we do even better than O of n log k?",
+            "audio_file": "sliding-window-maximum-heap-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Monotonic Deque",
+        "diagram": "graph TD\n    A[\"i=0: deque [0] → val 1\"] --> B[\"i=1: 3 > 1, pop 0, deque [1]\"]\n    B --> C[\"i=2: -1 < 3, deque [1,2] → output max=3\"]\n    C --> D[\"i=3: -3 < -1, deque [1,2,3] → output max=3\"]\n    D --> E[\"i=4: 5 > all, clear, deque [4] → output max=5\"]\n    E --> F[\"i=5: 3 < 5, deque [4,5] → output max=5\"]\n    F --> G[\"i=6: 6 > 3 and > 5, deque [6] → output max=6\"]\n    G --> H[\"i=7: 7 > 6, deque [7] → output max=7\"]\n    style A fill:#fb923c\n    style C fill:#fb923c\n    style E fill:#fb923c\n    style G fill:#fb923c",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The key insight is a monotonic deque. I store indices in a deque, keeping it in decreasing order of their values. When I add a new element, I remove all indices from the back whose values are smaller, since they can never be a window maximum while the new element is present.",
+            "audio_file": "sliding-window-maximum-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me trace through our example. At index zero, I push zero. At index one, value three is greater than one, so I pop zero and push one. At index two, negative one is smaller than three, so I just push two. The deque holds indices one and two. The front is index one with value three, which is our first output.",
+            "audio_file": "sliding-window-maximum-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How do you handle elements leaving the window?",
+            "audio_file": "sliding-window-maximum-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Before recording each answer, I check if the front index is outside the window, meaning it's less than i minus k plus one. If so, I remove it from the front. Each element enters and leaves the deque at most once, so the total work is O of n. Space is O of k for the deque.",
+            "audio_file": "sliding-window-maximum-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. That's optimal. Let's wrap up with a comparison.",
+            "audio_file": "sliding-window-maximum-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Brute Force\\nO of n times k\\nO of 1\"] --- B[\"Max-Heap\\nO of n log k\\nO of k\"]\n    B --- C[\"Monotonic Deque\\nO of n\\nO of k\"]\n    style A fill:#60a5fa\n    style B fill:#a78bfa\n    style C fill:#fb923c",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "To summarize, the brute force scans each window in O of n times k. The max-heap improves this to O of n log k by avoiding full rescans. The monotonic deque achieves O of n by ensuring each element is processed at most twice, once entering and once leaving the deque.",
+            "audio_file": "sliding-window-maximum-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great breakdown. The monotonic deque is a powerful pattern. Whenever you need to efficiently track a maximum or minimum in a sliding window, this technique gives you linear time. Well done.",
+            "audio_file": "sliding-window-maximum-summary-i1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

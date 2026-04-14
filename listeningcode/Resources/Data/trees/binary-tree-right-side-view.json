@@ -1,0 +1,217 @@
+{
+  "id": "binary-tree-right-side-view",
+  "title": "Viewing a Binary Tree From the Right Side",
+  "difficulty": "medium",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "looking at it from the right side",
+        "explanation": "Imagining you are standing to the right of the tree and observing which nodes are visible"
+      },
+      {
+        "phrase": "level by level",
+        "explanation": "Processing the tree one depth at a time, from top to bottom"
+      },
+      {
+        "phrase": "let me walk through an example",
+        "explanation": "A common phrase meaning to trace through a specific case step by step"
+      },
+      {
+        "phrase": "that makes sense",
+        "explanation": "Acknowledging understanding of the explanation or approach"
+      },
+      {
+        "phrase": "the key insight here",
+        "explanation": "Highlighting the most important idea behind an approach"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "BFS",
+        "definition": "Breadth-First Search, a traversal that visits all nodes at the current depth before moving deeper"
+      },
+      {
+        "term": "DFS",
+        "definition": "Depth-First Search, a traversal that goes as deep as possible along each branch before backtracking"
+      },
+      {
+        "term": "Queue",
+        "definition": "A first-in-first-out data structure often used for BFS traversal"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Queue.offer(element)",
+        "description": "Adds an element to the end of the queue"
+      },
+      {
+        "signature": "Queue.poll()",
+        "description": "Removes and returns the element at the front of the queue"
+      },
+      {
+        "signature": "Queue.size()",
+        "description": "Returns the number of elements currently in the queue"
+      },
+      {
+        "signature": "List.add(element)",
+        "description": "Appends an element to the end of the list"
+      },
+      {
+        "signature": "List.size()",
+        "description": "Returns the number of elements in the list"
+      }
+    ]
+  },
+  "concept": "Given the root of a binary tree, return the values of the nodes that are visible when looking at the tree from the right side, ordered from top to bottom.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "BFS Level Order (Collect Last)",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use BFS to traverse level by level, collecting the last node at each level."
+    },
+    {
+      "level": 2,
+      "label": "DFS Right-First Recursion",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(h)",
+      "summary": "Use DFS visiting right child first, recording the first node seen at each new depth."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"1\"]:::red --> B[\"2\"]\n    A --> C[\"3\"]:::red\n    B --> D[\"5\"]:::red\n    B --> E[\" \"]\n    C --> F[\" \"]\n    C --> G[\"4\"]:::red\n    classDef red fill:#f87171,stroke:#333,color:#fff\n    style E fill:none,stroke:none\n    style F fill:none,stroke:none",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given a binary tree, and I want you to imagine standing on the right side of it. Return the values of the nodes you can see from that perspective, ordered top to bottom.",
+            "audio_file": "binary-tree-right-side-view-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So I need to find the rightmost visible node at each level of the tree. Could the tree be empty?",
+            "audio_file": "binary-tree-right-side-view-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the tree can be empty, in which case return an empty list. The tree can have up to a few thousand nodes, and node values are integers.",
+            "audio_file": "binary-tree-right-side-view-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And the rightmost visible node isn't always the right child, correct? If a left child exists at a deeper level with no right sibling, it would be visible too.",
+            "audio_file": "binary-tree-right-side-view-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. For example, consider a tree with root one, left child two, right child three, and node two has a left child five, and node three has a right child four. The right side view would be one, three, four.",
+            "audio_file": "binary-tree-right-side-view-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "That makes sense. So the answer is the last node at each depth. Let me think about approaches.",
+            "audio_file": "binary-tree-right-side-view-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "bfs",
+        "level": 1,
+        "title": "BFS Level Order Traversal",
+        "diagram": "graph TD\n    subgraph \"Level 0\"\n    A[\"1\"]:::blue\n    end\n    subgraph \"Level 1\"\n    B[\"2\"]\n    C[\"3\"]:::blue\n    end\n    subgraph \"Level 2\"\n    D[\"5\"]\n    G[\"4\"]:::blue\n    end\n    A --> B\n    A --> C\n    B --> D\n    C --> G\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is to use BFS with a queue. I process the tree level by level, and at each level, I record the last node I encounter. That last node is the one visible from the right.",
+            "audio_file": "binary-tree-right-side-view-bfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example.",
+            "audio_file": "binary-tree-right-side-view-bfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Starting with node one in the queue. Level zero has one node, so the last node is one. Next, I add two and three. Level one has two nodes, and the last is three. Then I process two's child five and three's child four. Level two ends with four. The result is one, three, four.",
+            "audio_file": "binary-tree-right-side-view-bfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity?",
+            "audio_file": "binary-tree-right-side-view-bfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n since I visit every node once. Space is O of n because in the worst case the queue holds an entire level, which could be up to n over two nodes in a complete tree.",
+            "audio_file": "binary-tree-right-side-view-bfs-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "dfs",
+        "level": 2,
+        "title": "DFS Right-First Recursion",
+        "diagram": "graph TD\n    A[\"1 depth=0\"]:::purple -->|\"visit 2nd\"| B[\"2 depth=1\"]\n    A -->|\"visit 1st\"| C[\"3 depth=1\"]:::purple\n    B --> D[\"5 depth=2\"]\n    C --> G[\"4 depth=2\"]:::purple\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can improve space usage with DFS. The key insight is: if I visit the right child before the left child, the first node I see at each new depth is the rightmost one. I track the current depth and only add a value when I reach a depth I haven't recorded yet.",
+            "audio_file": "binary-tree-right-side-view-dfs-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does that look on our example?",
+            "audio_file": "binary-tree-right-side-view-dfs-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I start at node one, depth zero. The result list is empty so I add one. Then I go right to node three at depth one. The list has one entry so depth one is new, I add three. Then right child of three is four at depth two, which is new, so I add four. When I backtrack and visit left subtrees, depths zero, one, and two are already recorded, so nothing more is added.",
+            "audio_file": "binary-tree-right-side-view-dfs-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And the complexity?",
+            "audio_file": "binary-tree-right-side-view-dfs-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is still O of n since we visit every node. But space improves to O of h where h is the height of the tree. For a balanced tree that's O of log n, which is better than the BFS approach.",
+            "audio_file": "binary-tree-right-side-view-dfs-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n    BFS[\"BFS Level Order\\nTime: O of n\\nSpace: O of n\"]:::blue\n    DFS[\"DFS Right-First\\nTime: O of n\\nSpace: O of h\"]:::purple\n    end\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Both approaches visit every node in O of n time. The BFS approach is intuitive and uses a queue with O of n space. The DFS approach is more space-efficient at O of h by visiting the right side first.",
+            "audio_file": "binary-tree-right-side-view-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. For balanced trees, DFS saves space. BFS might be easier to explain in an interview since the level-by-level logic is straightforward. Both are solid choices.",
+            "audio_file": "binary-tree-right-side-view-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

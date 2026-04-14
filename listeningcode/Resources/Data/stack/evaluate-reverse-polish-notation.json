@@ -1,0 +1,183 @@
+{
+  "id": "evaluate-reverse-polish-notation",
+  "title": "Evaluating an Expression in Reverse Polish Notation",
+  "difficulty": "medium",
+  "category": "stack",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific case showing how the algorithm works at each stage"
+      },
+      {
+        "phrase": "pop off the stack",
+        "explanation": "To remove and return the top element from a stack data structure"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      },
+      {
+        "phrase": "evaluate the expression",
+        "explanation": "To compute and return the final numerical result of a mathematical expression"
+      },
+      {
+        "phrase": "in terms of",
+        "explanation": "Used to describe complexity relative to a variable, such as the size of the input"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Reverse Polish Notation",
+        "definition": "A mathematical notation where operators come after their operands, also called postfix notation. For example, 3 4 plus means 3 + 4."
+      },
+      {
+        "term": "Stack",
+        "definition": "A last-in first-out data structure where elements are added and removed from the top only."
+      },
+      {
+        "term": "Operand",
+        "definition": "A number or value that an operator acts upon in an expression."
+      },
+      {
+        "term": "Operator",
+        "definition": "A symbol such as plus, minus, multiply, or divide that performs an operation on operands."
+      },
+      {
+        "term": "Integer Division",
+        "definition": "Division that truncates the decimal part toward zero, returning only the whole number portion."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Deque<Integer> stack = new ArrayDeque<>()",
+        "description": "Creates a new stack using ArrayDeque, the preferred stack implementation in Java."
+      },
+      {
+        "signature": "stack.push(element)",
+        "description": "Pushes an element onto the top of the stack."
+      },
+      {
+        "signature": "stack.pop()",
+        "description": "Removes and returns the element on top of the stack."
+      },
+      {
+        "signature": "Integer.parseInt(str)",
+        "description": "Converts a string representation of a number into an integer value."
+      }
+    ]
+  },
+  "concept": "Given an array of strings representing an arithmetic expression in Reverse Polish Notation, evaluate the expression and return the result as an integer. Valid operators are plus, minus, multiply, and divide. Each operand may be an integer or another sub-expression. Division should truncate toward zero.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Stack-Based Evaluation",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Iterate through each token. Push numbers onto a stack. When an operator is found, pop two operands, apply the operation, and push the result back. The final answer is the last element on the stack."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    A[\"Input: tokens = 2, 1, +, 3, *\"] --> B[\"Output: 9\"]\n    B --> C[\"Step 1: 2 + 1 = 3\"]\n    C --> D[\"Step 2: 3 * 3 = 9\"]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's your problem. You are given an array of strings called tokens. Each string is either an integer or one of four operators: plus, minus, multiply, or divide. The tokens represent an expression in Reverse Polish Notation. Your task is to evaluate this expression and return the integer result.",
+            "audio_file": "evaluate-reverse-polish-notation-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Thanks. So just to confirm, Reverse Polish Notation means the operator comes after its two operands, right? For example, two one plus means two plus one. Can I ask about the constraints? Will the input always be a valid R P N expression?",
+            "audio_file": "evaluate-reverse-polish-notation-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's correct. Yes, the input is always a valid expression, so you don't need to handle malformed input. The operators are only plus, minus, multiply, and divide. Division should truncate toward zero. Operands can be negative integers as well.",
+            "audio_file": "evaluate-reverse-polish-notation-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And what about the size of the input? How many tokens can there be?",
+            "audio_file": "evaluate-reverse-polish-notation-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The number of tokens can be up to ten thousand. The expression will always evaluate to a value that fits in a 32-bit integer. There will always be at least one token.",
+            "audio_file": "evaluate-reverse-polish-notation-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright, let me summarize. I receive an array of strings in postfix notation. I need to evaluate the expression and return an integer. Division truncates toward zero. The input is always valid. A stack seems like the natural data structure here since R P N is designed to be evaluated with a stack.",
+            "audio_file": "evaluate-reverse-polish-notation-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 1,
+        "title": "Stack-Based Evaluation",
+        "diagram": "graph TD\n    style S0 fill:#60a5fa,color:#fff\n    style S1 fill:#60a5fa,color:#fff\n    style S2 fill:#60a5fa,color:#fff\n    style S3 fill:#60a5fa,color:#fff\n    style S4 fill:#60a5fa,color:#fff\n    style S5 fill:#60a5fa,color:#fff\n    S0[\"Read 2 → push 2\\nStack: 2\"] --> S1[\"Read 1 → push 1\\nStack: 2, 1\"]\n    S1 --> S2[\"Read + → pop 1 and 2\\n2 + 1 = 3 → push 3\\nStack: 3\"]\n    S2 --> S3[\"Read 3 → push 3\\nStack: 3, 3\"]\n    S3 --> S4[\"Read * → pop 3 and 3\\n3 * 3 = 9 → push 9\\nStack: 9\"]\n    S4 --> S5[\"Result: 9\"]",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I'll use a stack. I iterate through each token in the array. If the token is a number, I parse it and push it onto the stack. If it's an operator, I pop the top two elements. The first pop is the second operand and the second pop is the first operand. I apply the operation and push the result back.",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through the example: tokens are two, one, plus, three, star. I push two, then push one. I see plus, so I pop one and two, compute two plus one equals three, and push three. Then I push three again. I see star, so I pop three and three, compute three times three equals nine, and push nine. The stack has one element, nine, which is the answer.",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. What about the order of operands for subtraction and division? That matters, right?",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes, exactly. When I pop, the first value popped is the right operand and the second is the left operand. So for subtraction or division, I compute second-popped minus first-popped, or second-popped divided by first-popped. For division I use integer casting to truncate toward zero in Java.",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For time complexity, I visit each token exactly once, so it's O of n where n is the number of tokens. For space, the stack can hold at most roughly n over two elements in the worst case, so the space complexity is also O of n.",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's a clean solution. Since R P N was essentially designed to be evaluated with a stack, this approach is both optimal and straightforward. Can you handle a slightly more complex example, like four, thirteen, five, divide, plus?",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. I push four, then thirteen, then five. I see divide, so I pop five and thirteen. Thirteen divided by five is two point six, which truncates to two. I push two. Then I see plus, so I pop two and four. Four plus two is six. The answer is six.",
+            "audio_file": "evaluate-reverse-polish-notation-optimal-c5.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    style A fill:#60a5fa,color:#fff\n    A[\"Stack-Based: O of n time, O of n space\"] --> B[\"Optimal approach for RPN evaluation\"]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. This problem is a classic example of why the stack data structure exists. Reverse Polish Notation eliminates the need for parentheses and operator precedence rules because the stack naturally handles the order of operations.",
+            "audio_file": "evaluate-reverse-polish-notation-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. The key takeaways are: use a stack, push numbers, pop two operands when you see an operator, and be careful about operand order for subtraction and division. The time and space are both O of n, and there isn't really a way to improve beyond this since we must read every token at least once.",
+            "audio_file": "evaluate-reverse-polish-notation-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

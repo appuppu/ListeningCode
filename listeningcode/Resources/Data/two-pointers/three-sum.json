@@ -1,0 +1,258 @@
+{
+  "id": "three-sum",
+  "title": "Finding Three Numbers That Sum to Zero",
+  "difficulty": "medium",
+  "category": "two-pointers",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To explain step by step using a specific case"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The most straightforward but often inefficient method"
+      },
+      {
+        "phrase": "skip over duplicates",
+        "explanation": "To avoid processing the same value more than once"
+      },
+      {
+        "phrase": "narrow down the search",
+        "explanation": "To reduce the range of values being considered"
+      },
+      {
+        "phrase": "sort the array first",
+        "explanation": "To arrange elements in order before applying a strategy"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Triplet",
+        "definition": "A group of exactly three elements from an array"
+      },
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two indices moving toward each other to find pairs efficiently"
+      },
+      {
+        "term": "Hash Set",
+        "definition": "A data structure that stores unique values with fast lookup"
+      },
+      {
+        "term": "Duplicate Elimination",
+        "definition": "The process of removing repeated results from output"
+      },
+      {
+        "term": "Sorted Array",
+        "definition": "An array whose elements are arranged in non-decreasing order"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Arrays.sort(int[] a)",
+        "description": "Sorts the array in ascending order in place"
+      },
+      {
+        "signature": "List.add(E element)",
+        "description": "Appends an element to the end of a list"
+      },
+      {
+        "signature": "HashSet.contains(Object o)",
+        "description": "Returns true if the set contains the specified element"
+      },
+      {
+        "signature": "Arrays.asList(T... a)",
+        "description": "Returns a fixed-size list backed by the given array"
+      }
+    ]
+  },
+  "concept": "Given an integer array, find all unique triplets of elements that sum to zero. Each triplet must consist of three distinct indices, and the result must not contain duplicate triplets.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Three Loops",
+      "time_complexity": "O(n^3)",
+      "space_complexity": "O(n)",
+      "summary": "Check every combination of three elements using three nested loops and use a set to remove duplicates."
+    },
+    {
+      "level": 2,
+      "label": "Hash Set Approach",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n)",
+      "summary": "For each pair of elements, use a hash set to check if the needed third value exists."
+    },
+    {
+      "level": 3,
+      "label": "Sort and Two Pointers",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "summary": "Sort the array, fix one element, then use two pointers to find complementary pairs efficiently."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: [-1, 0, 1, 2, -1, -4]\"] --> B{\"Find triplets\\nsumming to 0\"}\n    B --> C[\"(-1, -1, 2)\"]\n    B --> D[\"(-1, 0, 1)\"]\n    style A fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an array of integers, and you need to find all unique triplets in the array that sum to zero. For example, given the array negative one, zero, one, two, negative one, negative four, you should return the triplets negative one, negative one, two and negative one, zero, one.",
+            "audio_file": "three-sum-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I see. So I need to find every group of three numbers whose sum is exactly zero. A couple of clarifying questions: can the array contain duplicates, and should the output include duplicate triplets?",
+            "audio_file": "three-sum-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array can have duplicate values. However, your result must not contain duplicate triplets. Also, the array can be empty or have fewer than three elements, in which case you'd return an empty list.",
+            "audio_file": "three-sum-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And the return type is a list of lists of integers. Can I use the same element at the same index twice in a single triplet?",
+            "audio_file": "three-sum-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "No, each triplet must use three distinct indices. But two different indices with the same value are fine.",
+            "audio_file": "three-sum-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So to summarize, I need to find all unique triplets from distinct indices that sum to zero, with no duplicate triplets in the output. Let me start with the simplest approach.",
+            "audio_file": "three-sum-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Three Loops",
+        "diagram": "graph TD\n    A[\"Array: [-1, 0, 1, 2, -1, -4]\"] --> B[\"i=0: -1\"]\n    B --> C[\"j=1: 0\"]\n    C --> D[\"k=2: 1\"]\n    D --> E{\"Sum = -1+0+1 = 0 ✓\"}\n    B --> F[\"j=4: -1\"]\n    F --> G[\"k=3: 2\"]\n    G --> H{\"Sum = -1+(-1)+2 = 0 ✓\"}\n    style A fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff\n    style H fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The most straightforward approach is to use three nested loops. I pick every combination of three distinct indices i, j, and k, and check if the sum is zero. I'd use a set to avoid adding duplicate triplets.",
+            "audio_file": "three-sum-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through the example array negative one, zero, one, two, negative one, negative four?",
+            "audio_file": "three-sum-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. When i is zero, j is one, and k is two, we have negative one plus zero plus one, which equals zero. That's a valid triplet. When i is zero, j is four, and k is three, we get negative one plus negative one plus two, also zero. We continue checking all combinations.",
+            "audio_file": "three-sum-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time complexity here?",
+            "audio_file": "three-sum-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n-cubed because of the three nested loops. Space is O of n for storing triplets in a set. This is too slow for large inputs, so let's improve it.",
+            "audio_file": "three-sum-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashmap",
+        "level": 2,
+        "title": "Hash Set Approach",
+        "diagram": "graph TD\n    A[\"Sorted: [-4, -1, -1, 0, 1, 2]\"] --> B[\"Fix i=1: -1\"]\n    B --> C[\"j=2: -1, need 2\"]\n    C --> D[\"HashSet: {-1}\"]\n    B --> E[\"j=3: 0, need 1\"]\n    E --> F[\"HashSet: {-1, 0}\"]\n    B --> G[\"j=4: 1, need 0\"]\n    G --> H{\"0 in set ✓\"}\n    H --> I[\"Triplet: (-1, 0, 1)\"]\n    style A fill:#a78bfa,color:#fff\n    style H fill:#a78bfa,color:#fff\n    style I fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can reduce one loop by using a hash set. First I sort the array. Then I fix element i and for each j after i, I compute the complement as negative of the sum of elements at i and j. I check if that complement is already in a hash set for the current i iteration.",
+            "audio_file": "three-sum-hashmap-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does sorting help with duplicates?",
+            "audio_file": "three-sum-hashmap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "After sorting, duplicate values are adjacent. So when I move i forward, I skip over any value equal to the previous one. This ensures I don't process the same first element twice, which prevents duplicate triplets.",
+            "audio_file": "three-sum-hashmap-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For the sorted array negative four, negative one, negative one, zero, one, two, when i is at the first negative one, j scans forward. When j reaches one, the complement zero is already in the hash set, giving us the triplet negative one, zero, one.",
+            "audio_file": "three-sum-hashmap-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What are the complexities?",
+            "audio_file": "three-sum-hashmap-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n-squared because we have two loops. Space is O of n for the hash set. This is better than brute force, but we can reduce space usage further.",
+            "audio_file": "three-sum-hashmap-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-pointer",
+        "level": 3,
+        "title": "Sort and Two Pointers",
+        "diagram": "graph TD\n    A[\"Sorted: [-4, -1, -1, 0, 1, 2]\"] --> B[\"Fix i=1: -1, target=1\"]\n    B --> C[\"left=2: -1, right=5: 2\"]\n    C --> D{\"Sum = -1+2 = 1 = target ✓\"}\n    D --> E[\"Found: (-1, -1, 2)\"]\n    E --> F[\"left=3: 0, right=4: 1\"]\n    F --> G{\"Sum = 0+1 = 1 = target ✓\"}\n    G --> H[\"Found: (-1, 0, 1)\"]\n    style A fill:#fb923c,color:#fff\n    style D fill:#fb923c,color:#fff\n    style G fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach also sorts first. I fix element i, then set a left pointer right after i and a right pointer at the end. The target sum for the two pointers is the negative of element i.",
+            "audio_file": "three-sum-two-pointer-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For i at index one, which is negative one, the target is one. Left starts at index two, value negative one, and right is at index five, value two. Their sum is one, which matches the target, so we record the triplet negative one, negative one, two.",
+            "audio_file": "three-sum-two-pointer-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How do you move the pointers?",
+            "audio_file": "three-sum-two-pointer-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If the sum of left and right is less than the target, I move left forward to increase the sum. If it's greater, I move right backward. When they match, I record the triplet, then move both pointers inward while skipping duplicates.",
+            "audio_file": "three-sum-two-pointer-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is O of n-squared. The outer loop is O of n, and the two pointer scan is O of n for each iteration. Space is O of one, ignoring the output, because we only use pointers. This is optimal.",
+            "audio_file": "three-sum-two-pointer-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n        A[\"Brute Force\\nO(n³) / O(n)\"] --> B[\"Hash Set\\nO(n²) / O(n)\"]\n        B --> C[\"Two Pointers\\nO(n²) / O(1)\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Can you quickly compare the three approaches?",
+            "audio_file": "three-sum-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The brute force uses three loops at O of n-cubed. The hash set approach reduces it to O of n-squared with O of n space. The two pointer solution is also O of n-squared but uses only O of one extra space. Sorting plus two pointers is the best overall approach, and it's what I'd use in an interview.",
+            "audio_file": "three-sum-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

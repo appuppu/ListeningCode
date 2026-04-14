@@ -1,0 +1,128 @@
+[
+  {
+    "id": "arrays-and-hashing",
+    "title": "Arrays & Hashing",
+    "system_image": "square.grid.2x2",
+    "problem_count": 9,
+    "sort_order": 0
+  },
+  {
+    "id": "two-pointers",
+    "title": "Two Pointers",
+    "system_image": "arrow.left.and.right",
+    "problem_count": 5,
+    "sort_order": 1
+  },
+  {
+    "id": "sliding-window",
+    "title": "Sliding Window",
+    "system_image": "rectangle.split.3x1",
+    "problem_count": 6,
+    "sort_order": 2
+  },
+  {
+    "id": "stack",
+    "title": "Stack",
+    "system_image": "square.stack.3d.up",
+    "problem_count": 6,
+    "sort_order": 3
+  },
+  {
+    "id": "binary-search",
+    "title": "Binary Search",
+    "system_image": "magnifyingglass",
+    "problem_count": 7,
+    "sort_order": 4
+  },
+  {
+    "id": "linked-list",
+    "title": "Linked List",
+    "system_image": "link",
+    "problem_count": 11,
+    "sort_order": 5
+  },
+  {
+    "id": "trees",
+    "title": "Trees",
+    "system_image": "tree",
+    "problem_count": 15,
+    "sort_order": 6
+  },
+  {
+    "id": "heap-priority-queue",
+    "title": "Heap / Priority Queue",
+    "system_image": "triangle",
+    "problem_count": 7,
+    "sort_order": 7
+  },
+  {
+    "id": "backtracking",
+    "title": "Backtracking",
+    "system_image": "arrow.uturn.backward",
+    "problem_count": 10,
+    "sort_order": 8
+  },
+  {
+    "id": "tries",
+    "title": "Tries",
+    "system_image": "character.textbox",
+    "problem_count": 3,
+    "sort_order": 9
+  },
+  {
+    "id": "graphs",
+    "title": "Graphs",
+    "system_image": "point.3.connected.trianglepath.dotted",
+    "problem_count": 13,
+    "sort_order": 10
+  },
+  {
+    "id": "advanced-graphs",
+    "title": "Advanced Graphs",
+    "system_image": "point.3.filled.connected.trianglepath.dotted",
+    "problem_count": 6,
+    "sort_order": 11
+  },
+  {
+    "id": "1d-dynamic-programming",
+    "title": "1-D Dynamic Programming",
+    "system_image": "chart.line.uptrend.xyaxis",
+    "problem_count": 12,
+    "sort_order": 12
+  },
+  {
+    "id": "2d-dynamic-programming",
+    "title": "2-D Dynamic Programming",
+    "system_image": "square.grid.3x3",
+    "problem_count": 11,
+    "sort_order": 13
+  },
+  {
+    "id": "greedy",
+    "title": "Greedy",
+    "system_image": "bolt",
+    "problem_count": 8,
+    "sort_order": 14
+  },
+  {
+    "id": "intervals",
+    "title": "Intervals",
+    "system_image": "calendar.day.timeline.left",
+    "problem_count": 6,
+    "sort_order": 15
+  },
+  {
+    "id": "math-and-geometry",
+    "title": "Math & Geometry",
+    "system_image": "function",
+    "problem_count": 8,
+    "sort_order": 16
+  },
+  {
+    "id": "bit-manipulation",
+    "title": "Bit Manipulation",
+    "system_image": "01.square",
+    "problem_count": 7,
+    "sort_order": 17
+  }
+]

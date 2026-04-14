@@ -1,0 +1,263 @@
+{
+  "id": "merge-two-sorted-lists",
+  "title": "Merging Two Sorted Linked Lists",
+  "difficulty": "easy",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "in sorted order",
+        "explanation": "Arranged from smallest to largest value"
+      },
+      {
+        "phrase": "traverse the list",
+        "explanation": "Visit each node in the linked list one by one from head to tail"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input scenario that needs special handling"
+      },
+      {
+        "phrase": "maintain a pointer",
+        "explanation": "Keep a reference variable that tracks a specific position in the data structure"
+      },
+      {
+        "phrase": "in-place operation",
+        "explanation": "Performing the task without allocating significant extra memory"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Linked List",
+        "definition": "A linear data structure where each element (node) contains a value and a reference to the next node"
+      },
+      {
+        "term": "Dummy Node",
+        "definition": "A placeholder node used at the beginning of a list to simplify insertion logic"
+      },
+      {
+        "term": "Head Pointer",
+        "definition": "A reference to the first node in a linked list"
+      },
+      {
+        "term": "Recursion",
+        "definition": "A technique where a function calls itself to solve smaller subproblems"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the runtime of an algorithm grows relative to input size"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "new ListNode(val)",
+        "description": "Creates a new linked list node with the given value"
+      },
+      {
+        "signature": "node.next",
+        "description": "Accesses the reference to the next node in the linked list"
+      },
+      {
+        "signature": "node.val",
+        "description": "Accesses the integer value stored in the current node"
+      },
+      {
+        "signature": "Collections.sort(List)",
+        "description": "Sorts a Java List in ascending order"
+      }
+    ]
+  },
+  "concept": "Given two sorted linked lists, merge them into a single linked list that is also sorted. Return the head of the merged list.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Collect and Sort",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "summary": "Collect all values from both lists into an array, sort the array, then build a new linked list from the sorted values."
+    },
+    {
+      "level": 2,
+      "label": "Iterative Merge with Dummy Node",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use a dummy node and a tail pointer. Compare nodes from both lists one by one, appending the smaller node to the merged list."
+    },
+    {
+      "level": 3,
+      "label": "Recursive Merge",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Recursively choose the smaller head node and set its next pointer to the result of merging the remaining nodes."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph TD\n    subgraph List1[\"List 1\"]\n        A1[\"1\"]:::red --> A2[\"3\"]:::red --> A3[\"5\"]:::red\n    end\n    subgraph List2[\"List 2\"]\n        B1[\"2\"]:::red --> B2[\"4\"]:::red --> B3[\"6\"]:::red\n    end\n    A3 --> R[\"? Merged Result\"]\n    B3 --> R\n    R --> M1[\"1\"] --> M2[\"2\"] --> M3[\"3\"] --> M4[\"4\"] --> M5[\"5\"] --> M6[\"6\"]\n    classDef red fill:#f87171,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is today's problem. You are given two linked lists, and each one is already sorted in ascending order. Your task is to merge them into a single sorted linked list and return its head.",
+            "audio_file": "merge-two-sorted-lists-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So both input lists are sorted from smallest to largest. Can I ask a few clarifying questions? What types of values do the nodes contain, and how large can the lists be?",
+            "audio_file": "merge-two-sorted-lists-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Each node holds an integer. Each list can have between zero and fifty nodes, and node values range from negative fifty to fifty.",
+            "audio_file": "merge-two-sorted-lists-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What if one or both lists are empty? And should I create new nodes or reuse the existing ones?",
+            "audio_file": "merge-two-sorted-lists-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "If a list is empty, just return the other list. You may reuse existing nodes. No need to create new ones.",
+            "audio_file": "merge-two-sorted-lists-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So given list one as 1, 3, 5 and list two as 2, 4, 6, the result should be 1, 2, 3, 4, 5, 6. Let me think about approaches.",
+            "audio_file": "merge-two-sorted-lists-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Collect and Sort",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Collect All Values\"]\n        L1[\"List1: 1→3→5\"]:::blue --> Arr[\"Array: 1, 3, 5, 2, 4, 6\"]\n        L2[\"List2: 2→4→6\"]:::blue --> Arr\n    end\n    subgraph Step2[\"Step 2: Sort Array\"]\n        Arr --> Sorted[\"Sorted: 1, 2, 3, 4, 5, 6\"]:::blue\n    end\n    subgraph Step3[\"Step 3: Build New List\"]\n        Sorted --> N1[\"1\"]:::blue --> N2[\"2\"]:::blue --> N3[\"3\"]:::blue --> N4[\"4\"]:::blue --> N5[\"5\"]:::blue --> N6[\"6\"]:::blue\n    end\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is straightforward. I traverse both lists and collect all values into an array. Then I sort the array and build a new linked list from those sorted values.",
+            "audio_file": "merge-two-sorted-lists-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. Can you walk through the example?",
+            "audio_file": "merge-two-sorted-lists-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. From list one I get 1, 3, 5, and from list two I get 2, 4, 6. The combined array is 1, 3, 5, 2, 4, 6. After sorting, it becomes 1, 2, 3, 4, 5, 6. Then I build a linked list from that.",
+            "audio_file": "merge-two-sorted-lists-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What is the time complexity?",
+            "audio_file": "merge-two-sorted-lists-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let n be the total number of nodes in both lists. Collecting takes O of n, sorting takes O of n log n, and building the list takes O of n. So overall it is O of n log n time and O of n space for the array.",
+            "audio_file": "merge-two-sorted-lists-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That is correct, but we are ignoring the fact that both lists are already sorted. Can you do better?",
+            "audio_file": "merge-two-sorted-lists-brute-force-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "iterative",
+        "level": 2,
+        "title": "Iterative Merge with Dummy Node",
+        "diagram": "graph TD\n    D[\"Dummy Node\"]:::purple --> N1[\"1 ← from L1\"]:::purple\n    N1 --> N2[\"2 ← from L2\"]:::purple\n    N2 --> N3[\"3 ← from L1\"]:::purple\n    N3 --> N4[\"4 ← from L2\"]:::purple\n    N4 --> N5[\"5 ← from L1\"]:::purple\n    N5 --> N6[\"6 ← from L2\"]:::purple\n    N6 --> End[\"null\"]\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Since both lists are already sorted, I can use two pointers. I create a dummy node and a tail pointer. At each step, I compare the current nodes of both lists and attach the smaller one to tail, then advance that pointer.",
+            "audio_file": "merge-two-sorted-lists-iterative-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through it with our example.",
+            "audio_file": "merge-two-sorted-lists-iterative-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I start with list one pointing at 1 and list two pointing at 2. I compare: 1 is smaller, so I attach it to tail and advance list one to 3. Next, 2 is smaller than 3, so I attach 2 and advance list two to 4. I keep comparing: 3 then 4 then 5 then 6. When one list is exhausted, I attach the remainder of the other list directly.",
+            "audio_file": "merge-two-sorted-lists-iterative-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about complexity?",
+            "audio_file": "merge-two-sorted-lists-iterative-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each node is visited exactly once, so the time complexity is O of n where n is the total number of nodes. The space complexity is O of 1 since I only use a dummy node and a tail pointer, no extra data structures.",
+            "audio_file": "merge-two-sorted-lists-iterative-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Recursive Merge",
+        "diagram": "graph TD\n    Call1[\"merge(1→3→5, 2→4→6)\"]:::orange --> Pick1[\"Pick 1, recurse\"]\n    Pick1 --> Call2[\"merge(3→5, 2→4→6)\"]:::orange --> Pick2[\"Pick 2, recurse\"]\n    Pick2 --> Call3[\"merge(3→5, 4→6)\"]:::orange --> Pick3[\"Pick 3, recurse\"]\n    Pick3 --> Call4[\"merge(5, 4→6)\"]:::orange --> Pick4[\"Pick 4, recurse\"]\n    Pick4 --> Call5[\"merge(5, 6)\"]:::orange --> Pick5[\"Pick 5, recurse\"]\n    Pick5 --> Call6[\"merge(null, 6)\"]:::orange --> Pick6[\"Return 6\"]\n    classDef orange fill:#fb923c,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "There is also a recursive approach. At each call, I compare the heads of both lists. The smaller head becomes the current node, and its next pointer is set to the result of recursively merging the rest.",
+            "audio_file": "merge-two-sorted-lists-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does the recursion unfold with our example?",
+            "audio_file": "merge-two-sorted-lists-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "First call compares 1 and 2. Pick 1, then recurse with 3, 5 and 2, 4, 6. Next, pick 2, recurse with 3, 5 and 4, 6. Then pick 3, pick 4, pick 5, and finally the base case returns 6. The chain builds up as the recursion unwinds.",
+            "audio_file": "merge-two-sorted-lists-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about the complexity here?",
+            "audio_file": "merge-two-sorted-lists-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time complexity is still O of n since we process each node once. But space complexity is O of n due to the recursion call stack. So while elegant, the iterative approach is better for space.",
+            "audio_file": "merge-two-sorted-lists-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Collect and Sort\\nTime: O of n log n\\nSpace: O of n\"]:::blue\n        IT[\"Iterative Merge\\nTime: O of n\\nSpace: O of 1\"]:::purple\n        RC[\"Recursive Merge\\nTime: O of n\\nSpace: O of n\"]:::orange\n    end\n    BF --> IT --> RC\n    classDef blue fill:#60a5fa,stroke:#333,color:#fff\n    classDef purple fill:#a78bfa,stroke:#333,color:#fff\n    classDef orange fill:#fb923c,stroke:#333,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. Let us recap. The brute force collects and sorts all values in O of n log n time. The iterative merge with a dummy node runs in O of n time and O of 1 space, making it the most efficient. The recursive merge is also O of n time but uses O of n stack space.",
+            "audio_file": "merge-two-sorted-lists-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. In an interview, I would go with the iterative approach since it has the best overall complexity. The key insight is to leverage the fact that both lists are already sorted by comparing heads one step at a time.",
+            "audio_file": "merge-two-sorted-lists-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The dummy node technique is a pattern that comes up often in linked list problems. Great job.",
+            "audio_file": "merge-two-sorted-lists-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "reorder-list",
+  "title": "Reordering a Linked List by Interleaving Ends",
+  "difficulty": "medium",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "in-place",
+        "explanation": "Modifying the data structure directly without creating a new one"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "Trace through the algorithm step by step using a concrete input"
+      },
+      {
+        "phrase": "two-pointer technique",
+        "explanation": "Using two references that move at different speeds or from different positions"
+      },
+      {
+        "phrase": "interleave",
+        "explanation": "Merge two sequences by alternating elements from each"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or boundary input that may require special handling"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Singly Linked List",
+        "definition": "A linear data structure where each node points to the next node and the last node points to null"
+      },
+      {
+        "term": "Slow and Fast Pointer",
+        "definition": "A technique where one pointer moves one step at a time and another moves two steps, used to find the middle of a linked list"
+      },
+      {
+        "term": "Reverse a Linked List",
+        "definition": "Changing the direction of all next pointers so the last node becomes the head"
+      },
+      {
+        "term": "In-place Reordering",
+        "definition": "Rearranging nodes by changing pointers rather than creating new nodes"
+      },
+      {
+        "term": "ArrayList",
+        "definition": "A resizable array implementation in Java that allows random access by index"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "ArrayList.get(int index)",
+        "description": "Returns the element at the specified index in constant time"
+      },
+      {
+        "signature": "ArrayList.add(E element)",
+        "description": "Appends an element to the end of the list"
+      },
+      {
+        "signature": "ListNode.next",
+        "description": "A field referencing the next node in the linked list"
+      },
+      {
+        "signature": "ArrayList.size()",
+        "description": "Returns the number of elements in the list"
+      }
+    ]
+  },
+  "concept": "Given the head of a singly linked list L0 → L1 → … → Ln-1 → Ln, reorder it to L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → … You must do this in-place without modifying node values.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Store in Array",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Copy all nodes into an array list, then rebuild the list using two pointers from both ends of the array."
+    },
+    {
+      "level": 2,
+      "label": "Find Middle, Reverse, and Merge",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Find the middle of the list, reverse the second half, then interleave the two halves together in-place."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph LR\n    style A fill:#f87171,color:#fff\n    style B fill:#fff\n    style C fill:#fff\n    style D fill:#f87171,color:#fff\n    style E fill:#fff\n    style F fill:#f87171,color:#fff\n    subgraph Input\n    A[1] --> B[2] --> C[3] --> D[4] --> E[5]\n    end\n    subgraph Output\n    F[1] --> G[5] --> H[2] --> I[4] --> J[3]\n    end",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's today's problem. You're given the head of a singly linked list. I'd like you to reorder the list so that nodes alternate between the front and the back. Specifically, the first node is followed by the last node, then the second node followed by the second-to-last node, and so on.",
+            "audio_file": "reorder-list-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So if the list is one, two, three, four, five, the result would be one, five, two, four, three. Is that correct?",
+            "audio_file": "reorder-list-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. And you must do this in-place by rearranging pointers. Don't create new nodes or just swap values.",
+            "audio_file": "reorder-list-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. What about edge cases? What if the list is empty or has only one or two nodes?",
+            "audio_file": "reorder-list-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "If the list has fewer than three nodes, it's already in the correct order, so no changes are needed.",
+            "audio_file": "reorder-list-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to reorder a singly linked list by interleaving from both ends, modifying the next pointers in-place. Let me think about approaches.",
+            "audio_file": "reorder-list-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Store in Array",
+        "diagram": "graph TD\n    style S1 fill:#60a5fa,color:#fff\n    style S2 fill:#60a5fa,color:#fff\n    style S3 fill:#60a5fa,color:#fff\n    S1[\"Step 1: Store nodes in array\\n[1, 2, 3, 4, 5]\"]\n    S2[\"Step 2: Use two pointers\\nleft=0, right=4\"]\n    S3[\"Step 3: Rebuild list\\n1→5→2→4→3\"]\n    S1 --> S2 --> S3\n    subgraph Pointer Movement\n    P1[\"left=0 right=4 → link 1→5\"] --> P2[\"left=1 right=3 → link 2→4\"] --> P3[\"left=2 meets right → link 3→null\"]\n    end",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is to store all nodes in an array list. This gives me random access. Then I can use two pointers, one from the start and one from the end, to rebuild the list by linking nodes in the alternating order.",
+            "audio_file": "reorder-list-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through that with our example, one through five.",
+            "audio_file": "reorder-list-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "First, I traverse the list and store each node in an array: indices zero through four hold nodes one through five. Then I set a left pointer at zero and a right pointer at four. I link node at left to node at right, giving one points to five. Then I move left to one and link five to node two. Next, I link two to node at right minus one, which is four. Then I link four to three. Left and right meet, so three becomes the tail and I set its next to null.",
+            "audio_file": "reorder-list-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the time and space complexity?",
+            "audio_file": "reorder-list-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n to traverse and rebuild. Space is also O of n because of the array storing all nodes. It works, but the extra space isn't ideal.",
+            "audio_file": "reorder-list-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Find Middle, Reverse, and Merge",
+        "diagram": "graph TD\n    style M1 fill:#a78bfa,color:#fff\n    style M2 fill:#a78bfa,color:#fff\n    style M3 fill:#a78bfa,color:#fff\n    M1[\"Step 1: Find middle using slow/fast\\nslow→3, fast→5\\nFirst half: 1→2→3\\nSecond half: 4→5\"]\n    M2[\"Step 2: Reverse second half\\n5→4→null\"]\n    M3[\"Step 3: Merge alternating\\n1→5→2→4→3→null\"]\n    M1 --> M2 --> M3\n    subgraph Merge Detail\n    D1[\"Take 1 from first, 5 from second → 1→5\"] --> D2[\"Take 2 from first, 4 from second → 2→4\"] --> D3[\"Take 3 from first → tail\"]\n    end",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can do this in O of one space with three steps. First, find the middle of the list using the slow and fast pointer technique. Second, reverse the second half. Third, merge the two halves by interleaving.",
+            "audio_file": "reorder-list-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Let's trace through our list: one, two, three, four, five.",
+            "audio_file": "reorder-list-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The slow pointer moves one step and the fast pointer moves two steps. When fast reaches the end, slow is at node three, the middle. I split the list: first half is one, two, three, and second half is four, five. Then I reverse the second half to get five, four. Now I merge by alternating. Take one from the first half, then five from the reversed half, link one to five. Take two, then four, link five to two, two to four. Finally, three is left, link four to three. The result is one, five, two, four, three.",
+            "audio_file": "reorder-list-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. And the complexity?",
+            "audio_file": "reorder-list-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n. We traverse the list three times: once to find the middle, once to reverse, and once to merge. Space is O of one because we only use a few pointer variables. No extra data structures are needed.",
+            "audio_file": "reorder-list-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n    A[\"Level 1: Store in Array\\nTime: O of n\\nSpace: O of n\"] --> B[\"Level 2: Find Middle + Reverse + Merge\\nTime: O of n\\nSpace: O of 1\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. We covered two approaches. The array method is simple to implement at the cost of O of n extra space. The optimal approach uses find middle, reverse, and merge, all in constant space.",
+            "audio_file": "reorder-list-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that linked list problems often combine multiple fundamental techniques. Here we used slow and fast pointers, list reversal, and merging, each of which is simple on its own, but together they solve a more complex problem efficiently.",
+            "audio_file": "reorder-list-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

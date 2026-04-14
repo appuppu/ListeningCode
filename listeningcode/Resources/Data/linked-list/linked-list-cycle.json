@@ -1,0 +1,208 @@
+{
+  "id": "linked-list-cycle",
+  "title": "Detecting a Cycle in a Linked List",
+  "difficulty": "easy",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "traverse the list",
+        "explanation": "Move through each node in the linked list one by one from the head to the end."
+      },
+      {
+        "phrase": "points to",
+        "explanation": "Refers to a reference or link from one node to another node in memory."
+      },
+      {
+        "phrase": "keep track of",
+        "explanation": "Store or remember certain values or states as you process data."
+      },
+      {
+        "phrase": "runs into",
+        "explanation": "Encounters or meets something during processing, such as a previously seen node."
+      },
+      {
+        "phrase": "catch up to",
+        "explanation": "Move faster so that you eventually reach the same position as something ahead of you."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Linked List",
+        "definition": "A linear data structure where each element, called a node, contains a value and a reference to the next node."
+      },
+      {
+        "term": "Cycle",
+        "definition": "A situation where a node's next pointer leads back to a previously visited node, creating an infinite loop."
+      },
+      {
+        "term": "Hash Set",
+        "definition": "A collection that stores unique elements and supports O of 1 average-time lookups."
+      },
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two references that move at different speeds or start at different positions to solve a problem."
+      },
+      {
+        "term": "Floyd's Algorithm",
+        "definition": "A cycle detection method using a slow pointer moving one step and a fast pointer moving two steps at a time."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashSet.add(element)",
+        "description": "Adds an element to the set. Returns true if the set did not already contain the element."
+      },
+      {
+        "signature": "HashSet.contains(element)",
+        "description": "Returns true if the set contains the specified element."
+      },
+      {
+        "signature": "node.next",
+        "description": "Accesses the reference to the next node in the linked list."
+      },
+      {
+        "signature": "node.val",
+        "description": "Accesses the integer value stored in the current node."
+      }
+    ]
+  },
+  "concept": "Given the head of a singly linked list, determine whether the list contains a cycle. A cycle exists if some node's next pointer connects back to a previously visited node. Return true if a cycle exists, otherwise return false.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Hash Set Approach",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Store each visited node in a hash set. If we encounter a node already in the set, a cycle exists."
+    },
+    {
+      "level": 2,
+      "label": "Floyd's Tortoise and Hare",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use two pointers moving at different speeds. If they meet, a cycle exists. This uses constant space."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph LR\n    A[\"3\"] -->|next| B[\"1\"]\n    B -->|next| C[\"4\"]\n    C -->|next| D[\"2\"]\n    D -->|next| B\n    style B fill:#f87171,stroke:#dc2626,color:#fff\n    style D fill:#f87171,stroke:#dc2626,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's work on a linked list problem. You're given the head of a singly linked list. Each node has a value and a next pointer. I want you to determine whether the list contains a cycle. A cycle means that following next pointers eventually leads you back to a node you've already visited.",
+            "audio_file": "linked-list-cycle-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I need to return true if any node is visited more than once while traversing, and false otherwise. Can the list be empty, meaning the head is null?",
+            "audio_file": "linked-list-cycle-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the head can be null, and the list can have just one node. A single node could still form a cycle if its next pointer points to itself. Node values can repeat, so you cannot rely on values alone to detect a cycle.",
+            "audio_file": "linked-list-cycle-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to check node identity, not node values. For example, if we have nodes three, one, four, two, and node two points back to node one, that forms a cycle. I should return true in that case. If the last node points to null instead, I return false.",
+            "audio_file": "linked-list-cycle-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The return type is just a boolean. What approaches come to mind?",
+            "audio_file": "linked-list-cycle-intro-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashset",
+        "level": 1,
+        "title": "Hash Set Approach",
+        "diagram": "graph TD\n    S([\"Start\"]) --> V3[\"Visit 3, add to set\"]\n    V3 --> V1[\"Visit 1, add to set\"]\n    V1 --> V4[\"Visit 4, add to set\"]\n    V4 --> V2[\"Visit 2, add to set\"]\n    V2 --> CHK{\"Visit 1 again — already in set!\"}\n    CHK --> RET([\"Return true\"])\n    style V3 fill:#60a5fa,stroke:#3b82f6,color:#fff\n    style V1 fill:#60a5fa,stroke:#3b82f6,color:#fff\n    style V4 fill:#60a5fa,stroke:#3b82f6,color:#fff\n    style V2 fill:#60a5fa,stroke:#3b82f6,color:#fff\n    style CHK fill:#f87171,stroke:#dc2626,color:#fff\n    style RET fill:#60a5fa,stroke:#3b82f6,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is to use a hash set. As I traverse the list, I add each node to the set. Before adding, I check if the node is already in the set. If it is, that means I've visited it before, so a cycle exists.",
+            "audio_file": "linked-list-cycle-hashset-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through our example with nodes three, one, four, two, where two points back to one.",
+            "audio_file": "linked-list-cycle-hashset-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. I start at node three, it's not in the set, so I add it. Move to node one, not in the set, add it. Then node four, add it. Then node two, add it. Next I follow two's pointer and arrive at node one again. Node one is already in the set, so I return true.",
+            "audio_file": "linked-list-cycle-hashset-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about time and space complexity?",
+            "audio_file": "linked-list-cycle-hashset-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n because I visit each node at most once before detecting the cycle or reaching null. Space is also O of n because in the worst case, every node is stored in the set before I find a cycle or the list ends.",
+            "audio_file": "linked-list-cycle-hashset-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Floyd's Tortoise and Hare",
+        "diagram": "graph TD\n    ST([\"Start: slow=3, fast=3\"]) --> S1[\"Step 1: slow=1, fast=4\"]\n    S1 --> S2[\"Step 2: slow=4, fast=1\"]\n    S2 --> S3[\"Step 3: slow=2, fast=2\"]\n    S3 --> MET{\"slow == fast — cycle found!\"}\n    MET --> RET([\"Return true\"])\n    style ST fill:#a78bfa,stroke:#8b5cf6,color:#fff\n    style S1 fill:#a78bfa,stroke:#8b5cf6,color:#fff\n    style S2 fill:#a78bfa,stroke:#8b5cf6,color:#fff\n    style S3 fill:#a78bfa,stroke:#8b5cf6,color:#fff\n    style MET fill:#f87171,stroke:#dc2626,color:#fff\n    style RET fill:#a78bfa,stroke:#8b5cf6,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can do better on space using Floyd's tortoise and hare algorithm. I use two pointers, slow and fast, both starting at the head. Slow moves one step at a time. Fast moves two steps. If there's a cycle, fast will eventually catch up to slow inside the cycle.",
+            "audio_file": "linked-list-cycle-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you trace through our example?",
+            "audio_file": "linked-list-cycle-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Both start at node three. After step one, slow is at one and fast jumped to four. Step two, slow moves to four, fast goes from four to two then to one. Step three, slow moves to two, and fast goes from one to four then to two. Now slow and fast both point to node two, so they've met. I return true.",
+            "audio_file": "linked-list-cycle-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What if there's no cycle?",
+            "audio_file": "linked-list-cycle-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If there's no cycle, fast will reach null before they ever meet, and I return false. Time complexity is O of n because fast closes the gap by one node each step. Space is O of one since I only use two pointer variables regardless of list size.",
+            "audio_file": "linked-list-cycle-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison\n    A[\"Hash Set\\nTime: O of n\\nSpace: O of n\"] ---|vs| B[\"Floyd's Algorithm\\nTime: O of n\\nSpace: O of 1\"]\n    end\n    style A fill:#60a5fa,stroke:#3b82f6,color:#fff\n    style B fill:#a78bfa,stroke:#8b5cf6,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Good work. Can you summarize the two approaches?",
+            "audio_file": "linked-list-cycle-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The hash set approach is straightforward. Store visited nodes and check for duplicates. It runs in O of n time but uses O of n space. Floyd's tortoise and hare is the optimal solution. It also runs in O of n time, but uses only O of one space by having two pointers move at different speeds. In an interview, I'd mention the hash set for clarity, then present Floyd's algorithm as the improved solution.",
+            "audio_file": "linked-list-cycle-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

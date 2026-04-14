@@ -1,0 +1,208 @@
+{
+  "id": "container-with-most-water",
+  "title": "Maximizing Water Held Between Two Lines",
+  "difficulty": "medium",
+  "category": "two-pointers",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "brute force",
+        "explanation": "Trying every possible combination to find the answer, usually the simplest but slowest approach."
+      },
+      {
+        "phrase": "narrow down",
+        "explanation": "To reduce the search space by eliminating less promising options."
+      },
+      {
+        "phrase": "the bottleneck here is",
+        "explanation": "Used to identify the part of the algorithm that limits overall performance."
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through the algorithm step by step using a concrete input."
+      },
+      {
+        "phrase": "move the pointer inward",
+        "explanation": "Advance a pointer toward the center of the array to explore potentially better solutions."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Two Pointers",
+        "definition": "A technique using two indices that move through a data structure, often from opposite ends, to solve problems efficiently."
+      },
+      {
+        "term": "Greedy Strategy",
+        "definition": "An approach that makes the locally optimal choice at each step, hoping to reach a global optimum."
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows relative to the input size."
+      },
+      {
+        "term": "Container Area",
+        "definition": "Calculated as the minimum of the two heights multiplied by the distance between them."
+      },
+      {
+        "term": "Nested Loop",
+        "definition": "A loop inside another loop, often resulting in quadratic time complexity."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "Math.min(int a, int b)",
+        "description": "Returns the smaller of two integer values."
+      },
+      {
+        "signature": "Math.max(int a, int b)",
+        "description": "Returns the larger of two integer values."
+      },
+      {
+        "signature": "array.length",
+        "description": "Returns the number of elements in an array."
+      },
+      {
+        "signature": "int[] height = new int[]{...}",
+        "description": "Declares and initializes an integer array with given values."
+      }
+    ]
+  },
+  "concept": "Given an array of non-negative integers representing heights of vertical lines, find two lines that, together with the x-axis, form a container that holds the most water. Return the maximum amount of water the container can store.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Nested Loops",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "summary": "Check every pair of lines and compute the area for each, tracking the maximum."
+    },
+    {
+      "level": 2,
+      "label": "Two-Pointer Greedy Approach",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Start with pointers at both ends and move the shorter side inward, updating the maximum area at each step."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Input[\"Heights: 1, 8, 6, 2, 5, 4, 8, 3, 7\"]\n        L0[\"1\"]:::red\n        L1[\"8\"]:::red\n        L2[\"6\"]\n        L3[\"2\"]\n        L4[\"5\"]\n        L5[\"4\"]\n        L6[\"8\"]:::red\n        L7[\"3\"]\n        L8[\"7\"]:::red\n    end\n    subgraph Question[\"Which two lines hold the most water?\"]\n        Q1[\"Area = min height × distance\"]\n        Q2[\"Example: lines at index 1 and 8 → min 8,7 × 7 = 49\"]\n    end\n    Input --> Question\n    classDef red fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is today's problem. You are given an array of non-negative integers. Each integer represents the height of a vertical line drawn at that index. Your task is to pick two lines that, together with the x-axis, form a container. The goal is to maximize the amount of water that container can hold.",
+            "audio_file": "container-with-most-water-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So the water a container can hold is determined by the shorter of the two lines times the horizontal distance between them, correct? And I just need to return the maximum area, not the indices?",
+            "audio_file": "container-with-most-water-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. The area equals the minimum of the two heights multiplied by the distance between their indices. Return only the maximum area as an integer. The array will have at least two elements, and all values are non-negative.",
+            "audio_file": "container-with-most-water-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. What about edge cases? If all heights are zero, the answer is zero. If all heights are equal, the widest pair wins. And the lines themselves have no thickness, so we cannot tilt the container.",
+            "audio_file": "container-with-most-water-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That is right. You can assume the array length can be up to one hundred thousand, so efficiency matters.",
+            "audio_file": "container-with-most-water-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. Let me summarize: given an integer array of heights, find the pair of lines that maximizes the area, which is the minimum height of the two lines times the distance between them. Let me start with a straightforward approach.",
+            "audio_file": "container-with-most-water-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Nested Loops",
+        "diagram": "graph TD\n    subgraph BF[\"Brute Force: Check All Pairs\"]\n        S[\"Heights: 1, 8, 6, 2, 5, 4, 8, 3, 7\"]:::blue\n        P1[\"i=0, j=1: min 1,8 × 1 = 1\"]:::blue\n        P2[\"i=0, j=2: min 1,6 × 2 = 2\"]:::blue\n        P3[\"...\"]:::blue\n        P4[\"i=1, j=8: min 8,7 × 7 = 49 ★\"]:::blue\n        P5[\"i=1, j=6: min 8,8 × 5 = 40\"]:::blue\n        P6[\"Total pairs: 36\"]\n    end\n    S --> P1 --> P2 --> P3 --> P4 --> P5 --> P6\n    classDef blue fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest idea is to try every possible pair of lines. I use two nested loops. The outer loop picks the left line at index i, and the inner loop picks the right line at index j, where j is greater than i. For each pair, I compute the area and track the maximum.",
+            "audio_file": "container-with-most-water-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me walk through a small example. For the array one, eight, six, two, five, four, eight, three, seven, I check all thirty-six pairs. When i equals one and j equals eight, the area is the minimum of eight and seven, times seven, which gives forty-nine. That turns out to be the maximum.",
+            "audio_file": "container-with-most-water-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What is the time complexity of this approach?",
+            "audio_file": "container-with-most-water-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n-squared because of the nested loops. Space is O of one since I only store the maximum value. This works for small inputs, but with up to one hundred thousand elements, n-squared is too slow. I need a better strategy.",
+            "audio_file": "container-with-most-water-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "two-pointer",
+        "level": 2,
+        "title": "Two-Pointer Greedy Approach",
+        "diagram": "graph TD\n    subgraph TP[\"Two-Pointer on: 1, 8, 6, 2, 5, 4, 8, 3, 7\"]\n        S1[\"left=0 right=8: min 1,7 × 8 = 8 → move left\"]:::purple\n        S2[\"left=1 right=8: min 8,7 × 7 = 49 → move right\"]:::purple\n        S3[\"left=1 right=7: min 8,3 × 6 = 18 → move right\"]:::purple\n        S4[\"left=1 right=6: min 8,8 × 5 = 40 → move either\"]:::purple\n        S5[\"... continue until pointers meet\"]:::purple\n        S6[\"Max area found: 49\"]:::purple\n    end\n    S1 --> S2 --> S3 --> S4 --> S5 --> S6\n    classDef purple fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can do much better with a two-pointer technique. I place one pointer at the start and one at the end of the array. The key insight is that the width is maximized when the pointers are farthest apart. The only way to possibly find a larger area is to increase the height, so I move the pointer pointing to the shorter line inward.",
+            "audio_file": "container-with-most-water-two-pointer-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Using the same array: left starts at index zero with height one, right at index eight with height seven. The area is one times eight, which is eight. Since the left side is shorter, I move left to index one. Now the area is the minimum of eight and seven, times seven, giving forty-nine. The right side is shorter, so I move right inward.",
+            "audio_file": "container-with-most-water-two-pointer-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why is it safe to discard the shorter side? Could we miss a better answer?",
+            "audio_file": "container-with-most-water-two-pointer-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Great question. If the left line is shorter, then pairing it with any line closer than the current right pointer would give both a smaller width and a height still limited by the left line. So no combination with the shorter line can beat the current area. We safely discard it.",
+            "audio_file": "container-with-most-water-two-pointer-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "We continue moving pointers inward until they meet. The time complexity is O of n because each pointer moves at most n times total. Space is O of one. This is optimal for this problem.",
+            "audio_file": "container-with-most-water-two-pointer-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Brute Force\\nTime: O n-squared\\nSpace: O 1\"]:::blue\n        TP[\"Two-Pointer\\nTime: O n\\nSpace: O 1\"]:::purple\n    end\n    BF -- \"Optimize with greedy insight\" --> TP\n    classDef blue fill:#60a5fa,color:#000\n    classDef purple fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice work. Let us recap. The brute-force approach checks all pairs in O of n-squared time. The two-pointer technique uses a greedy strategy to achieve O of n time with constant space.",
+            "audio_file": "container-with-most-water-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key takeaway is recognizing that moving the shorter pointer inward is safe because keeping it cannot produce a larger area. This greedy reasoning is what makes the two-pointer approach both correct and efficient.",
+            "audio_file": "container-with-most-water-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

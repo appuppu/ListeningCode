@@ -1,0 +1,366 @@
+{
+  "id": "top-k-frequent-elements",
+  "title": "Finding the K Most Frequent Elements",
+  "difficulty": "medium",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "in any order",
+        "explanation": "The result can be returned in whatever sequence you like, not necessarily sorted."
+      },
+      {
+        "phrase": "frequency count",
+        "explanation": "The number of times a particular element appears in the array."
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input scenario that might break a naive solution."
+      },
+      {
+        "phrase": "trade-off between time and space",
+        "explanation": "Choosing to use more memory in order to make the algorithm run faster, or vice versa."
+      },
+      {
+        "phrase": "guaranteed to be unique",
+        "explanation": "The answer will always have exactly one valid combination, with no ties to break."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs and allows average O of one lookup, insertion, and deletion."
+      },
+      {
+        "term": "Heap",
+        "definition": "A tree-based data structure where the parent node is always smaller (min-heap) or larger (max-heap) than its children, allowing efficient retrieval of the extreme element."
+      },
+      {
+        "term": "Bucket Sort",
+        "definition": "A sorting technique that distributes elements into buckets based on their value or a derived property, then collects results from those buckets."
+      },
+      {
+        "term": "Priority Queue",
+        "definition": "An abstract data type similar to a queue, but each element has a priority and the element with the highest or lowest priority is served first."
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows relative to the size of the input."
+      },
+      {
+        "term": "Space Complexity",
+        "definition": "A measure of how much additional memory an algorithm uses relative to the size of the input."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashMap.getOrDefault(key, defaultValue)",
+        "description": "Returns the value mapped to the given key, or the default value if the key is not present in the map."
+      },
+      {
+        "signature": "PriorityQueue(Comparator)",
+        "description": "Creates a priority queue that orders elements according to the specified comparator, commonly used to build a min-heap or max-heap."
+      },
+      {
+        "signature": "Map.entrySet()",
+        "description": "Returns a set of all key-value pairs in the map, useful for iterating over both keys and values simultaneously."
+      },
+      {
+        "signature": "Collections.sort(List, Comparator)",
+        "description": "Sorts the given list according to the order defined by the comparator."
+      },
+      {
+        "signature": "ArrayList.add(element)",
+        "description": "Appends the specified element to the end of the list."
+      }
+    ]
+  },
+  "concept": "Given an integer array nums and an integer k, return the k elements that appear most frequently. The answer may be returned in any order. It is guaranteed that the answer is unique.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Sort by Frequency",
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "summary": "Count every element's frequency using a hash map, then sort all unique elements by their frequency in descending order and return the first k."
+    },
+    {
+      "level": 2,
+      "label": "Heap-Based Selection",
+      "time_complexity": "O(n log k)",
+      "space_complexity": "O(n)",
+      "summary": "Count frequencies with a hash map, then maintain a min-heap of size k. For each unique element, push it onto the heap and pop the smallest when the heap exceeds size k. The heap retains the top k frequent elements."
+    },
+    {
+      "level": 3,
+      "label": "Bucket Sort",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Count frequencies with a hash map, then create an array of buckets where index i holds elements that appear exactly i times. Walk the bucket array from the highest index downward, collecting elements until k are gathered."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    A[\"Input: nums array and integer k\"] --> B[\"Count frequency of each element\"]\n    B --> C[\"Find top k frequent elements\"]\n    C --> D[\"Return result in any order\"]\n    style A fill:#f87171,stroke:#dc2626,color:#fff\n    style B fill:#f87171,stroke:#dc2626,color:#fff\n    style C fill:#f87171,stroke:#dc2626,color:#fff\n    style D fill:#f87171,stroke:#dc2626,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Alright, let's jump into the next problem. You are given an integer array called nums, and an integer k. Your task is to return the k elements that appear most frequently in that array. You can return them in any order you like.",
+            "audio_file": "top-k-frequent-elements-intro-i1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "For example, suppose I give you the array one, one, one, two, two, three, and k equals two. What would you return?",
+            "audio_file": "top-k-frequent-elements-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Okay, so one appears three times and two appears twice. Those are the two most frequent elements. So I would return one and two.",
+            "audio_file": "top-k-frequent-elements-intro-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Before I start, let me ask a few clarifying questions. Can the array contain negative numbers?",
+            "audio_file": "top-k-frequent-elements-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array can contain any integers, positive or negative.",
+            "audio_file": "top-k-frequent-elements-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And is it guaranteed that k is always valid? I mean, will k always be between one and the number of distinct elements in the array?",
+            "audio_file": "top-k-frequent-elements-intro-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, k is always valid. You do not need to handle a case where k is larger than the number of unique elements.",
+            "audio_file": "top-k-frequent-elements-intro-i4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about ties? For instance, if two elements have the same frequency, how do I decide which one to include?",
+            "audio_file": "top-k-frequent-elements-intro-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The answer is guaranteed to be unique, so you will never have an ambiguous tie that affects the result.",
+            "audio_file": "top-k-frequent-elements-intro-i5.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "And what if k equals one and all elements are the same? For example, the array is just five, five, five?",
+            "audio_file": "top-k-frequent-elements-intro-c5.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Then you would simply return that single element, which is five. That is a valid scenario.",
+            "audio_file": "top-k-frequent-elements-intro-i6.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright, let me summarize. I have an integer array and a number k. I need to find which elements appear most often and return the top k of them. The answer is always unique, k is always valid, and I can return the result in any order. Let me think about how to approach this.",
+            "audio_file": "top-k-frequent-elements-intro-c6.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Sort by Frequency",
+        "diagram": "graph TD\n    A[\"Build frequency map\"] --> B[\"Collect unique elements\"]\n    B --> C[\"Sort by frequency descending\"]\n    C --> D[\"Take first k elements\"]\n    style A fill:#60a5fa,stroke:#2563eb,color:#fff\n    style B fill:#60a5fa,stroke:#2563eb,color:#fff\n    style C fill:#60a5fa,stroke:#2563eb,color:#fff\n    style D fill:#60a5fa,stroke:#2563eb,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first thought is a straightforward approach. I will iterate through the array and build a hash map to count the frequency of each element.",
+            "audio_file": "top-k-frequent-elements-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Once I have the frequency counts, I will collect all the unique elements into a list. Then I sort that list by frequency in descending order, so the most frequent elements come first.",
+            "audio_file": "top-k-frequent-elements-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Finally, I just take the first k elements from the sorted list and return them. That gives me the k most frequent elements.",
+            "audio_file": "top-k-frequent-elements-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That sounds reasonable. What is the time complexity of this approach?",
+            "audio_file": "top-k-frequent-elements-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Building the hash map takes O of n time, where n is the length of the array. Sorting the unique elements takes O of n log n in the worst case, since there could be up to n unique elements. So the overall time complexity is O of n log n.",
+            "audio_file": "top-k-frequent-elements-brute-force-c4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The space complexity is O of n because we store the frequency map and the list of unique elements.",
+            "audio_file": "top-k-frequent-elements-brute-force-c5.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good analysis. The sorting step dominates the time complexity. Can you think of a way to avoid sorting all the elements?",
+            "audio_file": "top-k-frequent-elements-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "heap",
+        "level": 2,
+        "title": "Heap-Based Selection",
+        "diagram": "graph TD\n    A[\"Build frequency map\"] --> B[\"Create min-heap of size k\"]\n    B --> C[\"For each unique element\"]\n    C --> D{\"Heap size less than k?\"}\n    D -- Yes --> E[\"Push element onto heap\"]\n    D -- No --> F{\"Current freq greater than heap top?\"}\n    F -- Yes --> G[\"Pop min, push current\"]\n    F -- No --> H[\"Skip element\"]\n    E --> C\n    G --> C\n    H --> C\n    C --> I[\"Heap contains top k elements\"]\n    style A fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style B fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style C fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style D fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style E fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style F fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style G fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style H fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style I fill:#a78bfa,stroke:#7c3aed,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Instead of sorting all elements, I can use a heap to find just the top k. The key insight is that I only need the k most frequent elements, not a full sorted order.",
+            "audio_file": "top-k-frequent-elements-heap-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "First, I build the frequency map just like before. Then I create a min-heap that orders elements by their frequency. The min-heap will keep track of the k elements with the highest frequencies.",
+            "audio_file": "top-k-frequent-elements-heap-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I iterate through the unique elements. For each one, I push it onto the heap. If the heap size exceeds k, I pop the element with the smallest frequency. This way, the heap always contains the top k most frequent elements seen so far.",
+            "audio_file": "top-k-frequent-elements-heap-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Why a min-heap instead of a max-heap?",
+            "audio_file": "top-k-frequent-elements-heap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Great question. With a min-heap, the element with the lowest frequency is always on top. When the heap exceeds size k, I pop the smallest. That guarantees the k elements remaining are the ones with the highest frequencies. If I used a max-heap, I would have to pop k times at the end, which would not improve the complexity.",
+            "audio_file": "top-k-frequent-elements-heap-c4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity improves to O of n log k. Building the map is O of n. For each of the at most n unique elements, the heap push and pop operations each take O of log k. Since k is typically much smaller than n, this is better than O of n log n.",
+            "audio_file": "top-k-frequent-elements-heap-c5.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The space complexity is still O of n for the frequency map, plus O of k for the heap.",
+            "audio_file": "top-k-frequent-elements-heap-c6.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice improvement. But can we do even better and solve it in linear time?",
+            "audio_file": "top-k-frequent-elements-heap-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Bucket Sort Approach",
+        "diagram": "graph TD\n    A[\"Build frequency map\"] --> B[\"Create bucket array of size n plus one\"]\n    B --> C[\"Place each element in bucket at index equal to its frequency\"]\n    C --> D[\"Walk buckets from highest index down\"]\n    D --> E[\"Collect elements until k are gathered\"]\n    E --> F[\"Return result\"]\n    style A fill:#fb923c,stroke:#ea580c,color:#fff\n    style B fill:#fb923c,stroke:#ea580c,color:#fff\n    style C fill:#fb923c,stroke:#ea580c,color:#fff\n    style D fill:#fb923c,stroke:#ea580c,color:#fff\n    style E fill:#fb923c,stroke:#ea580c,color:#fff\n    style F fill:#fb923c,stroke:#ea580c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Yes, we can achieve O of n time using a technique called bucket sort. Here is the idea. The maximum possible frequency of any element is n, the length of the array. So I create an array of buckets with indices from zero to n.",
+            "audio_file": "top-k-frequent-elements-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "First, I build the frequency map as usual. Then, for each entry in the map, I place the element into the bucket at the index matching its frequency. For example, if the number seven appears three times, I add seven to bucket three.",
+            "audio_file": "top-k-frequent-elements-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each bucket is a list because multiple elements could share the same frequency. After filling the buckets, I walk from the highest index down to the lowest, collecting elements. I stop as soon as I have gathered k elements.",
+            "audio_file": "top-k-frequent-elements-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Can you walk through the example? Given the array one, one, one, two, two, three, and k equals two.",
+            "audio_file": "top-k-frequent-elements-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. The frequency map is: one maps to three, two maps to two, and three maps to one. The array length is six, so I create seven buckets, indexed zero through six.",
+            "audio_file": "top-k-frequent-elements-optimal-c4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I place three in bucket one because three appears once. I place two in bucket two because two appears twice. I place one in bucket three because one appears three times. Buckets four, five, and six are empty.",
+            "audio_file": "top-k-frequent-elements-optimal-c5.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Now I walk from the highest index. Buckets six, five, and four are empty. Bucket three contains one, so I add it to my result. Bucket two contains two, so I add it. I now have two elements, which equals k, so I stop and return one and two.",
+            "audio_file": "top-k-frequent-elements-optimal-c6.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. What are the time and space complexities?",
+            "audio_file": "top-k-frequent-elements-optimal-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n. Building the frequency map is O of n. Creating and filling the buckets is O of n. Walking the buckets is also O of n in the worst case. So every step is linear.",
+            "audio_file": "top-k-frequent-elements-optimal-c7.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The space complexity is O of n because we use a frequency map of up to n entries and a bucket array of size n plus one.",
+            "audio_file": "top-k-frequent-elements-optimal-c8.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "This is a clever use of the constraint that frequencies are bounded by n. Well done.",
+            "audio_file": "top-k-frequent-elements-optimal-i3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Solution Comparison",
+        "diagram": "graph LR\n    subgraph Level1[\"Sort by Frequency\"]\n        A1[\"Time: O of n log n\"]\n        A2[\"Space: O of n\"]\n    end\n    subgraph Level2[\"Heap-Based Selection\"]\n        B1[\"Time: O of n log k\"]\n        B2[\"Space: O of n\"]\n    end\n    subgraph Level3[\"Bucket Sort\"]\n        C1[\"Time: O of n\"]\n        C2[\"Space: O of n\"]\n    end\n    Level1 --> Level2 --> Level3\n    style A1 fill:#60a5fa,stroke:#2563eb,color:#fff\n    style A2 fill:#60a5fa,stroke:#2563eb,color:#fff\n    style B1 fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style B2 fill:#a78bfa,stroke:#7c3aed,color:#fff\n    style C1 fill:#fb923c,stroke:#ea580c,color:#fff\n    style C2 fill:#fb923c,stroke:#ea580c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's review the three approaches we discussed for finding the k most frequent elements.",
+            "audio_file": "top-k-frequent-elements-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The first approach was sort by frequency. We build a frequency map, sort the unique elements by count, and pick the top k. This runs in O of n log n time and O of n space. It is simple but the sorting step is the bottleneck.",
+            "audio_file": "top-k-frequent-elements-summary-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The second approach used a min-heap of size k. We still build the frequency map, but instead of sorting everything, we maintain a heap that keeps only the top k elements. This improves the time to O of n log k, which is better when k is much smaller than n.",
+            "audio_file": "top-k-frequent-elements-summary-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The optimal approach uses bucket sort. We exploit the fact that the maximum frequency is at most n. By creating buckets indexed by frequency and walking from highest to lowest, we achieve O of n time. All three approaches use O of n space.",
+            "audio_file": "top-k-frequent-elements-summary-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great summary. The bucket sort approach is the best here because it achieves linear time. The key insight is recognizing that frequencies are bounded by the array length, which lets us avoid comparison-based sorting entirely.",
+            "audio_file": "top-k-frequent-elements-summary-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Exactly. And in a real interview, mentioning all three approaches demonstrates a strong understanding of the trade-offs between sorting, heaps, and bucket-based techniques.",
+            "audio_file": "top-k-frequent-elements-summary-c4.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

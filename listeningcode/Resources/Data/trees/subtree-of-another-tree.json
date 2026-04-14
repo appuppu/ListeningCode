@@ -1,0 +1,209 @@
+{
+  "id": "subtree-of-another-tree",
+  "title": "Checking if a Tree is a Subtree of Another",
+  "difficulty": "easy",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "walk through an example",
+        "explanation": "To step through a specific test case to illustrate how the algorithm works"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that might cause unexpected behavior"
+      },
+      {
+        "phrase": "recursive call",
+        "explanation": "When a function calls itself to solve a smaller subproblem"
+      },
+      {
+        "phrase": "time complexity",
+        "explanation": "A measure of how the runtime grows as the input size increases"
+      },
+      {
+        "phrase": "serialize the tree",
+        "explanation": "Convert a tree structure into a flat string representation"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Tree",
+        "definition": "A tree data structure where each node has at most two children, called left and right"
+      },
+      {
+        "term": "Subtree",
+        "definition": "A tree formed by a node and all of its descendants in the original tree"
+      },
+      {
+        "term": "Tree Traversal",
+        "definition": "Visiting every node in a tree in a specific order, such as preorder, inorder, or postorder"
+      },
+      {
+        "term": "Preorder Traversal",
+        "definition": "A traversal that visits the root first, then the left subtree, then the right subtree"
+      },
+      {
+        "term": "Null Node",
+        "definition": "A missing child position in a tree, representing the absence of a node"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "boolean equals(Object obj)",
+        "description": "Compares two objects for equality; used conceptually to compare node values"
+      },
+      {
+        "signature": "String.contains(CharSequence s)",
+        "description": "Returns true if the string contains the specified sequence of characters"
+      },
+      {
+        "signature": "StringBuilder.append(String str)",
+        "description": "Appends the given string to the builder, useful for serializing tree nodes"
+      }
+    ]
+  },
+  "concept": "Given two binary trees, root and subRoot, determine whether subRoot is a subtree of root. A subtree means there exists a node in root such that the tree rooted at that node is structurally identical to subRoot with the same node values.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Recursive Node-by-Node Comparison",
+      "time_complexity": "O(m * n)",
+      "space_complexity": "O(m + n)",
+      "summary": "For every node in the main tree, check if the subtree rooted there matches subRoot by comparing all nodes recursively."
+    },
+    {
+      "level": 2,
+      "label": "Tree Serialization with String Matching",
+      "time_complexity": "O(m + n)",
+      "space_complexity": "O(m + n)",
+      "summary": "Serialize both trees into strings using preorder traversal with null markers, then check if the subRoot string appears within the main tree string."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    style D fill:#f87171,color:#fff\n    style E fill:#f87171,color:#fff\n    A[3] --> B[4]\n    A --> C[5]\n    B --> D[1]\n    B --> E[2]\n    C --> F[null]\n    C --> G[null]\n    subgraph Main Tree\n    A\n    B\n    C\n    D\n    E\n    end\n    H[4] --> I[1]\n    H --> J[2]\n    style H fill:#fbbf24,color:#000\n    style I fill:#fbbf24,color:#000\n    style J fill:#fbbf24,color:#000\n    subgraph SubRoot\n    H\n    I\n    J\n    end",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given two binary trees. The first is the main tree, and the second is a smaller tree called subRoot. You need to determine whether subRoot is a subtree of the main tree. That means somewhere in the main tree, there's a node whose entire subtree is identical to subRoot, both in structure and values.",
+            "audio_file": "subtree-of-another-tree-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So just to clarify, when you say identical, you mean the subtree must match exactly from that node all the way down to the leaves? And what about null children, do those matter?",
+            "audio_file": "subtree-of-another-tree-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, exactly. The match must be complete. If subRoot has no right child at a node, the corresponding node in the main tree must also have no right child. Both trees contain only integer values, and you can assume subRoot is not null. The main tree has at most two thousand nodes.",
+            "audio_file": "subtree-of-another-tree-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. And what if the main tree is null but subRoot is not? That would return false, right?",
+            "audio_file": "subtree-of-another-tree-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Correct. A null tree cannot contain any subtree. Please return a boolean, true or false.",
+            "audio_file": "subtree-of-another-tree-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Alright. So to summarize, I need to check every node in the main tree to see if the subtree starting there perfectly matches subRoot in structure and values. Let me think about approaches.",
+            "audio_file": "subtree-of-another-tree-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Recursive Node-by-Node Comparison",
+        "diagram": "graph TD\n    style A fill:#60a5fa,color:#fff\n    style B fill:#60a5fa,color:#fff\n    style C fill:#60a5fa,color:#fff\n    style D fill:#60a5fa,color:#fff\n    style E fill:#60a5fa,color:#fff\n    A[\"3 - check match? No\"] --> B[\"4 - check match? Yes!\"]\n    A --> C[\"5 - check match? No\"]\n    B --> D[1]\n    B --> E[2]\n    subgraph Step 1: Visit node 3\n    A\n    end\n    subgraph Step 2: Visit node 4 - match found\n    B\n    D\n    E\n    end",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first approach is straightforward. I'll write a helper function called isSameTree that takes two nodes and checks if they're identical. It compares values and recurses on both children. If any mismatch is found, it returns false.",
+            "audio_file": "subtree-of-another-tree-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then in the main function, I traverse every node in the main tree. At each node, I call isSameTree comparing that node's subtree with subRoot. If any call returns true, I return true. Let me walk through the example. The main tree is rooted at three, with children four and five. Node four has children one and two. SubRoot is four with children one and two.",
+            "audio_file": "subtree-of-another-tree-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I start at node three. I call isSameTree comparing three with four. Values differ, so it returns false. I move to node four. I call isSameTree comparing four with four. Values match. Then I compare their left children, one and one, match. Right children, two and two, match. Both reach null at the same time. So it returns true.",
+            "audio_file": "subtree-of-another-tree-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good. What's the complexity?",
+            "audio_file": "subtree-of-another-tree-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let m be the number of nodes in the main tree and n the number of nodes in subRoot. In the worst case, I call isSameTree at every node, and each call takes O of n time. So the total time is O of m times n. Space is O of m plus n for the recursion stack.",
+            "audio_file": "subtree-of-another-tree-brute-force-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Tree Serialization with String Matching",
+        "diagram": "graph TD\n    style A fill:#a78bfa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#a78bfa,color:#fff\n    style D fill:#a78bfa,color:#fff\n    style E fill:#a78bfa,color:#fff\n    A[\"Serialize main tree\"] --> B[\"Preorder: #3 #4 #1 X X #2 X X #5 X X\"]\n    C[\"Serialize subRoot\"] --> D[\"Preorder: #4 #1 X X #2 X X\"]\n    B --> E{\"Does main string contain sub string? Yes → true\"}\n    D --> E",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can do better. Instead of comparing trees node by node repeatedly, I can serialize both trees into strings using preorder traversal. I'll use a special marker like X for null nodes and prefix each value with a hash symbol to avoid ambiguity. For example, node twelve won't accidentally match node one followed by node two.",
+            "audio_file": "subtree-of-another-tree-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For our example, the main tree serializes to hash three, hash four, hash one, X, X, hash two, X, X, hash five, X, X. The subRoot serializes to hash four, hash one, X, X, hash two, X, X.",
+            "audio_file": "subtree-of-another-tree-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Now I just check if the subRoot string appears inside the main tree string. Since the sub string is found within the main string, the answer is true.",
+            "audio_file": "subtree-of-another-tree-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice. And the complexity here?",
+            "audio_file": "subtree-of-another-tree-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Serialization takes O of m plus n time. String matching with a built-in contains method is also linear on average. So overall time is O of m plus n. Space is O of m plus n to store the serialized strings.",
+            "audio_file": "subtree-of-another-tree-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Level 1: Recursive Compare\"] -->|\"O of m times n\"| B[\"Level 2: Serialization\"]\n    B -->|\"O of m plus n\"| C[\"Best for interviews\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#22c55e,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great job. Let's recap. The recursive approach is intuitive and works well for smaller inputs, running in O of m times n time. The serialization approach brings it down to O of m plus n by converting the problem into a string matching task.",
+            "audio_file": "subtree-of-another-tree-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. In an interview, I'd start with the recursive solution since it's easy to implement and explain, then mention the serialization optimization. The key insight is that two trees are identical if and only if their serialized forms with null markers are the same string.",
+            "audio_file": "subtree-of-another-tree-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "id": "lowest-common-ancestor-of-a-bst",
+  "title": "Finding the Lowest Common Ancestor in a BST",
+  "difficulty": "medium",
+  "category": "trees",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "lowest common ancestor",
+        "explanation": "The deepest node in a tree that is an ancestor of both given nodes"
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through a specific test case step by step to verify understanding"
+      },
+      {
+        "phrase": "leverage the BST property",
+        "explanation": "To take advantage of the fact that left children are smaller and right children are larger than the current node"
+      },
+      {
+        "phrase": "narrow down the search",
+        "explanation": "To reduce the range of possible answers by eliminating impossible candidates"
+      },
+      {
+        "phrase": "base case",
+        "explanation": "The simplest scenario in a recursive solution where the answer is returned directly without further recursion"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Binary Search Tree",
+        "definition": "A binary tree where every node's left subtree contains only smaller values and the right subtree contains only larger values"
+      },
+      {
+        "term": "Lowest Common Ancestor",
+        "definition": "The deepest node in the tree that has both target nodes as descendants, where a node can be a descendant of itself"
+      },
+      {
+        "term": "Recursive Traversal",
+        "definition": "A technique that solves a problem by calling the same function on smaller subtrees until a base case is reached"
+      },
+      {
+        "term": "Iterative Traversal",
+        "definition": "A technique that uses a loop instead of recursion to walk through the tree one node at a time"
+      },
+      {
+        "term": "Ancestor Path",
+        "definition": "The sequence of nodes from the root down to a given target node in the tree"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "TreeNode.val",
+        "description": "Accesses the integer value stored in a tree node"
+      },
+      {
+        "signature": "TreeNode.left",
+        "description": "Returns the left child of the current tree node, or null if none exists"
+      },
+      {
+        "signature": "TreeNode.right",
+        "description": "Returns the right child of the current tree node, or null if none exists"
+      },
+      {
+        "signature": "ArrayList.add(E element)",
+        "description": "Appends an element to the end of the list, used to build ancestor paths"
+      },
+      {
+        "signature": "ArrayList.contains(Object o)",
+        "description": "Returns true if the list contains the specified element"
+      }
+    ]
+  },
+  "concept": "Given a binary search tree and two nodes that exist in the tree, find their lowest common ancestor. The lowest common ancestor is the deepest node that has both given nodes as descendants, where a node is allowed to be a descendant of itself.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Path Comparison",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Find the path from the root to each target node, then compare the two paths to find the last common node."
+    },
+    {
+      "level": 2,
+      "label": "Recursive BST Traversal",
+      "time_complexity": "O(h)",
+      "space_complexity": "O(h)",
+      "summary": "Recursively use BST ordering to decide whether to go left, right, or return the current node as the answer."
+    },
+    {
+      "level": 3,
+      "label": "Iterative BST Traversal",
+      "time_complexity": "O(h)",
+      "space_complexity": "O(1)",
+      "summary": "Iteratively traverse the BST using the same logic as the recursive approach, eliminating the call stack overhead."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    style N6 fill:#f87171,color:#fff\n    style N2 fill:#f87171,color:#fff\n    style N8 fill:#f87171,color:#fff\n    N6[6] --> N2[2]\n    N6 --> N8[8]\n    N2 --> N0[0]\n    N2 --> N4[4]\n    N4 --> N3[3]\n    N4 --> N5[5]\n    N8 --> N7[7]\n    N8 --> N9[9]",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "You're given a binary search tree and two nodes, p and q, that are guaranteed to exist in the tree. Find their lowest common ancestor. A node can be a descendant of itself.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So I need to find the deepest node that is an ancestor of both p and q. Can the two nodes be the same node?",
+            "audio_file": "lowest-common-ancestor-of-a-bst-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good question. The two nodes will always be distinct, and both are guaranteed to exist in the tree. The tree has unique values and at least two nodes.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And should I return the node itself or just its value?",
+            "audio_file": "lowest-common-ancestor-of-a-bst-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Return the tree node object. For example, in a BST with root six, if p is two and q is eight, the answer is node six since it's the deepest node that is an ancestor of both.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I have a BST with unique values, two distinct nodes that exist in it, and I return their lowest common ancestor node. Let me think about approaches.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Path Comparison",
+        "diagram": "graph TD\n    style N6 fill:#60a5fa,color:#fff\n    style N2 fill:#60a5fa,color:#fff\n    style N4 fill:#60a5fa,color:#fff\n    style N5 fill:#60a5fa,color:#fff\n    N6[6] --> N2[2]\n    N6 --> N8[8]\n    N2 --> N0[0]\n    N2 --> N4[4]\n    N4 --> N3[3]\n    N4 --> N5[5]\n    N8 --> N7[7]\n    N8 --> N9[9]\n    P1[\"Path to 2: 6 → 2\"] -.-> N6\n    P2[\"Path to 5: 6 → 2 → 4 → 5\"] -.-> N6\n    ANS[\"Last common: 2\"] -.-> N2",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is a path comparison approach. I'll find the path from the root to p and the path from the root to q, storing each in a list. Then I compare the two lists and find the last node they share.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Let's walk through an example. If p is two and q is five in our BST rooted at six, what happens?",
+            "audio_file": "lowest-common-ancestor-of-a-bst-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The path to two is six then two. The path to five is six, two, four, five. Comparing these, both share six and two. The last common node is two, so that's our answer.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What's the complexity?",
+            "audio_file": "lowest-common-ancestor-of-a-bst-brute-force-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of n in the worst case for a skewed tree since finding each path could visit every node. Space is also O of n to store the two paths. This works, but we're not using the BST property efficiently.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-brute-force-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "recursive",
+        "level": 2,
+        "title": "Recursive BST Traversal",
+        "diagram": "graph TD\n    style N6 fill:#a78bfa,color:#fff\n    style N2 fill:#a78bfa,color:#fff\n    N6[\"6: p=2 < 6, q=5 < 6 → go left\"] --> N2[\"2: p=2 ≤ 2 ≤ q=5 → split point!\"]\n    N6 --> N8[8]\n    N2 --> N0[0]\n    N2 --> N4[4]\n    N4 --> N3[3]\n    N4 --> N5[5]\n    N8 --> N7[7]\n    N8 --> N9[9]\n    RES[\"Return node 2\"] -.-> N2",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can leverage the BST property. If both p and q are smaller than the current node, the ancestor must be in the left subtree. If both are larger, it's in the right subtree. Otherwise, the current node is the split point and that's our answer.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-recursive-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk through the same example with p equals two and q equals five.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-recursive-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At node six, both two and five are less than six, so I recurse left. At node two, two is equal to two and five is greater than two. They don't both go the same direction, so node two is the split point. Return two.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-recursive-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great. What about complexity?",
+            "audio_file": "lowest-common-ancestor-of-a-bst-recursive-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Time is O of h where h is the height of the tree, since we only visit one node per level. Space is also O of h due to the recursion call stack. For a balanced tree, h is log n, which is much better.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-recursive-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Iterative BST Traversal",
+        "diagram": "graph TD\n    style N6 fill:#fb923c,color:#fff\n    style N2 fill:#fb923c,color:#fff\n    N6[\"6: both < 6 → move left\"] --> N2[\"2: split → answer!\"]\n    N6 --> N8[8]\n    N2 --> N0[0]\n    N2 --> N4[4]\n    N4 --> N3[3]\n    N4 --> N5[5]\n    N8 --> N7[7]\n    N8 --> N9[9]\n    RES[\"Return node 2, O of 1 space\"] -.-> N2",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The recursive approach has O of h space from the call stack. I can convert it to an iterative solution using a while loop. I start at the root and keep moving left or right based on the same BST comparison logic.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-optimal-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "How does the loop work step by step?",
+            "audio_file": "lowest-common-ancestor-of-a-bst-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "I set current to root. While current is not null, if both p and q values are less than current, I move current to current dot left. If both are greater, I move to current dot right. Otherwise, I return current because that's the split point.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "With p equals two and q equals five, at node six both are smaller so I move left. At node two, they split, so I return two. Time is O of h, and now space is O of one since there's no recursion.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-optimal-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    A[\"Path Comparison\nO of n time\nO of n space\"] -->|Leverage BST| B[\"Recursive\nO of h time\nO of h space\"]\n    B -->|Remove stack| C[\"Iterative\nO of h time\nO of 1 space\"]\n    style A fill:#60a5fa,color:#fff\n    style B fill:#a78bfa,color:#fff\n    style C fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Nice progression. You went from path comparison at O of n time and space, to recursive BST traversal at O of h time and space, then to iterative with O of h time and O of one space.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that in a BST, the lowest common ancestor is the node where p and q split into different subtrees. Once you see that, the solution becomes a simple traversal from root to the split point.",
+            "audio_file": "lowest-common-ancestor-of-a-bst-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

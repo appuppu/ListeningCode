@@ -1,0 +1,286 @@
+{
+  "id": "two-sum",
+  "title": "Finding Two Numbers That Add Up to a Target",
+  "difficulty": "easy",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "brute force approach",
+        "explanation": "A straightforward method that tries all possible combinations without any clever optimization."
+      },
+      {
+        "phrase": "time-space tradeoff",
+        "explanation": "The idea that you can often make an algorithm faster by using more memory, or use less memory at the cost of speed."
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual or extreme input that could cause unexpected behavior, such as an empty array or duplicate values."
+      },
+      {
+        "phrase": "walk through an example",
+        "explanation": "To trace through the algorithm step by step using a concrete input to verify correctness."
+      },
+      {
+        "phrase": "return the indices",
+        "explanation": "Give back the position numbers of elements in the array, not the values themselves."
+      },
+      {
+        "phrase": "complement of a number",
+        "explanation": "The value you need to add to a given number to reach the target sum."
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Hash Map",
+        "definition": "A data structure that stores key-value pairs and allows nearly instant lookup of a value by its key, typically in O of one time."
+      },
+      {
+        "term": "Index",
+        "definition": "The position of an element in an array, usually starting from zero."
+      },
+      {
+        "term": "Nested Loop",
+        "definition": "A loop inside another loop, often resulting in O of n-squared time complexity because every pair of elements is examined."
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the running time of an algorithm grows as the input size increases."
+      },
+      {
+        "term": "Space Complexity",
+        "definition": "A measure of how much additional memory an algorithm requires relative to the input size."
+      },
+      {
+        "term": "Complement",
+        "definition": "In the context of this problem, the complement of a number is the target minus that number — the value needed to form the desired sum."
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashMap.put(key, value)",
+        "description": "Inserts a key-value pair into the hash map. If the key already exists, its value is updated."
+      },
+      {
+        "signature": "HashMap.get(key)",
+        "description": "Returns the value associated with the given key, or null if the key is not present in the map."
+      },
+      {
+        "signature": "HashMap.containsKey(key)",
+        "description": "Returns true if the hash map contains the specified key, allowing an O of one lookup check."
+      },
+      {
+        "signature": "new int[]{a, b}",
+        "description": "Creates a new integer array containing the values a and b, commonly used to return a pair of results."
+      }
+    ]
+  },
+  "concept": "Given an array of integers and a target sum, find the indices of the two numbers that add up to the target. There is exactly one valid solution, and you may not use the same element twice.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Nested Loops",
+      "time_complexity": "O(n²)",
+      "space_complexity": "O(1)",
+      "summary": "Check every possible pair of elements using two nested loops and return the pair whose sum equals the target."
+    },
+    {
+      "level": 3,
+      "label": "One-Pass Hash Map",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Iterate through the array once, storing each number's index in a hash map. For each element, check if its complement already exists in the map."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction and Problem Clarification",
+        "diagram": "graph TD\n    A[\"📝 Input: Integer Array + Target\"] -->|\"Find two numbers\"| B[\"🎯 Target Sum\"]\n    B --> C[\"✅ Output: Indices of the Two Numbers\"]\n    style A fill:#f87171,stroke:#dc2626,color:#fff\n    style B fill:#f87171,stroke:#dc2626,color:#fff\n    style C fill:#f87171,stroke:#dc2626,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "All right, let's get started. I have an array problem for you today. Imagine you're given an array of integers and a single integer called the target. Your job is to find two numbers in the array that add up to that target, and return their indices. For example, if I give you the array two, seven, eleven, fifteen and the target is nine, you should return the indices zero and one, because two plus seven equals nine.",
+            "audio_file": "two-sum-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Okay, that makes sense. So I need to return the positions of the two numbers, not the numbers themselves. Let me ask a few clarifying questions. First, can I assume that there is always exactly one valid pair, or could there be multiple pairs that sum to the target?",
+            "audio_file": "two-sum-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good question. Yes, you can assume that each input has exactly one solution. There will always be one unique pair.",
+            "audio_file": "two-sum-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. And can I use the same element twice? For example, if the target is six and the array has a three in it, can I use that same three twice?",
+            "audio_file": "two-sum-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "No, you may not use the same element twice. The two numbers must be at different indices.",
+            "audio_file": "two-sum-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. What about the size of the array? Should I handle edge cases like an empty array or an array with only one element?",
+            "audio_file": "two-sum-intro-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The array will have at least two elements, so you don't need to worry about empty or single-element arrays. The values can be negative, zero, or positive, and the array can contain duplicates.",
+            "audio_file": "two-sum-intro-i4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Okay, and what should I return exactly? An array of two integers representing the indices?",
+            "audio_file": "two-sum-intro-c4.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, return an integer array of length two containing the two indices. The order of the indices does not matter.",
+            "audio_file": "two-sum-intro-i5.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Perfect. Let me summarize to make sure I have it right. I'm given an integer array and a target integer. I need to find two distinct elements in the array that add up to the target and return their indices as an integer array. There is guaranteed to be exactly one solution, and I cannot reuse the same element. The array has at least two elements and may contain negative numbers or duplicates. Does that sound correct?",
+            "audio_file": "two-sum-intro-c5.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's exactly right. Go ahead and think about how you would solve this.",
+            "audio_file": "two-sum-intro-i6.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Nested Loops",
+        "diagram": "graph TD\n    A[\"Start: i = 0\"] --> B[\"Inner loop: j = i + 1\"]\n    B --> C{\"arr[i] + arr[j] == target?\"}\n    C -->|Yes| D[\"Return {i, j}\"]\n    C -->|No| E[\"Increment j\"]\n    E --> F{\"j < length?\"}\n    F -->|Yes| B\n    F -->|No| G[\"Increment i\"]\n    G --> A\n    style A fill:#60a5fa,stroke:#2563eb,color:#fff\n    style B fill:#60a5fa,stroke:#2563eb,color:#fff\n    style C fill:#60a5fa,stroke:#2563eb,color:#fff\n    style D fill:#60a5fa,stroke:#2563eb,color:#fff\n    style E fill:#60a5fa,stroke:#2563eb,color:#fff\n    style F fill:#60a5fa,stroke:#2563eb,color:#fff\n    style G fill:#60a5fa,stroke:#2563eb,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The most straightforward approach that comes to mind is the brute force method. I can use two nested loops to check every possible pair of elements in the array. The outer loop picks the first number at index i, and the inner loop picks the second number at index j, where j starts from i plus one to avoid using the same element twice.",
+            "audio_file": "two-sum-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "For each pair, I check if the sum of the element at index i and the element at index j equals the target. If it does, I return an array containing i and j. Let me walk through the example. Given the array two, seven, eleven, fifteen with target nine. First, i equals zero and j equals one. I check two plus seven, which is nine. That matches the target, so I return indices zero and one.",
+            "audio_file": "two-sum-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works. What is the time and space complexity of this approach?",
+            "audio_file": "two-sum-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n-squared because for each element, I'm potentially comparing it against every other element. The outer loop runs n times and the inner loop runs up to n minus one times, giving us roughly n times n comparisons. The space complexity is O of one because I'm not using any extra data structures — just two loop variables.",
+            "audio_file": "two-sum-brute-force-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Right. O of n-squared can be slow for large arrays. Can you think of a way to do better?",
+            "audio_file": "two-sum-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashmap",
+        "level": 3,
+        "title": "Optimal One-Pass Hash Map",
+        "diagram": "graph TD\n    A[\"Start: Create empty HashMap\"] --> B[\"For each element at index i\"]\n    B --> C[\"Calculate complement = target - arr[i]\"]\n    C --> D{\"Is complement in HashMap?\"}\n    D -->|Yes| E[\"Return {map.get(complement), i}\"]\n    D -->|No| F[\"Store arr[i] → i in HashMap\"]\n    F --> G[\"Move to next element\"]\n    G --> B\n    style A fill:#fb923c,stroke:#ea580c,color:#fff\n    style B fill:#fb923c,stroke:#ea580c,color:#fff\n    style C fill:#fb923c,stroke:#ea580c,color:#fff\n    style D fill:#fb923c,stroke:#ea580c,color:#fff\n    style E fill:#fb923c,stroke:#ea580c,color:#fff\n    style F fill:#fb923c,stroke:#ea580c,color:#fff\n    style G fill:#fb923c,stroke:#ea580c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Yes, I can use a hash map to bring this down to O of n time. The key insight is this: for each number in the array, I know exactly what other number I need to reach the target. That other number is the complement, which is simply the target minus the current number.",
+            "audio_file": "two-sum-hashmap-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Here is the idea. I create an empty hash map where the key is the number and the value is its index. Then I iterate through the array once. For each element, I calculate its complement by subtracting the current value from the target. Then I check if that complement already exists as a key in my hash map.",
+            "audio_file": "two-sum-hashmap-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "If the complement is in the map, I've found my pair. I return the index stored in the map for the complement and the current index. If it's not in the map, I store the current number and its index in the map and move on to the next element.",
+            "audio_file": "two-sum-hashmap-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Nice. Can you walk through the example with this approach?",
+            "audio_file": "two-sum-hashmap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Sure. The array is two, seven, eleven, fifteen, and the target is nine. I start with an empty hash map. At index zero, the value is two. The complement is nine minus two, which is seven. I check the map — seven is not there yet. So I store two mapped to zero in the map.",
+            "audio_file": "two-sum-hashmap-c4.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "At index one, the value is seven. The complement is nine minus seven, which is two. I check the map — two is there, stored at index zero. So I return the indices zero and one. I found the answer in just two steps instead of checking all pairs.",
+            "audio_file": "two-sum-hashmap-c5.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great. And the complexity of this hash map approach?",
+            "audio_file": "two-sum-hashmap-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n because I traverse the array only once, and each hash map lookup and insertion takes O of one on average. The space complexity is also O of n because in the worst case, I might store almost every element in the hash map before finding the answer.",
+            "audio_file": "two-sum-hashmap-c6.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What if the array has duplicate values? Say the array is three, three, and the target is six. Does your solution still work?",
+            "audio_file": "two-sum-hashmap-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Yes, it does. Let me trace through it. At index zero, the value is three. The complement is six minus three, which is three. Three is not in the map yet, so I store three mapped to zero. At index one, the value is three again. The complement is three. Now three is already in the map at index zero. So I return indices zero and one. The key point is that I check for the complement before inserting the current element, so the current element never matches against itself.",
+            "audio_file": "two-sum-hashmap-c7.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary and Comparison",
+        "diagram": "graph LR\n    subgraph Brute Force\n    A[\"Time: O of n-squared\"]\n    B[\"Space: O of one\"]\n    end\n    subgraph Hash Map\n    C[\"Time: O of n\"]\n    D[\"Space: O of n\"]\n    end\n    A ---|\"Improved to\"| C\n    B ---|\"Tradeoff\"| D\n    style A fill:#60a5fa,stroke:#2563eb,color:#fff\n    style B fill:#60a5fa,stroke:#2563eb,color:#fff\n    style C fill:#fb923c,stroke:#ea580c,color:#fff\n    style D fill:#fb923c,stroke:#ea580c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Excellent work. Let's recap what we discussed. You started with a brute force approach using nested loops, which runs in O of n-squared time and O of one space. Then you optimized it to a one-pass hash map solution running in O of n time with O of n space.",
+            "audio_file": "two-sum-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Right. The main takeaway here is the time-space tradeoff. By using extra memory for the hash map, we reduced the time from O of n-squared to O of n. The hash map lets us look up the complement of each number in constant time instead of scanning the rest of the array.",
+            "audio_file": "two-sum-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "And what's the core idea that made the optimization possible?",
+            "audio_file": "two-sum-summary-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The core idea is the concept of the complement. Instead of asking which two numbers add up to the target, I reframe it as: for each number, does the value I need to complete the sum already exist in what I've seen so far? The hash map lets me answer that question in O of one time. This pattern of using a hash map to trade space for time comes up frequently in array problems.",
+            "audio_file": "two-sum-summary-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Well said. That's a great solution. Let's move on.",
+            "audio_file": "two-sum-summary-i3.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

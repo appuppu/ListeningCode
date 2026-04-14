@@ -1,0 +1,218 @@
+{
+  "id": "copy-list-with-random-pointer",
+  "title": "Deep Copying a Linked List With Random Pointers",
+  "difficulty": "medium",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "deep copy",
+        "explanation": "Creating a completely independent duplicate where changes to the copy do not affect the original"
+      },
+      {
+        "phrase": "point to",
+        "explanation": "A reference or link from one node to another node in the data structure"
+      },
+      {
+        "phrase": "map each node",
+        "explanation": "Create a correspondence between every original node and its copied counterpart"
+      },
+      {
+        "phrase": "interleave the nodes",
+        "explanation": "Insert new nodes between existing nodes in an alternating pattern"
+      },
+      {
+        "phrase": "in one pass",
+        "explanation": "Processing the entire data structure by traversing it only a single time"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Linked List",
+        "definition": "A linear data structure where each element contains a value and a reference to the next element"
+      },
+      {
+        "term": "Random Pointer",
+        "definition": "An additional pointer in each node that can reference any node in the list or null"
+      },
+      {
+        "term": "HashMap",
+        "definition": "A data structure that stores key-value pairs and provides average O of one lookup time"
+      },
+      {
+        "term": "Deep Copy",
+        "definition": "A full duplication of a data structure where all nodes are newly created, not shared with the original"
+      },
+      {
+        "term": "Node",
+        "definition": "A single element in a linked list containing a value and one or more pointers"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "HashMap.put(key, value)",
+        "description": "Inserts a key-value pair into the hash map"
+      },
+      {
+        "signature": "HashMap.get(key)",
+        "description": "Retrieves the value associated with the given key"
+      },
+      {
+        "signature": "HashMap.containsKey(key)",
+        "description": "Returns true if the map contains the specified key"
+      },
+      {
+        "signature": "new Node(val)",
+        "description": "Creates a new linked list node with the given value"
+      }
+    ]
+  },
+  "concept": "Given a linked list where each node has a next pointer and a random pointer that can point to any node in the list or null, create a deep copy of the entire list. The copied list must be completely independent of the original.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "HashMap Mapping",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Use a hash map to store the mapping from each original node to its copy. First pass creates all copied nodes. Second pass sets next and random pointers using the map."
+    },
+    {
+      "level": 2,
+      "label": "Interleaving Nodes",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Weave copied nodes directly into the original list. Each copy is placed right after its original. Then set random pointers using the interleaved structure. Finally, separate the two lists."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction",
+        "diagram": "graph LR\n    style A fill:#f87171,color:#fff\n    style B fill:#f87171,color:#fff\n    style C fill:#f87171,color:#fff\n    A[\"Node 7\"] -->|next| B[\"Node 13\"]\n    B -->|next| C[\"Node 11\"]\n    A -.->|random| C\n    B -.->|random| A\n    C -.->|random| B",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Imagine you're given a linked list, but each node has two pointers. One is the usual next pointer. The other is a random pointer that can point to any node in the list or to null. Your task is to create a deep copy of this list. The new list must be entirely independent of the original.",
+            "audio_file": "copy-list-with-random-pointer-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "So just to clarify, every node has a value, a next pointer, and a random pointer. The random pointer could reference any node, including itself, or it could be null. Is that correct?",
+            "audio_file": "copy-list-with-random-pointer-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. And the deep copy means every node in the new list must be a newly created object. The random pointers in the copy must point to the corresponding copied nodes, not the originals.",
+            "audio_file": "copy-list-with-random-pointer-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "What about edge cases? Could the list be empty, or have just one node? And are the node values unique?",
+            "audio_file": "copy-list-with-random-pointer-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "The list could be empty, yes. Values are not necessarily unique, so you cannot rely on values to identify nodes. You should use node references for identification.",
+            "audio_file": "copy-list-with-random-pointer-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So the core challenge is that when I copy a node, its random pointer might reference a node I haven't created yet. I need a way to track the mapping between original nodes and their copies. Let me think about approaches.",
+            "audio_file": "copy-list-with-random-pointer-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "hashmap",
+        "level": 1,
+        "title": "HashMap Mapping",
+        "diagram": "graph TD\n    subgraph Pass1[\"Pass 1: Create Copies\"]\n        style Pass1 fill:#1e3a5f,color:#fff\n        O1[\"Original 7\"] -->|map| C1[\"Copy 7\"]\n        O2[\"Original 13\"] -->|map| C2[\"Copy 13\"]\n        O3[\"Original 11\"] -->|map| C3[\"Copy 11\"]\n    end\n    subgraph Pass2[\"Pass 2: Set Pointers\"]\n        style Pass2 fill:#1e3a5f,color:#fff\n        C1 -->|next| C2\n        C2 -->|next| C3\n        C1 -.->|random| C3\n        C2 -.->|random| C1\n        C3 -.->|random| C2\n    end\n    style C1 fill:#60a5fa,color:#fff\n    style C2 fill:#60a5fa,color:#fff\n    style C3 fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first approach uses a hash map. I'll traverse the list once and create a copy of every node, storing the mapping from original to copy in the map. I don't set any pointers yet, just create the nodes.",
+            "audio_file": "copy-list-with-random-pointer-hashmap-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then I traverse the list a second time. For each original node, I look up its copy in the map. I set the copy's next pointer to the map entry for the original's next. I set the copy's random pointer to the map entry for the original's random.",
+            "audio_file": "copy-list-with-random-pointer-hashmap-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the example. We have nodes seven, thirteen, and eleven. Seven's random points to eleven. Thirteen's random points to seven. Eleven's random points to thirteen.",
+            "audio_file": "copy-list-with-random-pointer-hashmap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In pass one, I create copies of seven, thirteen, and eleven, storing each pair in the map. In pass two, I visit original seven. Its next is thirteen, so copy seven's next becomes copy thirteen. Its random is eleven, so copy seven's random becomes copy eleven. I repeat for all nodes.",
+            "audio_file": "copy-list-with-random-pointer-hashmap-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is O of n since I traverse the list twice. The space complexity is also O of n because the hash map stores n entries. This works well, but can we do it without extra space?",
+            "audio_file": "copy-list-with-random-pointer-hashmap-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 2,
+        "title": "Interleaving Nodes",
+        "diagram": "graph LR\n    subgraph Step1[\"Step 1: Interleave\"]\n        direction LR\n        A1[\"7\"] --> A1c[\"7'\"] --> A2[\"13\"] --> A2c[\"13'\"] --> A3[\"11\"] --> A3c[\"11'\"]\n    end\n    subgraph Step2[\"Step 2: Set Random\"]\n        direction LR\n        B1[\"7'\"] -.->|random| B3[\"11'\"]\n        B2[\"13'\"] -.->|random| B1\n        B3c[\"11'\"] -.->|random| B2\n    end\n    subgraph Step3[\"Step 3: Separate\"]\n        direction LR\n        D1[\"7'\"] --> D2[\"13'\"] --> D3[\"11'\"]\n    end\n    style A1c fill:#fb923c,color:#fff\n    style A2c fill:#fb923c,color:#fff\n    style A3c fill:#fb923c,color:#fff\n    style B1 fill:#fb923c,color:#fff\n    style B2 fill:#fb923c,color:#fff\n    style B3 fill:#fb923c,color:#fff\n    style B3c fill:#fb923c,color:#fff\n    style D1 fill:#fb923c,color:#fff\n    style D2 fill:#fb923c,color:#fff\n    style D3 fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "We can eliminate the hash map by interleaving copied nodes into the original list. In the first pass, for each original node, I create its copy and insert it right after the original. So the list becomes seven, copy of seven, thirteen, copy of thirteen, eleven, copy of eleven.",
+            "audio_file": "copy-list-with-random-pointer-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In the second pass, I set the random pointers. If original seven's random points to eleven, then copy of seven's random should point to eleven's next, which is copy of eleven. The copy is always right after its original, so we can find it directly.",
+            "audio_file": "copy-list-with-random-pointer-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That's clever. How do you separate the two lists afterward?",
+            "audio_file": "copy-list-with-random-pointer-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In the third pass, I untangle them. I restore the original list by setting each original node's next to skip over the copy. Simultaneously, I build the copied list by linking each copy to the next copy. After this, both lists are fully independent.",
+            "audio_file": "copy-list-with-random-pointer-optimal-c3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The time complexity is still O of n with three passes. But the space complexity is now O of one since we don't use a hash map. We only use the existing list structure as scaffolding.",
+            "audio_file": "copy-list-with-random-pointer-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph TD\n    subgraph Compare[\"Approach Comparison\"]\n        direction TB\n        H[\"HashMap Mapping\"] --- HT[\"Time: O of n\"]\n        H --- HS[\"Space: O of n\"]\n        I[\"Interleaving Nodes\"] --- IT[\"Time: O of n\"]\n        I --- IS[\"Space: O of 1\"]\n    end\n    style H fill:#60a5fa,color:#fff\n    style HT fill:#60a5fa,color:#fff\n    style HS fill:#60a5fa,color:#fff\n    style I fill:#fb923c,color:#fff\n    style IT fill:#fb923c,color:#fff\n    style IS fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great analysis. The hash map approach is intuitive and easy to implement. The interleaving approach is more advanced but achieves constant extra space. Which would you choose in practice?",
+            "audio_file": "copy-list-with-random-pointer-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "In an interview, I'd start with the hash map solution since it's clear and correct. Then I'd mention the interleaving optimization to show deeper understanding. The hash map is usually preferred in production for readability, while interleaving is great when memory is constrained.",
+            "audio_file": "copy-list-with-random-pointer-summary-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Well said. The key insight here is recognizing that the challenge lies in mapping original nodes to copies so that random pointers can be reconstructed. Both approaches solve that in different ways.",
+            "audio_file": "copy-list-with-random-pointer-summary-i2.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

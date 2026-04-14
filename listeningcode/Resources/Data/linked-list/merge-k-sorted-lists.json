@@ -1,0 +1,243 @@
+{
+  "id": "merge-k-sorted-lists",
+  "title": "Merging K Sorted Linked Lists",
+  "difficulty": "hard",
+  "category": "linked-list",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "merge them into",
+        "explanation": "Combine multiple things into a single unified result"
+      },
+      {
+        "phrase": "let me walk through",
+        "explanation": "Let me explain step by step using an example"
+      },
+      {
+        "phrase": "brute force approach",
+        "explanation": "The most straightforward but often inefficient method"
+      },
+      {
+        "phrase": "maintain the order",
+        "explanation": "Keep elements in their correct sorted sequence"
+      },
+      {
+        "phrase": "at each step",
+        "explanation": "During every iteration or phase of the process"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Linked List",
+        "definition": "A linear data structure where each element (node) contains a value and a pointer to the next node"
+      },
+      {
+        "term": "Min-Heap",
+        "definition": "A binary tree where the parent node is always smaller than its children, giving O of log n extraction of the minimum"
+      },
+      {
+        "term": "Priority Queue",
+        "definition": "An abstract data type that always returns the element with the highest priority (smallest value in a min-heap)"
+      },
+      {
+        "term": "Divide and Conquer",
+        "definition": "A strategy that breaks a problem into smaller subproblems, solves them, and combines the results"
+      },
+      {
+        "term": "Merge Sort",
+        "definition": "A sorting algorithm that divides the input in half, sorts each half, and merges the sorted halves"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "PriorityQueue<ListNode>(Comparator)",
+        "description": "Creates a min-heap that orders ListNode elements by the given comparator"
+      },
+      {
+        "signature": "queue.offer(node)",
+        "description": "Inserts a node into the priority queue in O of log k time"
+      },
+      {
+        "signature": "queue.poll()",
+        "description": "Removes and returns the smallest element from the priority queue"
+      },
+      {
+        "signature": "Collections.sort(list)",
+        "description": "Sorts a list in ascending order using O of n log n comparison-based sorting"
+      }
+    ]
+  },
+  "concept": "Given an array of k sorted linked lists, merge all of them into one single sorted linked list and return its head.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Collect and Sort",
+      "time_complexity": "O(N log N)",
+      "space_complexity": "O(N)",
+      "summary": "Gather all node values into a list, sort them, then build a new linked list from the sorted values."
+    },
+    {
+      "level": 2,
+      "label": "Min-Heap Approach",
+      "time_complexity": "O(N log k)",
+      "space_complexity": "O(k)",
+      "summary": "Use a priority queue of size k to always extract the smallest head among all lists, appending it to the result."
+    },
+    {
+      "level": 3,
+      "label": "Divide and Conquer Merge",
+      "time_complexity": "O(N log k)",
+      "space_complexity": "O(log k)",
+      "summary": "Pair up lists and merge each pair repeatedly, halving the number of lists each round until one remains."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Understanding the Problem",
+        "diagram": "graph TD\n    subgraph Input[\"Input: 3 Sorted Linked Lists\"]\n        L1[\"List 1: 1 → 4 → 7\"]\n        L2[\"List 2: 2 → 5 → 8\"]\n        L3[\"List 3: 3 → 6 → 9\"]\n    end\n    subgraph Output[\"Merged Result\"]\n        R[\"1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9\"]\n    end\n    L1 -->|merge| R\n    L2 -->|merge| R\n    L3 -->|merge| R\n    style L1 fill:#f87171,color:#fff\n    style L2 fill:#f87171,color:#fff\n    style L3 fill:#f87171,color:#fff\n    style R fill:#f87171,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here's the problem. You're given an array containing k sorted linked lists. Each list is sorted in ascending order. Your task is to merge all of them into one single sorted linked list and return its head.",
+            "audio_file": "merge-k-sorted-lists-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. So I receive an array of linked list heads, and each individual list is already sorted. A few clarifying questions: Can the array be empty, or can some of the lists be null?",
+            "audio_file": "merge-k-sorted-lists-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, the array could be empty, and individual lists can be null. Also, k can range from zero to ten thousand, and the total number of nodes across all lists can be up to one hundred thousand.",
+            "audio_file": "merge-k-sorted-lists-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. Can node values be negative?",
+            "audio_file": "merge-k-sorted-lists-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, values range from minus ten thousand to ten thousand.",
+            "audio_file": "merge-k-sorted-lists-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me summarize. I have k sorted linked lists. I need to merge them into a single sorted linked list. I should handle empty arrays and null lists. For example, given lists one-four-seven, two-five-eight, and three-six-nine, the result would be one through nine in order.",
+            "audio_file": "merge-k-sorted-lists-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Collect and Sort",
+        "diagram": "graph TD\n    subgraph Step1[\"Step 1: Collect All Values\"]\n        L1[\"1 → 4 → 7\"] --> A[\"Array: [1,4,7,2,5,8,3,6,9]\"]\n        L2[\"2 → 5 → 8\"] --> A\n        L3[\"3 → 6 → 9\"] --> A\n    end\n    subgraph Step2[\"Step 2: Sort the Array\"]\n        A --> S[\"Sorted: [1,2,3,4,5,6,7,8,9]\"]\n    end\n    subgraph Step3[\"Step 3: Build New List\"]\n        S --> R[\"1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9\"]\n    end\n    style A fill:#60a5fa,color:#fff\n    style S fill:#60a5fa,color:#fff\n    style R fill:#60a5fa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "My first idea is straightforward. I'll traverse every linked list, collect all node values into a single array, sort that array, and then build a new linked list from the sorted values.",
+            "audio_file": "merge-k-sorted-lists-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Walk me through the complexity of that approach.",
+            "audio_file": "merge-k-sorted-lists-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let capital N be the total number of nodes. Collecting takes O of N. Sorting takes O of N log N. Building the list is O of N. So overall time is O of N log N, and space is O of N for the array.",
+            "audio_file": "merge-k-sorted-lists-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works, but it doesn't use the fact that each list is already sorted. Can you do better?",
+            "audio_file": "merge-k-sorted-lists-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "heap",
+        "level": 2,
+        "title": "Min-Heap Approach",
+        "diagram": "graph TD\n    subgraph Init[\"Initialize Heap with Heads\"]\n        H[\"Min-Heap: [1, 2, 3]\"]\n    end\n    subgraph Round1[\"Extract 1, push 4\"]\n        H1[\"Heap: [2, 3, 4]\"]\n        R1[\"Result: 1\"]\n    end\n    subgraph Round2[\"Extract 2, push 5\"]\n        H2[\"Heap: [3, 4, 5]\"]\n        R2[\"Result: 1 → 2\"]\n    end\n    subgraph Round3[\"Extract 3, push 6\"]\n        H3[\"Heap: [4, 5, 6]\"]\n        R3[\"Result: 1 → 2 → 3\"]\n    end\n    Init --> Round1 --> Round2 --> Round3\n    style H fill:#a78bfa,color:#fff\n    style H1 fill:#a78bfa,color:#fff\n    style H2 fill:#a78bfa,color:#fff\n    style H3 fill:#a78bfa,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "Since each list is sorted, I only need to compare the current head of each list to find the global minimum. A min-heap of size k is perfect for this. I insert the head of each list into the heap. Then I repeatedly extract the minimum, add it to my result, and push that node's next pointer into the heap.",
+            "audio_file": "merge-k-sorted-lists-heap-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Let's trace through our example. Lists are one-four-seven, two-five-eight, three-six-nine.",
+            "audio_file": "merge-k-sorted-lists-heap-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The heap starts with one, two, three. I extract one, push four. Heap becomes two, three, four. Extract two, push five. Extract three, push six. This continues until the heap is empty. Each extraction is O of log k, and I do it N times, so time is O of N log k. Space is O of k for the heap.",
+            "audio_file": "merge-k-sorted-lists-heap-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Great improvement. Since k is usually much smaller than N, log k is better than log N. Is there an approach that uses even less space?",
+            "audio_file": "merge-k-sorted-lists-heap-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Divide and Conquer Merge",
+        "diagram": "graph TD\n    subgraph Round1[\"Round 1: Pair and Merge\"]\n        L1[\"1→4→7\"] --- L2[\"2→5→8\"]\n        L3[\"3→6→9\"]\n        L1 --> M1[\"1→2→4→5→7→8\"]\n        L2 --> M1\n        L3 --> M2[\"3→6→9 (unpaired)\"]\n    end\n    subgraph Round2[\"Round 2: Merge Again\"]\n        M1 --> Final[\"1→2→3→4→5→6→7→8→9\"]\n        M2 --> Final\n    end\n    style M1 fill:#fb923c,color:#fff\n    style M2 fill:#fb923c,color:#fff\n    style Final fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can use divide and conquer, similar to merge sort. I pair up the k lists and merge each pair. This halves the number of lists each round. After log k rounds, only one list remains.",
+            "audio_file": "merge-k-sorted-lists-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "With our three lists: round one merges list one and list two into one-two-four-five-seven-eight. List three has no pair. Round two merges those two remaining lists into the final sorted list.",
+            "audio_file": "merge-k-sorted-lists-optimal-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What about the complexity?",
+            "audio_file": "merge-k-sorted-lists-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Each round processes all N nodes once, and there are log k rounds, so time is O of N log k, same as the heap. But space is only O of log k for the recursion stack, since we merge in place without extra data structures. This makes it the most space-efficient solution.",
+            "audio_file": "merge-k-sorted-lists-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. The in-place merging is a real advantage when memory matters.",
+            "audio_file": "merge-k-sorted-lists-optimal-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary",
+        "diagram": "graph LR\n    subgraph Comparison[\"Approach Comparison\"]\n        BF[\"Collect & Sort\\nO of N log N time\\nO of N space\"]\n        HP[\"Min-Heap\\nO of N log k time\\nO of k space\"]\n        DC[\"Divide & Conquer\\nO of N log k time\\nO of log k space\"]\n    end\n    BF -->|\"leverage sorted property\"| HP\n    HP -->|\"reduce space\"| DC\n    style BF fill:#60a5fa,color:#fff\n    style HP fill:#a78bfa,color:#fff\n    style DC fill:#fb923c,color:#fff",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Let's wrap up. We covered three approaches. The brute force collects and sorts everything in O of N log N. The heap approach uses a priority queue to get O of N log k time with O of k space. The divide and conquer merge matches the heap's time but reduces space to O of log k.",
+            "audio_file": "merge-k-sorted-lists-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that since each list is already sorted, we only need to efficiently pick the smallest element among k candidates at each step. Both the heap and divide and conquer exploit this, but divide and conquer wins on space.",
+            "audio_file": "merge-k-sorted-lists-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}

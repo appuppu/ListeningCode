@@ -1,0 +1,243 @@
+{
+  "id": "product-of-array-except-self",
+  "title": "Computing Products Without Self Inclusion",
+  "difficulty": "medium",
+  "category": "arrays-and-hashing",
+  "prerequisites": {
+    "phrases": [
+      {
+        "phrase": "without using division",
+        "explanation": "A constraint meaning you cannot use the divide operator to solve the problem"
+      },
+      {
+        "phrase": "prefix and suffix",
+        "explanation": "Prefix means elements before a position, suffix means elements after a position"
+      },
+      {
+        "phrase": "in-place computation",
+        "explanation": "Performing calculations using existing storage rather than allocating extra arrays"
+      },
+      {
+        "phrase": "running product",
+        "explanation": "A cumulative product that updates as you iterate through elements"
+      },
+      {
+        "phrase": "edge case",
+        "explanation": "An unusual input scenario that may require special handling"
+      }
+    ],
+    "technical_terms": [
+      {
+        "term": "Prefix Product",
+        "definition": "The product of all elements to the left of a given index"
+      },
+      {
+        "term": "Suffix Product",
+        "definition": "The product of all elements to the right of a given index"
+      },
+      {
+        "term": "Brute Force",
+        "definition": "A straightforward approach that checks all possibilities, often with higher time complexity"
+      },
+      {
+        "term": "Time Complexity",
+        "definition": "A measure of how the runtime of an algorithm grows relative to input size"
+      },
+      {
+        "term": "Space Complexity",
+        "definition": "A measure of how much extra memory an algorithm uses relative to input size"
+      }
+    ],
+    "java_methods": [
+      {
+        "signature": "new int[n]",
+        "description": "Creates a new integer array of size n, initialized to zero"
+      },
+      {
+        "signature": "array.length",
+        "description": "Returns the number of elements in the array"
+      },
+      {
+        "signature": "Arrays.toString(array)",
+        "description": "Converts an array to a readable string representation"
+      },
+      {
+        "signature": "System.arraycopy(src, srcPos, dest, destPos, length)",
+        "description": "Copies elements from one array to another efficiently"
+      }
+    ]
+  },
+  "concept": "Given an integer array nums, return an array result where result[i] is the product of all elements in nums except nums[i]. You must solve it without using the division operator.",
+  "solutions": [
+    {
+      "level": 1,
+      "label": "Brute Force with Nested Loops",
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(n)",
+      "summary": "For each index, loop through all other indices and multiply their values together."
+    },
+    {
+      "level": 2,
+      "label": "Prefix and Suffix Arrays",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "summary": "Build a prefix product array and a suffix product array, then multiply them element by element."
+    },
+    {
+      "level": 3,
+      "label": "Optimized Single Output Array",
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "summary": "Use the output array to store prefix products, then sweep backward with a running suffix variable."
+    }
+  ],
+  "audio_script": {
+    "sections": [
+      {
+        "id": "intro",
+        "level": 0,
+        "title": "Introduction and Problem Clarification",
+        "diagram": "graph TD\n    A[\"Input: nums = [1,2,3,4]\"] --> B[\"For index 0: 2×3×4 = 24\"]\n    A --> C[\"For index 1: 1×3×4 = 12\"]\n    A --> D[\"For index 2: 1×2×4 = 8\"]\n    A --> E[\"For index 3: 1×2×3 = 6\"]\n    B --> F[\"Output: [24,12,8,6]\"]\n    C --> F\n    D --> F\n    E --> F\n    style A fill:#f87171,color:#000\n    style F fill:#f87171,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Here is today's problem. You are given an integer array. Return a new array where each element equals the product of every other element in the original array, except the one at that same index. Oh, and one important constraint: you cannot use division.",
+            "audio_file": "product-of-array-except-self-intro-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Let me confirm. For the array one, two, three, four, the result at index zero would be two times three times four, which is twenty-four. Is that correct?",
+            "audio_file": "product-of-array-except-self-intro-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Exactly. And the full output would be twenty-four, twelve, eight, six. The array will have at least two elements and can be up to one hundred thousand elements long. Values can be negative or zero.",
+            "audio_file": "product-of-array-except-self-intro-i2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Got it. Can there be zeros in the array? That would normally make division tricky, which I guess is why division is banned.",
+            "audio_file": "product-of-array-except-self-intro-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Yes, zeros are possible. The no-division rule is a firm constraint, not just a hint. The answer is guaranteed to fit in a thirty-two-bit integer.",
+            "audio_file": "product-of-array-except-self-intro-i3.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Understood. So I need to compute, for each index, the product of all elements except itself, without division, handling zeros and negatives. Let me think about approaches.",
+            "audio_file": "product-of-array-except-self-intro-c3.mp3"
+          }
+        ]
+      },
+      {
+        "id": "brute-force",
+        "level": 1,
+        "title": "Brute Force with Nested Loops",
+        "diagram": "graph TD\n    A[\"Pick index i\"] --> B[\"Loop j from 0 to n-1\"]\n    B --> C{\"Is j equal to i?\"}\n    C -->|Yes| D[\"Skip this element\"]\n    C -->|No| E[\"Multiply into product\"]\n    D --> B\n    E --> B\n    B --> F[\"Store product at result i\"]\n    F --> G[\"Repeat for all i\"]\n    style A fill:#60a5fa,color:#000\n    style F fill:#60a5fa,color:#000\n    style G fill:#60a5fa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "The simplest approach is brute force. For each index i, I loop through every other index j, skipping when j equals i, and multiply all those values together. This gives the correct product for each position.",
+            "audio_file": "product-of-array-except-self-brute-force-c1.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "What is the time complexity of that approach?",
+            "audio_file": "product-of-array-except-self-brute-force-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "It is O of n-squared because for each of the n elements, I iterate through n minus one others. Space is O of n for the output array only.",
+            "audio_file": "product-of-array-except-self-brute-force-c2.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "That works but is too slow for large inputs. Can you do better than n-squared?",
+            "audio_file": "product-of-array-except-self-brute-force-i2.mp3"
+          }
+        ]
+      },
+      {
+        "id": "prefix-suffix",
+        "level": 2,
+        "title": "Prefix and Suffix Product Arrays",
+        "diagram": "graph LR\n    subgraph Input\n    N[\"nums: [1, 2, 3, 4]\"]\n    end\n    subgraph Prefix\n    P[\"prefix: [1, 1, 2, 6]\"]\n    end\n    subgraph Suffix\n    S[\"suffix: [24, 12, 4, 1]\"]\n    end\n    subgraph Result\n    R[\"result: [24, 12, 8, 6]\"]\n    end\n    N --> P\n    N --> S\n    P --> R\n    S --> R\n    style P fill:#a78bfa,color:#000\n    style S fill:#a78bfa,color:#000\n    style R fill:#a78bfa,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can observe that the product at index i equals the product of everything to its left times the product of everything to its right. So I will build two arrays: a prefix array and a suffix array.",
+            "audio_file": "product-of-array-except-self-prefix-suffix-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The prefix array stores cumulative products from left to right. Prefix of zero is one. Prefix of one is nums zero. Prefix of two is nums zero times nums one, and so on.",
+            "audio_file": "product-of-array-except-self-prefix-suffix-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The suffix array stores cumulative products from right to left. Then result at i equals prefix of i multiplied by suffix of i. Each pass is O of n, so total time is O of n.",
+            "audio_file": "product-of-array-except-self-prefix-suffix-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Good improvement. The time is now O of n, but you are using two extra arrays. Can you reduce the extra space?",
+            "audio_file": "product-of-array-except-self-prefix-suffix-i1.mp3"
+          }
+        ]
+      },
+      {
+        "id": "optimal",
+        "level": 3,
+        "title": "Optimized Single Output Array",
+        "diagram": "graph TD\n    A[\"Pass 1: Left to Right\"] --> B[\"Store prefix products in result array\"]\n    B --> C[\"result = [1, 1, 2, 6]\"]\n    C --> D[\"Pass 2: Right to Left\"]\n    D --> E[\"Multiply each result element by running suffix\"]\n    E --> F[\"result = [24, 12, 8, 6]\"]\n    style A fill:#fb923c,color:#000\n    style D fill:#fb923c,color:#000\n    style F fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "candidate",
+            "text": "I can eliminate the extra arrays entirely. First, I fill the result array with prefix products using a left-to-right pass. Result at zero starts as one, and each next position stores the running product of all elements before it.",
+            "audio_file": "product-of-array-except-self-optimal-c1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "Then I sweep from right to left, keeping a single variable called suffix that tracks the running product from the right. At each index, I multiply result of i by suffix, then update suffix by multiplying in nums of i.",
+            "audio_file": "product-of-array-except-self-optimal-c2.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "This gives O of n time with O of one extra space, since the output array does not count as extra space. We only use one integer variable for the suffix running product.",
+            "audio_file": "product-of-array-except-self-optimal-c3.mp3"
+          },
+          {
+            "speaker": "interviewer",
+            "text": "Excellent. Walk me through the example one, two, three, four.",
+            "audio_file": "product-of-array-except-self-optimal-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "After the left pass, result is one, one, two, six. Then the right pass: suffix starts at one. Index three: result stays six, suffix becomes four. Index two: two times four is eight, suffix becomes twelve. Index one: one times twelve is twelve, suffix becomes twenty-four. Index zero: one times twenty-four is twenty-four. Final result: twenty-four, twelve, eight, six.",
+            "audio_file": "product-of-array-except-self-optimal-c4.mp3"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "level": 0,
+        "title": "Summary and Comparison",
+        "diagram": "graph LR\n    subgraph Comparison\n    A[\"Brute Force\\nO of n-squared time\\nO of n space\"] --> B[\"Prefix-Suffix Arrays\\nO of n time\\nO of n space\"]\n    B --> C[\"Optimized\\nO of n time\\nO of one space\"]\n    end\n    style A fill:#60a5fa,color:#000\n    style B fill:#a78bfa,color:#000\n    style C fill:#fb923c,color:#000",
+        "lines": [
+          {
+            "speaker": "interviewer",
+            "text": "Great work. Let us recap. We went from O of n-squared brute force, to O of n with two extra arrays, and finally to O of n time with O of one extra space using a single output array with a running suffix variable.",
+            "audio_file": "product-of-array-except-self-summary-i1.mp3"
+          },
+          {
+            "speaker": "candidate",
+            "text": "The key insight is that each element's answer is the product of its prefix and suffix. By computing these in two passes over the result array, we avoid both division and extra space.",
+            "audio_file": "product-of-array-except-self-summary-c1.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}
