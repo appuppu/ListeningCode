@@ -1,0 +1,143 @@
+# Designing a Simplified Twitter Feed — 여러 사용자의 트윗에서 최신 10건을 효율적으로 가져오는 시스템을 설계한다
+
+## 문제의 본질
+
+간이 Twitter 시스템으로서 4가지 연산을 구현한다. `postTweet`으로 트윗을 게시하고, `getNewsFeed`로 해당 사용자와 팔로우 중인 사용자의 트윗에서 **최신 10건**을 가져오고, `follow`로 팔로우하고, `unfollow`로 팔로우를 해제한다. 핵심 과제는 여러 사용자의 트윗 리스트를 **시간순으로 병합하여 상위 10건만을 효율적으로 추출하는** 것에 있다.
+
+## 핵심 아이디어
+
+각 사용자의 트윗 리스트는 이미 게시 순서(시간순)로 정렬되어 있다. 여러 개의 정렬된 리스트에서 상위 K건을 꺼내는 문제는, 전체 리스트를 다시 정렬하는 것이 아니라, **힙을 사용한 K-way 병합**으로 각 리스트의 선두만 비교하면서 1건씩 꺼냄으로써 최소한의 비교 횟수로 해결할 수 있다.
+
+## 사고 프로세스
+
+1. **데이터 보관 방법을 결정한다**: 각 사용자가 게시한 트윗을 시간순으로 관리할 필요가 있다. 사용자 ID를 키로, 트윗 리스트를 값으로 하는 HashMap을 사용하면, 임의의 사용자의 트윗 목록을 O(1)로 가져올 수 있다. 각 트윗에는 글로벌 타임스탬프를 부여하여 게시 순서를 기록한다
+2. **팔로우 관계의 관리 방법을 결정한다**: 팔로우·언팔로우는 사용자 ID 집합의 추가·삭제에 해당한다. 사용자 ID를 키로, 팔로우 대상의 ID Set을 값으로 하는 HashMap을 사용하면, 팔로우 추가·삭제·목록 조회를 모두 O(1)로 수행할 수 있다
+3. **뉴스 피드 가져오기의 본질을 파악한다**: `getNewsFeed`는 자신과 팔로우 중인 모든 사용자의 트윗에서 최신 10건을 반환하는 연산이다. 각 사용자의 트윗 리스트는 게시 순서로 정렬되어 있으므로, 이것은 **여러 정렬된 리스트에서 상위 K건을 꺼내는 문제(K-way 병합)**로 귀결된다
+4. **K-way 병합에 힙을 사용한다**: 각 사용자의 트윗 리스트의 끝(최신 트윗)을 Max-Heap에 넣는다. 힙에서 타임스탬프가 가장 큰 요소를 꺼내고, 해당 사용자의 다음으로 새로운 트윗을 힙에 추가한다. 이것을 10번 반복하면 최신 10건을 얻을 수 있다
+5. **힙의 각 요소에 포함시킬 정보를 결정한다**: 힙에서 꺼낸 후 같은 사용자의 다음 트윗을 추가하기 위해, 각 엔트리에는 「타임스탬프」「트윗 ID」「사용자 ID」「리스트 내 인덱스」의 4가지를 포함시킨다. 인덱스를 1 줄이면 해당 사용자의 다음으로 새로운 트윗에 접근할 수 있다
+6. **10건을 가져오면 조기 종료한다**: 힙이 비거나 결과 리스트가 10건에 도달한 시점에서 루프를 종료한다. 모든 트윗을 처리할 필요는 없다
+
+## 전제 지식
+
+### PriorityQueue(우선순위 큐 / 힙)란
+
+요소를 추가할 때마다 우선순위 순서로 자동 정렬하는 데이터 구조이다. 가장 우선순위가 높은 요소를 O(log N)로 꺼낼 수 있다. Java의 PriorityQueue는 기본적으로 Min-Heap(최솟값이 선두)이지만, Comparator를 지정하여 Max-Heap(최댓값이 선두)으로 변경할 수 있다.
+
+```java
+// Max-Heap(타임스탬프가 큰 = 새로운 것이 선두)을 생성한다
+PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+pq.offer(new int[]{5, 101});   // [타임스탬프, 트윗 ID]를 추가한다
+pq.offer(new int[]{3, 102});   // 추가 후, 내부에서 타임스탬프 내림차순으로 정렬된다
+int[] top = pq.poll();         // 가장 큰 타임스탬프를 가진 요소를 꺼낸다 → [5, 101]
+pq.isEmpty();                  // 힙이 비어 있는지를 boolean으로 반환한다 → false
+```
+
+### computeIfAbsent란
+
+HashMap의 키가 존재하지 않는 경우에만, 지정한 함수로 값을 생성하여 등록하고 그 값을 반환하는 메서드이다. 키가 존재하는 경우에는 기존 값을 그대로 반환한다. `get`하고 `null` 체크하고 `put`하는 3단계를 1줄로 정리할 수 있다.
+
+```java
+Map<Integer, List<int[]>> tweets = new HashMap<>();
+// 키 1이 존재하지 않으면 새 ArrayList를 생성하여 등록하고, 그 리스트를 반환한다
+tweets.computeIfAbsent(1, k -> new ArrayList<>()).add(new int[]{0, 101});
+// 키 1은 이미 존재하므로, 기존 리스트를 반환하고 거기에 추가한다
+tweets.computeIfAbsent(1, k -> new ArrayList<>()).add(new int[]{1, 102});
+```
+
+### K-way 병합이란
+
+K개의 정렬된 리스트를 하나의 정렬된 시퀀스로 통합하는 기법이다. 각 리스트의 선두 요소만 힙에 넣고, 최솟값(또는 최댓값)을 꺼낼 때마다 꺼낸 요소가 속한 리스트의 다음 요소를 힙에 추가한다. 전체 요소를 모아서 정렬하는 O(N log N)보다 효율적으로 O(N log K)로 통합할 수 있다.
+
+## 계산량
+
+| | 값 |
+|---|---|
+| Time | O(K log K) — K는 팔로우 중인 사용자 수이다. 힙에 초기 삽입하는 데 O(K log K), 최대 10회의 poll/offer에 O(10 log K)가 소요된다 |
+| Space | O(K) — 힙에는 최대 K개의 요소가 동시에 저장된다 |
+
+## 코드
+
+```java
+// 입력: postTweet(userId, tweetId), follow(followerId, followeeId), unfollow(followerId, followeeId), getNewsFeed(userId)의 각 연산 호출
+// 출력: getNewsFeed는 사용자와 그 팔로우 대상의 트윗에서 최신 10건의 트윗 ID를 List<Integer>로 반환한다
+class Twitter {
+    // 글로벌 타임스탬프. 모든 사용자의 트윗 간에 게시 순서를 고유하게 식별한다
+    // 단조 증가하므로, 다른 사용자의 트윗끼리도 올바르게 시간순 비교를 할 수 있다
+    int time = 0;
+    // 키=사용자 ID, 값=해당 사용자의 트윗 리스트(각 요소는 [타임스탬프, 트윗 ID])
+    // 리스트는 게시 순서대로 끝에 추가되므로, 끝이 최신이 된다
+    Map<Integer, List<int[]>> tweets;
+    // 키=팔로우하는 쪽의 사용자 ID, 값=팔로우 대상 사용자 ID의 Set
+    // Set을 사용함으로써 팔로우 추가·삭제·중복 제거를 모두 O(1)로 수행할 수 있다
+    Map<Integer, Set<Integer>> follows;
+
+    Twitter() {
+        tweets = new HashMap<>();
+        follows = new HashMap<>();
+    }
+
+    void postTweet(int userId, int tweetId) {
+        // 사용자의 트윗 리스트를 가져오고(없으면 생성하고), 끝에 [타임스탬프, 트윗 ID]를 추가한다
+        // time++로 글로벌 타임스탬프를 부여하여 게시 순서를 기록한다
+        tweets.computeIfAbsent(userId, k -> new ArrayList<>())
+            .add(new int[]{time++, tweetId});
+    }
+
+    void follow(int followerId, int followeeId) {
+        // 팔로우 대상 Set에 followeeId를 추가한다(Set이므로 같은 사용자를 중복 팔로우해도 중복되지 않는다)
+        follows.computeIfAbsent(followerId, k -> new HashSet<>())
+            .add(followeeId);
+    }
+
+    void unfollow(int followerId, int followeeId) {
+        // 팔로우 관계가 존재하는 경우에만 followeeId를 Set에서 삭제한다
+        // 존재하지 않는 키에 대해 get을 호출하면 NullPointerException이 발생하므로 containsKey로 먼저 판정한다
+        if (follows.containsKey(followerId))
+            follows.get(followerId).remove(followeeId);
+    }
+
+    List<Integer> getNewsFeed(int userId) {
+        // Max-Heap: 타임스탬프가 큰(새로운) 것이 선두에 오도록 Comparator를 지정한다
+        PriorityQueue<int[]> pq =
+            new PriorityQueue<>((a, b) -> b[0] - a[0]);
+
+        // 피드 대상 사용자 = 자신 + 팔로우 중인 모든 사용자
+        // 자신의 트윗도 피드에 포함해야 하므로, 자기 자신을 빠뜨리지 않고 추가한다
+        Set<Integer> users = new HashSet<>();
+        users.add(userId);
+        if (follows.containsKey(userId))
+            users.addAll(follows.get(userId));
+
+        // 각 사용자의 최신 트윗(리스트 끝)을 힙에 추가한다(K-way 병합의 초기화)
+        for (int uid : users) {
+            // 트윗이 존재하지 않는 사용자는 건너뛴다
+            if (!tweets.containsKey(uid)) continue;
+            List<int[]> t = tweets.get(uid);
+            int idx = t.size() - 1;
+            int[] tw = t.get(idx);
+            // [타임스탬프, 트윗 ID, 사용자 ID, 리스트 내 인덱스]
+            // 사용자 ID와 인덱스를 포함시키는 이유는, 꺼낸 후 해당 사용자의 다음 트윗을 추적하기 위함이다
+            pq.offer(new int[]{tw[0], tw[1], uid, idx});
+        }
+
+        // 힙에서 최대 10건을 꺼낸다(K-way 병합의 실행)
+        List<Integer> res = new ArrayList<>();
+        while (!pq.isEmpty() && res.size() < 10) {
+            // 타임스탬프가 가장 큰 요소를 꺼낸다
+            int[] top = pq.poll();
+            // 꺼낸 트윗 ID를 결과에 추가한다
+            res.add(top[1]);
+            int uid = top[2];
+            // 인덱스를 1 줄여서, 해당 사용자의 다음으로 새로운 트윗을 가리킨다
+            int idx = top[3] - 1;
+            // 해당 사용자에게 아직 오래된 트윗이 있으면 힙에 추가한다(인덱스가 음수이면 전부 처리 완료)
+            if (idx >= 0) {
+                int[] tw = tweets.get(uid).get(idx);
+                pq.offer(new int[]{tw[0], tw[1], uid, idx});
+            }
+        }
+        // 최신 10건(또는 트윗 총수가 10건 미만인 경우 전체)의 트윗 ID가 타임스탬프 내림차순으로 저장되어 있다
+        return res;
+    }
+}
+```

@@ -1,0 +1,143 @@
+# Designing a Simplified Twitter Feed — Diseñar un sistema que obtiene eficientemente los 10 tweets más recientes de múltiples usuarios
+
+## Esencia del problema
+
+Se implementan 4 operaciones como un sistema simplificado de Twitter. `postTweet` publica un tweet, `getNewsFeed` obtiene los **10 tweets más recientes** del usuario y de los usuarios que sigue, `follow` sigue a un usuario y `unfollow` deja de seguirlo. El desafío central consiste en **fusionar las listas de tweets de múltiples usuarios en orden cronológico y extraer eficientemente solo los 10 primeros**.
+
+## Idea central
+
+Las listas de tweets de cada usuario ya están ordenadas por orden de publicación (orden cronológico). El problema de extraer los K elementos más recientes de múltiples listas ordenadas se resuelve no reordenando todas las listas, sino mediante un **K-way merge con heap**, comparando solo el primer elemento de cada lista y extrayéndolos uno por uno, logrando así el número mínimo necesario de comparaciones.
+
+## Proceso de razonamiento
+
+1. **Decidir cómo almacenar los datos**: Es necesario gestionar los tweets publicados por cada usuario en orden cronológico. Usando un HashMap con el ID de usuario como clave y la lista de tweets como valor, se puede obtener la lista de tweets de cualquier usuario en O(1). A cada tweet se le asigna un timestamp global para registrar el orden de publicación
+2. **Decidir cómo gestionar las relaciones de seguimiento**: Seguir y dejar de seguir corresponden a agregar y eliminar elementos en un conjunto de IDs de usuario. Usando un HashMap con el ID de usuario como clave y un Set de IDs de usuarios seguidos como valor, se pueden realizar la adición, eliminación y consulta de seguidores en O(1)
+3. **Identificar la esencia de la obtención del feed**: `getNewsFeed` es una operación que devuelve los 10 tweets más recientes de todos los tweets del usuario y de los usuarios que sigue. Como las listas de tweets de cada usuario ya están ordenadas por orden de publicación, esto se reduce al **problema de extraer los K elementos más recientes de múltiples listas ordenadas (K-way merge)**
+4. **Usar un heap para el K-way merge**: Se inserta el último elemento (tweet más reciente) de la lista de tweets de cada usuario en un Max-Heap. Se extrae del heap el elemento con el mayor timestamp y se agrega al heap el siguiente tweet más reciente de ese usuario. Repitiendo esto 10 veces, se obtienen los 10 tweets más recientes
+5. **Decidir qué información almacenar en cada elemento del heap**: Para poder agregar el siguiente tweet del mismo usuario después de extraer un elemento del heap, cada entrada contiene 4 datos: "timestamp", "ID del tweet", "ID del usuario" e "índice dentro de la lista". Decrementando el índice en 1, se puede acceder al siguiente tweet más reciente de ese usuario
+6. **Terminar anticipadamente al obtener 10 elementos**: El bucle termina cuando el heap se vacía o la lista de resultados alcanza 10 elementos. No es necesario procesar todos los tweets
+
+## Conocimientos previos
+
+### Qué es una PriorityQueue (cola de prioridad / heap)
+
+Es una estructura de datos que reordena automáticamente los elementos por prioridad cada vez que se agrega uno. El elemento con mayor prioridad se puede extraer en O(log N). La PriorityQueue de Java es por defecto un Min-Heap (el valor mínimo está al frente), pero se puede cambiar a Max-Heap (el valor máximo al frente) especificando un Comparator.
+
+```java
+// Crear un Max-Heap (el timestamp más grande = más reciente queda al frente)
+PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+pq.offer(new int[]{5, 101});   // Agregar [timestamp, ID del tweet]
+pq.offer(new int[]{3, 102});   // Después de agregar, se ordena internamente por timestamp descendente
+int[] top = pq.poll();         // Extraer el elemento con el mayor timestamp → [5, 101]
+pq.isEmpty();                  // Devuelve un boolean indicando si el heap está vacío → false
+```
+
+### Qué es computeIfAbsent
+
+Es un método que, solo cuando la clave no existe en el HashMap, genera un valor mediante la función especificada, lo registra y lo devuelve. Si la clave ya existe, devuelve el valor existente tal cual. Permite condensar en una sola línea los 3 pasos de hacer `get`, verificar `null` y hacer `put`.
+
+```java
+Map<Integer, List<int[]>> tweets = new HashMap<>();
+// Si la clave 1 no existe, se crea un nuevo ArrayList, se registra y se devuelve esa lista
+tweets.computeIfAbsent(1, k -> new ArrayList<>()).add(new int[]{0, 101});
+// La clave 1 ya existe, así que se devuelve la lista existente y se agrega a ella
+tweets.computeIfAbsent(1, k -> new ArrayList<>()).add(new int[]{1, 102});
+```
+
+### Qué es el K-way merge
+
+Es una técnica para integrar K listas ordenadas en una sola secuencia ordenada. Se insertan en el heap solo los primeros elementos de cada lista, y cada vez que se extrae el mínimo (o máximo), se agrega al heap el siguiente elemento de la lista a la que pertenecía el elemento extraído. Es más eficiente que ordenar todos los elementos juntos con O(N log N), logrando la integración en O(N log K).
+
+## Complejidad computacional
+
+| | Valor |
+|---|---|
+| Time | O(K log K) — K es el número de usuarios seguidos. La inserción inicial en el heap cuesta O(K log K), y las máximo 10 operaciones de poll/offer cuestan O(10 log K) |
+| Space | O(K) — El heap almacena como máximo K elementos simultáneamente |
+
+## Código
+
+```java
+// Entrada: llamadas a las operaciones postTweet(userId, tweetId), follow(followerId, followeeId), unfollow(followerId, followeeId), getNewsFeed(userId)
+// Salida: getNewsFeed devuelve los 10 tweets más recientes del usuario y sus seguidos como List<Integer>
+class Twitter {
+    // Timestamp global. Identifica de forma única el orden de publicación entre todos los tweets de todos los usuarios
+    // Al ser monotónicamente creciente, permite comparar correctamente el orden cronológico incluso entre tweets de distintos usuarios
+    int time = 0;
+    // Clave=ID de usuario, Valor=lista de tweets de ese usuario (cada elemento es [timestamp, ID del tweet])
+    // Los elementos se agregan al final de la lista en orden de publicación, por lo que el último elemento es el más reciente
+    Map<Integer, List<int[]>> tweets;
+    // Clave=ID del usuario que sigue, Valor=Set de IDs de usuarios seguidos
+    // Usar un Set permite que la adición, eliminación y deduplicación de seguidores se realicen en O(1)
+    Map<Integer, Set<Integer>> follows;
+
+    Twitter() {
+        tweets = new HashMap<>();
+        follows = new HashMap<>();
+    }
+
+    void postTweet(int userId, int tweetId) {
+        // Obtener la lista de tweets del usuario (crearla si no existe) y agregar [timestamp, ID del tweet] al final
+        // Se asigna un timestamp global con time++ para registrar el orden de publicación
+        tweets.computeIfAbsent(userId, k -> new ArrayList<>())
+            .add(new int[]{time++, tweetId});
+    }
+
+    void follow(int followerId, int followeeId) {
+        // Agregar followeeId al Set de seguidos (al ser un Set, seguir al mismo usuario dos veces no genera duplicados)
+        follows.computeIfAbsent(followerId, k -> new HashSet<>())
+            .add(followeeId);
+    }
+
+    void unfollow(int followerId, int followeeId) {
+        // Solo si existe la relación de seguimiento, se elimina followeeId del Set
+        // Hacer get sobre una clave inexistente lanzaría NullPointerException, por lo que se verifica primero con containsKey
+        if (follows.containsKey(followerId))
+            follows.get(followerId).remove(followeeId);
+    }
+
+    List<Integer> getNewsFeed(int userId) {
+        // Max-Heap: se especifica un Comparator para que el timestamp más grande (más reciente) quede al frente
+        PriorityQueue<int[]> pq =
+            new PriorityQueue<>((a, b) -> b[0] - a[0]);
+
+        // Usuarios objetivo del feed = uno mismo + todos los usuarios seguidos
+        // Se debe incluir al propio usuario, ya que sus tweets también deben aparecer en el feed
+        Set<Integer> users = new HashSet<>();
+        users.add(userId);
+        if (follows.containsKey(userId))
+            users.addAll(follows.get(userId));
+
+        // Agregar el tweet más reciente (último de la lista) de cada usuario al heap (inicialización del K-way merge)
+        for (int uid : users) {
+            // Se omiten los usuarios que no tienen tweets
+            if (!tweets.containsKey(uid)) continue;
+            List<int[]> t = tweets.get(uid);
+            int idx = t.size() - 1;
+            int[] tw = t.get(idx);
+            // [timestamp, ID del tweet, ID del usuario, índice dentro de la lista]
+            // Se incluyen el ID del usuario y el índice para poder acceder al siguiente tweet de ese usuario después de la extracción
+            pq.offer(new int[]{tw[0], tw[1], uid, idx});
+        }
+
+        // Extraer un máximo de 10 elementos del heap (ejecución del K-way merge)
+        List<Integer> res = new ArrayList<>();
+        while (!pq.isEmpty() && res.size() < 10) {
+            // Extraer el elemento con el mayor timestamp
+            int[] top = pq.poll();
+            // Agregar el ID del tweet extraído al resultado
+            res.add(top[1]);
+            int uid = top[2];
+            // Decrementar el índice en 1 para apuntar al siguiente tweet más reciente de ese usuario
+            int idx = top[3] - 1;
+            // Si ese usuario aún tiene tweets más antiguos, se agregan al heap (si el índice es negativo, ya se procesaron todos)
+            if (idx >= 0) {
+                int[] tw = tweets.get(uid).get(idx);
+                pq.offer(new int[]{tw[0], tw[1], uid, idx});
+            }
+        }
+        // Los IDs de los 10 tweets más recientes (o todos si hay menos de 10) están almacenados en orden descendente de timestamp
+        return res;
+    }
+}
+```
